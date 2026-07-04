@@ -34,8 +34,6 @@ BuildPixies
 
 ## Takım Elemanları
 
-## Takım Elemanları
-
 <table>
   <tr>
     <th>Name</th>
