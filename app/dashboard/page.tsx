@@ -8,9 +8,13 @@ import { listProjects } from "@/lib/projects";
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
-  const { projects } = await listProjects().then(
-    (p) => ({ projects: p }),
-    () => ({ projects: [] }),
+  const { projects, loadError } = await listProjects().then(
+    (p) => ({ projects: p, loadError: null as string | null }),
+    () => ({
+      projects: [],
+      loadError:
+        "Projects could not be loaded. Check storage configuration and try again.",
+    }),
   );
 
   return (
@@ -29,7 +33,22 @@ export default async function DashboardPage() {
           </Button>
         </div>
 
-        {projects.length === 0 ? (
+        {loadError ? (
+          <div
+            role="alert"
+            className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-destructive/30 bg-card px-6 py-16 text-center"
+          >
+            <h2 className="font-heading text-xl font-semibold">
+              Projects are unavailable
+            </h2>
+            <p className="max-w-sm text-sm text-muted-foreground">
+              {loadError}
+            </p>
+            <Button asChild variant="outline">
+              <Link href="/dashboard">Retry</Link>
+            </Button>
+          </div>
+        ) : projects.length === 0 ? (
           <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed bg-card px-6 py-20 text-center">
             <span className="text-4xl">✨</span>
             <h2 className="font-heading text-xl font-semibold">

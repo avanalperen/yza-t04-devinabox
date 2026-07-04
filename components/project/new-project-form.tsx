@@ -26,11 +26,13 @@ const platforms: { value: ProjectPlatform; label: string }[] = [
 ];
 
 function Select({
+  id,
   label,
   value,
   onChange,
   options,
 }: {
+  id: string;
   label: string;
   value: string;
   onChange: (v: string) => void;
@@ -38,11 +40,12 @@ function Select({
 }) {
   return (
     <div className="flex flex-col gap-2">
-      <Label>{label}</Label>
+      <Label htmlFor={id}>{label}</Label>
       <select
+        id={id}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="h-9 rounded-md border bg-background px-3 text-sm"
+        className="h-10 rounded-md border bg-background px-3 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
       >
         {options.map((o) => (
           <option key={o.value} value={o.value}>
@@ -62,11 +65,13 @@ export function NewProjectForm() {
   const [platform, setPlatform] = useState<ProjectPlatform>("web");
   const [timeline, setTimeline] = useState("6 weeks");
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!rawIdea.trim()) return;
     setSubmitting(true);
+    setError(null);
     try {
       const res = await fetch("/api/projects", {
         method: "POST",
@@ -80,14 +85,20 @@ export function NewProjectForm() {
         }),
       });
       const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Project could not be created");
+      }
       if (data.project?.id) router.push(`/projects/${data.project.id}`);
+      else throw new Error("Project could not be created");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Project could not be created");
     } finally {
       setSubmitting(false);
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5" aria-busy={submitting}>
       <div className="flex flex-col gap-2">
         <Label htmlFor="idea">What do you want to build?</Label>
         <Textarea
@@ -121,19 +132,26 @@ export function NewProjectForm() {
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <Select
+          id="goal"
           label="Goal"
           value={goal}
           onChange={(v) => setGoal(v as ProjectGoal)}
           options={goals}
         />
         <Select
+          id="platform"
           label="Platform"
           value={platform}
           onChange={(v) => setPlatform(v as ProjectPlatform)}
           options={platforms}
         />
       </div>
-      <Button type="submit" disabled={submitting || !rawIdea.trim()} className="pixie-glow">
+      {error && (
+        <p role="alert" className="text-sm text-destructive">
+          {error}
+        </p>
+      )}
+      <Button type="submit" disabled={submitting || !rawIdea.trim()} className="h-10 pixie-glow">
         {submitting ? "Summoning pixies..." : "Summon your pixies"}
       </Button>
     </form>

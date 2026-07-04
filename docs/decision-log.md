@@ -80,3 +80,30 @@ memory (pgvector) + structured outputs (Zod) + guardrails.
 Çalışan MVP'yi Sprint 2 sonunda göstermek; AI derinliğini Sprint 3'te jüri
 demo'suna hazırlamak. OpenAI anahtarı yoksa sample blueprint ile çalışan demo
 (fallback) — demo güvenliği için kritik.
+
+---
+
+## ADR-004: API validation, guarded AI endpoints and persisted blueprint
+
+**Tarih:** 4 Temmuz 2026
+**Durum:** Kabul edildi
+
+### Bağlam
+
+İlk teknik denetimde API route'larının request body'yi TypeScript cast ile
+güvendiği, AI endpoint'lerinin rate-limit/body limit olmadan public olduğu ve
+blueprint çıktısının sadece client state'te kaldığı görüldü.
+
+### Karar
+
+Route handler'larda Zod tabanlı runtime request validation, body size limit,
+basit IP bucket rate-limit ve generic hata cevapları kullanılacak. Generate
+sonucunda blueprint proje kaydına yazılacak; local geliştirmede JSON fallback,
+hosted deployment'ta Supabase zorunlu storage politikası uygulanacak.
+
+### Sonuçlar
+
+- Bozuk JSON/invalid section/malformed blueprint 500 yerine 400 döner.
+- OpenAI maliyetli endpoint'leri kısa pencere rate-limit ile korunur.
+- Refresh sonrası hazır proje blueprint çıktısını kaybetmez.
+- Production deploy öncesi Supabase schema/migration gereksinimi görünürdür.

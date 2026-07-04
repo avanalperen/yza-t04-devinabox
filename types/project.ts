@@ -1,3 +1,5 @@
+import type { Blueprint } from "@/types/output";
+
 export type ProjectStatus = "draft" | "generating" | "ready" | "failed";
 
 export type ProjectGoal =
@@ -33,6 +35,7 @@ export interface Project {
   targetAudience: string;
   constraints: ProjectConstraints;
   outputDepth?: OutputDepth;
+  blueprint?: Blueprint;
   status: ProjectStatus;
   createdAt: string;
   updatedAt: string;

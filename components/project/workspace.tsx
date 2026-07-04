@@ -12,10 +12,17 @@ import { PIXIES } from "@/types/pixie";
 const pipelineNames = PIXIES.map((pixie) => pixie.name);
 
 export function Workspace({ project }: { project: Project }) {
-  const [blueprint, setBlueprint] = useState<Blueprint | null>(null);
+  const [blueprint, setBlueprint] = useState<Blueprint | null>(
+    project.blueprint ?? null,
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [statuses, setStatuses] = useState<Record<string, PixieStatus>>({});
+  const [statuses, setStatuses] = useState<Record<string, PixieStatus>>(() => {
+    if (!project.blueprint) return {};
+    const done: Record<string, PixieStatus> = {};
+    PIXIES.forEach((p) => (done[p.name] = "done"));
+    return done;
+  });
 
   async function handleGenerate() {
     setLoading(true);
@@ -60,27 +67,37 @@ export function Workspace({ project }: { project: Project }) {
 
   async function handleExport() {
     if (!blueprint) return;
-    const res = await fetch("/api/export-readme", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ projectId: project.id, blueprint }),
-    });
-    const data = await res.json();
-    const blob = new Blob([data.markdown], { type: "text/markdown" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = data.filename || "README.md";
-    a.click();
-    URL.revokeObjectURL(url);
+    setError(null);
+    try {
+      const res = await fetch("/api/export-readme", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ projectId: project.id, blueprint }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Export failed");
+      const blob = new Blob([data.markdown], { type: "text/markdown" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = data.filename || "README.md";
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Export failed");
+    }
   }
 
   return (
     <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
       <aside className="flex flex-col gap-4 rounded-2xl border bg-card p-5">
-        <div>
-          <h2 className="font-heading font-semibold">{project.title}</h2>
-          <p className="text-sm text-muted-foreground">{project.rawIdea}</p>
+        <div className="min-w-0">
+          <h2 className="break-words font-heading font-semibold">
+            {project.title}
+          </h2>
+          <p className="break-words text-sm text-muted-foreground">
+            {project.rawIdea}
+          </p>
         </div>
         <div className="flex flex-col gap-1 text-xs text-muted-foreground">
           <span>Goal: {project.goal}</span>
@@ -90,10 +107,14 @@ export function Workspace({ project }: { project: Project }) {
         <Button onClick={handleGenerate} disabled={loading} className="pixie-glow">
           {loading ? "Pixies are working..." : blueprint ? "Regenerate" : "Generate blueprint"}
         </Button>
-        {error && <p className="text-sm text-destructive">{error}</p>}
+        {error && (
+          <p role="alert" className="text-sm text-destructive">
+            {error}
+          </p>
+        )}
       </aside>
 
-      <div className="flex flex-col gap-6">
+      <div className="min-w-0 flex flex-col gap-6" aria-live="polite">
         <section>
           <h3 className="mb-3 font-heading text-sm font-medium text-muted-foreground">
             Pixie team
@@ -101,12 +122,23 @@ export function Workspace({ project }: { project: Project }) {
           <PixieTeam statuses={statuses} />
         </section>
 
-        {blueprint && (
+        {blueprint ? (
           <section>
             <h3 className="mb-3 font-heading text-sm font-medium text-muted-foreground">
               Blueprint
             </h3>
             <OutputHub project={project} blueprint={blueprint} onExport={handleExport} />
+          </section>
+        ) : (
+          <section className="rounded-2xl border border-dashed bg-card p-6">
+            <h3 className="font-heading text-lg font-semibold">
+              No blueprint yet
+            </h3>
+            <p className="mt-2 max-w-xl text-sm text-muted-foreground">
+              Generate a blueprint to create the product brief, market angle,
+              MVP scope, UX flow, tech plan, code skeleton, backlog, tests and
+              README export for this idea.
+            </p>
           </section>
         )}
       </div>

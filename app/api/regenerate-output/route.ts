@@ -1,33 +1,34 @@
 import { NextRequest } from "next/server";
 import { regenerateSection } from "@/lib/ai/orchestrator";
-import type { BlueprintSection } from "@/types/output";
-import type { CreateProjectInput } from "@/types/project";
+import { checkRateLimit } from "@/lib/api/rate-limit";
+import { getSafeErrorMessage, jsonError, parseJsonWithSchema } from "@/lib/api/http";
+import { regenerateOutputRequestSchema } from "@/lib/api/schemas";
+
+export const maxDuration = 30;
 
 export async function POST(request: NextRequest) {
-  const body = (await request.json()) as {
-    input: CreateProjectInput;
-    section: BlueprintSection;
-    previousOutputs?: Record<string, unknown>;
-  };
+  const limited = checkRateLimit(request, {
+    bucket: "ai:regenerate",
+    limit: 10,
+    windowMs: 60_000,
+  });
+  if (limited) return limited;
 
-  if (!body.input || !body.section) {
-    return Response.json(
-      { error: "input and section are required" },
-      { status: 400 },
-    );
-  }
+  const parsed = await parseJsonWithSchema(
+    request,
+    regenerateOutputRequestSchema,
+    { maxBytes: 24_576 },
+  );
+  if (!parsed.ok) return parsed.response;
 
   try {
     const output = await regenerateSection(
-      body.input,
-      body.section,
-      body.previousOutputs,
+      parsed.data.input,
+      parsed.data.section,
+      parsed.data.previousOutputs,
     );
-    return Response.json({ section: body.section, output });
+    return Response.json({ section: parsed.data.section, output });
   } catch (error) {
-    return Response.json(
-      { error: error instanceof Error ? error.message : "Regeneration failed" },
-      { status: 500 },
-    );
+    return jsonError(getSafeErrorMessage(error), 500);
   }
 }

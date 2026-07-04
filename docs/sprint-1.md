@@ -6,7 +6,7 @@ README, backlog ve proje iskeletini (Next.js + mimari) oturtmak.
 
 ## Definition of Done
 
-- Repo public (GitHub'a push bekliyor)
+- Repo public ve GitHub'a push edildi
 - README'de ürün fikri, backlog, roller var
 - Web pivot karar kaydı (`docs/decision-log.md`) var
 - Next.js 16 + TypeScript + Tailwind v4 + shadcn/ui kurulu

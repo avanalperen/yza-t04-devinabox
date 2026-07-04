@@ -2,7 +2,7 @@ import type { CreateProjectInput } from "@/types/project";
 import type { Blueprint, BlueprintSection } from "@/types/output";
 import { isOpenAIConfigured, runJsonCompletion, runTextCompletion } from "@/lib/ai/client";
 import { buildSampleBlueprint } from "@/lib/ai/sample";
-import { validateSection } from "@/lib/ai/schemas";
+import { blueprintSchema, validateSection } from "@/lib/ai/schemas";
 import {
   backlogPrompt,
   codePrompt,
@@ -100,7 +100,7 @@ export async function generateBlueprint(
     }
   }
 
-  return outputs as unknown as Blueprint;
+  return blueprintSchema.parse(outputs);
 }
 
 export async function regenerateSection(

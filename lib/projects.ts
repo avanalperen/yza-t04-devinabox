@@ -1,4 +1,5 @@
 import type { Project, CreateProjectInput } from "@/types/project";
+import type { Blueprint } from "@/types/output";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { createClient as createServerClient } from "@/lib/supabase/server";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
@@ -19,7 +20,22 @@ const localStorePath = path.join(
 );
 
 function canUseLocalFileStore(): boolean {
-  return process.env.VERCEL !== "1" && process.env.BUILDPIXIES_DISABLE_FILE_STORE !== "1";
+  return !requiresSupabase() && process.env.BUILDPIXIES_DISABLE_FILE_STORE !== "1";
+}
+
+function requiresSupabase(): boolean {
+  return (
+    process.env.VERCEL === "1" ||
+    process.env.BUILDPIXIES_REQUIRE_SUPABASE === "1"
+  );
+}
+
+function assertStorageAvailable() {
+  if (!isSupabaseConfigured() && !canUseLocalFileStore()) {
+    throw new Error(
+      "Persistent storage is not configured. Set Supabase env vars or enable local file store for development.",
+    );
+  }
 }
 
 async function hydrateMemoryFromDisk(): Promise<void> {
@@ -65,7 +81,7 @@ function toProject(input: CreateProjectInput): Project {
     platform: input.platform,
     targetAudience: input.targetAudience,
     constraints: input.constraints ?? {},
-    outputDepth: input.outputDepth,
+    outputDepth: input.outputDepth ?? "bootcamp-ready",
     status: "draft",
     createdAt: now,
     updatedAt: now,
@@ -73,6 +89,7 @@ function toProject(input: CreateProjectInput): Project {
 }
 
 export async function createProject(input: CreateProjectInput): Promise<Project> {
+  assertStorageAvailable();
   const project = toProject(input);
   if (isSupabaseConfigured()) {
     const supabase = await createServerClient();
@@ -85,6 +102,8 @@ export async function createProject(input: CreateProjectInput): Promise<Project>
         platform: project.platform,
         target_audience: project.targetAudience,
         constraints: project.constraints,
+        output_depth: project.outputDepth,
+        blueprint: project.blueprint,
         status: project.status,
         created_at: project.createdAt,
         updated_at: project.updatedAt,
@@ -100,6 +119,7 @@ export async function createProject(input: CreateProjectInput): Promise<Project>
 }
 
 export async function listProjects(): Promise<Project[]> {
+  assertStorageAvailable();
   if (isSupabaseConfigured()) {
     const supabase = await createServerClient();
     if (supabase) {
@@ -118,6 +138,7 @@ export async function listProjects(): Promise<Project[]> {
 }
 
 export async function getProject(id: string): Promise<Project | null> {
+  assertStorageAvailable();
   if (isSupabaseConfigured()) {
     const supabase = await createServerClient();
     if (supabase) {
@@ -138,6 +159,7 @@ export async function updateProjectStatus(
   id: string,
   status: Project["status"],
 ): Promise<void> {
+  assertStorageAvailable();
   const updatedAt = new Date().toISOString();
   if (isSupabaseConfigured()) {
     const supabase = await createServerClient();
@@ -158,6 +180,31 @@ export async function updateProjectStatus(
   }
 }
 
+export async function saveProjectBlueprint(
+  id: string,
+  blueprint: Blueprint,
+): Promise<void> {
+  assertStorageAvailable();
+  const updatedAt = new Date().toISOString();
+  if (isSupabaseConfigured()) {
+    const supabase = await createServerClient();
+    if (supabase) {
+      const { error } = await supabase
+        .from("projects")
+        .update({ blueprint, status: "ready", updated_at: updatedAt })
+        .eq("id", id);
+      if (error) throw error;
+      return;
+    }
+  }
+  await hydrateMemoryFromDisk();
+  const existing = memory.get(id);
+  if (existing) {
+    memory.set(id, { ...existing, blueprint, status: "ready", updatedAt });
+    await persistMemoryToDisk();
+  }
+}
+
 function rowToProject(row: Record<string, unknown>): Project {
   return {
     id: String(row.id),
@@ -168,6 +215,7 @@ function rowToProject(row: Record<string, unknown>): Project {
     targetAudience: String(row.target_audience ?? ""),
     constraints: (row.constraints as Project["constraints"]) ?? {},
     outputDepth: row.output_depth as Project["outputDepth"],
+    blueprint: row.blueprint as Project["blueprint"],
     status: (row.status as Project["status"]) ?? "draft",
     createdAt: String(row.created_at ?? new Date().toISOString()),
     updatedAt: String(row.updated_at ?? new Date().toISOString()),

@@ -24,6 +24,15 @@ npm install
 npm run dev
 ```
 
+Supabase ile kalıcı storage kullanacaksanız başlangıç şemasını uygulayın:
+
+```bash
+supabase db push
+```
+
+Hosted deploy'larda `BUILDPIXIES_REQUIRE_SUPABASE=1` kullanın. Local geliştirmede
+Supabase yoksa `.local/buildpixies-projects.json` fallback'i devreye girer.
+
 ---
 
 # Takım İsmi
@@ -81,16 +90,27 @@ export eder.
 
 ## Ürün Özellikleri
 
+### Mevcut MVP akışı
+
 - Fikirden yapılandırılmış product brief üretimi (problem, hedef kitle, değer)
 - MVP scope (must-have / nice-to-have / out-of-scope ayrımı)
 - User story + priority içeren backlog üretimi
 - Kullanıcı akışı ve ekran haritası (UX flow)
 - Stack, veri modeli, API planı içeren tech architecture
+- Pazar açısı ve farklılaşma özeti
+- Başlangıç dosya ağacı / code skeleton önerisi
 - Test senaryoları ve demo öncesi kontrol listesi
 - 3 sprintlik sprint planı
 - README.md export (markdown download)
 - Pixie karakterli workspace (her agent'ın durumu görünür)
+- Proje ve blueprint çıktısının local fallback veya Supabase `projects.blueprint`
+  alanında saklanması
+
+### Roadmap / Sprint 3 hedefleri
+
 - Bootcamp Mode (sprint notlarını Scrum formatına dönüştürme — roadmap)
+- OpenAI Agents SDK handoff ve kalıcı project memory (pgvector)
+- Supabase Auth, owner bazlı RLS ve public deploy sertleştirmesi
 
 ## Hedef Kitle
 
@@ -231,9 +251,12 @@ backlog ve proje iskeletini (Next.js + mimari) oturtmak.
 
 # Technical Architecture
 
-**Stack:** Next.js 16 (App Router, Turbopack) · TypeScript · Tailwind CSS v4 ·
-shadcn/ui · Framer Motion · Supabase (Postgres + pgvector) · OpenAI API /
-Agents SDK · Vercel (deploy).
+**Current stack:** Next.js 16 (App Router, Turbopack) · TypeScript · Tailwind
+CSS v4 · shadcn/ui/base-ui · Supabase Postgres (project + blueprint storage) ·
+OpenAI API role-based prompt pipeline · local JSON fallback for development.
+
+**Roadmap stack:** OpenAI Agents SDK handoff · Supabase Auth/RLS · pgvector
+project memory · Vercel deploy hardening.
 
 **Klasör yapısı (Clean Architecture):**
 
@@ -279,17 +302,19 @@ BuildPixies, fikri uzman agent'lara bölüyor. Her pixie bir rol üstlenir:
 - **Bugsy** (QA) — test senaryoları, riskler
 - **Sprinta** (Scrum) — backlog, sprint planı
 
-**Pipeline:** Raw idea → Pip → Pria → Moxie → Luma → Tinker → Bugsy →
+**Pipeline:** Raw idea → Pip → Pria → Moxie → Luma → Tinker → Bitsy → Bugsy →
 Sprinta → Quill → Blueprint.
 
-Sprint 2'de role-based prompt pipeline; Sprint 3'te OpenAI Agents SDK ile gerçek
-handoff + project memory (pgvector) + structured outputs (Zod) + guardrails
-hedeflenmektedir. OpenAI anahtarı yoksa uygulama sample blueprint ile çalışır
-(demo güvenliği).
+Sprint 2'de çalışan mimari role-based prompt pipeline'dır. OpenAI anahtarı yoksa
+uygulama sample blueprint ile çalışır; bu fallback demo güvenliği içindir ve
+gerçek AI çıktısı gibi sunulmamalıdır. Sprint 3 hedefi OpenAI Agents SDK ile
+gerçek handoff + project memory (pgvector) + owner bazlı guardrails katmanıdır.
 
 # Screenshots
 
-> Sprint sonlarında eklenecek.
+Sprint 1 ekran görüntüleri yukarıdaki Sprint 1 / Ürün Durumu bölümünde
+listelenmiştir. Sprint 2 ve Sprint 3 sonunda bu bölüm final demo akışıyla
+güncellenecektir.
 
 # Demo Video
 

@@ -1,21 +1,37 @@
 import { NextRequest } from "next/server";
 import { generateBlueprint } from "@/lib/ai/orchestrator";
-import { getProject, updateProjectStatus } from "@/lib/projects";
-import type { CreateProjectInput } from "@/types/project";
+import { getProject, saveProjectBlueprint, updateProjectStatus } from "@/lib/projects";
+import { checkRateLimit } from "@/lib/api/rate-limit";
+import { getSafeErrorMessage, jsonError, parseJsonWithSchema } from "@/lib/api/http";
+import { generateBlueprintRequestSchema } from "@/lib/api/schemas";
+
+export const maxDuration = 60;
 
 export async function POST(request: NextRequest) {
-  const body = (await request.json()) as {
-    projectId?: string;
-    input?: CreateProjectInput;
-  };
+  const limited = checkRateLimit(request, {
+    bucket: "ai:generate",
+    limit: 5,
+    windowMs: 60_000,
+  });
+  if (limited) return limited;
 
+  const parsed = await parseJsonWithSchema(
+    request,
+    generateBlueprintRequestSchema,
+    { maxBytes: 12_288 },
+  );
+  if (!parsed.ok) return parsed.response;
+
+  const body = parsed.data;
   let input = body.input;
-  if (!input && body.projectId) {
+  let projectExists = false;
+  if (body.projectId) {
     const project = await getProject(body.projectId);
     if (!project) {
-      return Response.json({ error: "Project not found" }, { status: 404 });
+      return jsonError("Project not found", 404);
     }
-    input = {
+    projectExists = true;
+    input ??= {
       rawIdea: project.rawIdea,
       goal: project.goal,
       platform: project.platform,
@@ -25,18 +41,18 @@ export async function POST(request: NextRequest) {
     };
   }
 
-  if (!input || !input.rawIdea?.trim()) {
-    return Response.json({ error: "rawIdea is required" }, { status: 400 });
+  if (body.projectId && projectExists) {
+    await updateProjectStatus(body.projectId, "generating");
   }
 
-  if (body.projectId) {
-    await updateProjectStatus(body.projectId, "generating");
+  if (!input) {
+    return jsonError("projectId or input is required", 400);
   }
 
   try {
     const blueprint = await generateBlueprint(input);
     if (body.projectId) {
-      await updateProjectStatus(body.projectId, "ready");
+      await saveProjectBlueprint(body.projectId, blueprint);
     }
     return Response.json({
       projectId: body.projectId,
@@ -47,9 +63,6 @@ export async function POST(request: NextRequest) {
     if (body.projectId) {
       await updateProjectStatus(body.projectId, "failed");
     }
-    return Response.json(
-      { error: error instanceof Error ? error.message : "Generation failed" },
-      { status: 500 },
-    );
+    return jsonError(getSafeErrorMessage(error), 500);
   }
 }
