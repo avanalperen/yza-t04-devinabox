@@ -9,7 +9,7 @@
 
 BuildPixies başlangıçta mobil uygulama (tatlı AI yazılım geliştirme takımı)
 olarak planlanıyordu. Bootcamp teslim süreci (2 Ağustos, 3 dakikalık video,
-canlı demo, top 10 sunumu) ve tek geliştirici gerçeği göz önüne alındığında
+canlı demo, top 10 sunumu) ve takım gerçeği göz önüne alındığında
 mobil yerine web-first gitmek değerlendirildi.
 
 ### Karar
@@ -33,7 +33,7 @@ estetiği korunacak ama ürün "satılabilir SaaS" gibi görünecek.
 
 - Bootcamp teslimine daha uygun (canlı link + video).
 - AI agent ve output deneyimi daha rahat gösterilir.
-- Tek kişiyle MVP çıkarmak daha mümkün.
+- Üç kişilik takımla MVP çıkarmak daha mümkün.
 - "Cute but useful" marka dili daha güçlü görünür.
 - AI agent + hafıza + orkestrasyon puanlarına direkt oynar.
 
@@ -44,19 +44,19 @@ estetiği korunacak ama ürün "satılabilir SaaS" gibi görünecek.
 
 ---
 
-## ADR-002: Tek kişi MVP scope'u
+## ADR-002: Takım MVP scope'u
 
 **Tarih:** 4 Temmuz 2026
 **Durum:** Kabul edildi
 
 ### Bağlam
 
-Takım arkadaşlarına ulaşılamadı. Bootcamp zorunlu etkinlik olduğu için
-beklemek yerine ilerlemek gerekiyor.
+Takım 3 kişidir (Product Owner, Scrum Master, Developer). Bootcamp zorunlu
+etkinlik olduğu için net rol dağılımıyla ilerleniyor.
 
 ### Karar
 
-Plan bölüm 22'deki "Tek Kişiyle Uygulanabilir Minimum Plan" uygulanacak:
+Plan bölüm 22'deki görev dağılımı uygulanacak:
 landing, new project form, pixie workspace, tek endpoint ile blueprint
 generation, output hub, README export, Bootcamp Mode (basic), Vercel deploy.
 Takım gelirse görev dağılımı plana göre entegre edilecek. Durum asistana

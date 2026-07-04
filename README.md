@@ -122,15 +122,16 @@ tutulmaktadır. Sprint board olarak GitHub Projects kullanılması planlanmışt
 backlog ve proje iskeletini (Next.js + mimari) oturtmak.
 
 - **Backlog düzeni ve Story seçimleri**: Sprint 1, ürünün temellerine ayrıldı.
-  P0 story'lerden proje iskeleti, README ve backlog önceliklendirildi. Tek
-  geliştirici olduğu için sprint puan hedefi düşük ve gerçekçi tutuldu:
+  P0 story'lerden proje iskeleti, README ve backlog önceliklendirildi. Sprint
+  başında tek geliştiriciydi; sprint sonuna doğru takım (3 kişi) oluştu. Puan
+  hedefi gerçekçi tutuldu:
   fikir/repo/README/backlog/plan + Next.js kurulumu ve landing iskeleti.
   Seçilen P0 story'ler: BP-001, BP-003, BP-004, BP-007, BP-010–BP-014
   (iskelet seviyesinde).
 
-- **Daily Scrum**: Solo geliştirme. Günlük kısa notlar README ve Slack
-  üzerinden tutulmaktadır. Sprint sonunda özetleri `docs/sprint-1.md`
-  içerisinde toplanacaktır.
+- **Daily Scrum**: Sprint başında solo yürüdü; takım oluşunca Slack/WhatsApp
+  üzerinden günlük short sync'lere geçildi. Notlar `docs/sprint-1.md`
+  içerisinde toplanmaktadır.
 
 - **Sprint board update**: Sprint board screenshot'ları sprint sonunda
   eklenecektir (GitHub Projects / Trello). Şu anki durum: board
@@ -144,15 +145,15 @@ backlog ve proje iskeletini (Next.js + mimari) oturtmak.
 
 - **Sprint Review**: Alınan kararlar: (1) Mobil uygulama yerine web uygulamasına
   pivot yapıldı — demo, deploy ve output deneyimi açısından web daha uygun
-  (`docs/decision-log.md`). (2) Ürün adı BuildPixies olarak belirlendi. (3) Tek
-  kişi MVP scope'u benimsendi; takım gelirse görev dağılımı plana göre
-  entegre edilecek. (4) Next.js App Router + Route Handlers + Supabase +
-  OpenAI stack'i seçildi. Çıkan ürünün çalışmasında sorun yok; geliştirme
-  ortamı ayağa kalktı. Katılımcılar: Muhammed Köseoğlu (solo).
+  (`docs/decision-log.md`). (2) Ürün adı BuildPixies olarak belirlendi. (3)
+  Takım 3 kişiye tamamlandı (Product Owner, Scrum Master, Developer). (4)
+  Next.js App Router + Route Handlers + Supabase + OpenAI stack'i seçildi.
+  Çıkan ürünün çalışmasında sorun yok; geliştirme ortamı ayağa kalktı.
+  Katılımcılar: Muhammed Köseoğlu, Alperen Avan, Kemal Ersin Özkan.
 
 - **Sprint Retrospective:**
-  - Takım arkadaşlarına ulaşılamadığı için iletişim kanalları yeniden
-    denenecek; durum asistana bildirilecek.
+  - Takım sprint sonuna doğru oluştu; Sprint 2'de tam kapasite üç kişi
+    devam edilecek.
   - Sprint 2'de kodlamaya hızlı başlamak için Sprint 1'de iskelet
     tamamlandı — iyi karar.
   - Sprint 2'de gerçek AI generation akışını ve pixie animasyonlarını

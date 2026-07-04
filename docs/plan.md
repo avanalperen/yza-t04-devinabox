@@ -4,7 +4,7 @@
 > **Konsept:** Web-first AI product-building workspace — fikrini anlat, pixie takımın MVP blueprint'ine dönüştürsün.
 > **Tagline:** "Your tiny AI product team that turns ideas into launch-ready MVP plans."
 >
-> Bu doküman, YZTA Bootcamp 2026 sürecinde geliştirilecek BuildPixies web uygulamasının ürün, mimari ve sprint bazlı planını içerir. Bootcamp kılavuzu (`docs/bootcamp.md`) ve bilgilendirme toplantısı (`docs/bootcamp bilgilendirme toplantısı.md`) ile hizalıdır. Takım arkadaşlarına ulaşılamadığı için plan tek geliştirici varsayımıyla yapılmıştır; gelen olursa görev dağılımı bölümüne göre entegre olacak şekilde tasarlanmıştır.
+> Bu doküman, YZTA Bootcamp 2026 sürecinde geliştirilecek BuildPixies web uygulamasının ürün, mimari ve sprint bazlı planını içerir. Bootcamp kılavuzu (`docs/bootcamp.md`) ve bilgilendirme toplantısı (`docs/bootcamp bilgilendirme toplantısı.md`) ile hizalıdır. Takım 3 kişidir (Product Owner, Scrum Master, Developer); görev dağılımı bölümüne göre yürütülür.
 
 ---
 
@@ -31,7 +31,7 @@
 19. [Clean Architecture Planı](#19-clean-architecture-planı)
 20. [Product Backlog](#20-product-backlog)
 21. [Sprint Planı (Takvime Bağlı)](#21-sprint-planı-takvime-bağlı)
-22. [Tek Kişiyle Uygulanabilir Minimum Plan](#22-tek-kişiyle-uygulanabilir-minimum-plan)
+22. [Görev Dağılımı ve Minimum Plan](#22-görev-dağılımı-ve-minimum-plan)
 23. [Proje Yönetimi ve README Yapısı](#23-proje-yönetimi-ve-readme-yapısı)
 24. [Pazar ve Rekabet Anlatısı](#24-pazar-ve-rekabet-anlatısı)
 25. [Jüri Kriterlerine Göre Strateji](#25-jüri-kriterlerine-göre-strateji)
@@ -53,8 +53,8 @@
 | --- | --- |
 | **Bugün** | 4 Temmuz 2026 Cumartesi |
 | **Bootcamp süreci** | Sprint 1 dönüyor (19 Haziran – 5 Temmuz), Sprint 2 yarın başlıyor |
-| **Takım durumu** | Takım arkadaşlarına ulaşılamadı; tek geliştirici olarak ilerleniyor |
-| **Asistan bildirimi** | Durum asistana bildirilecek (Slack) |
+| **Takım durumu** | 3 kişi: Muhammed Köseoğlu (PO), Alperen Avan (SM), Kemal Ersin Özkan (Dev) |
+| **Asistan bildirimi** | Takım oluştu; asistan ile iletişim kuruldu |
 | **Ürün teslimi** | 2 Ağustos 2026 23:59 |
 | **Top 10 sunum** | 14 Ağustos 2026 (tarih değişebilir) — YZ'den top 7, No-Code'tan top 3 |
 | **Repo** | Local init edildi, ilk commit atıldı; GitHub'a push bekliyor |
@@ -349,7 +349,7 @@ Bootcamp için en önemli export: **README.md**.
 
 > Next.js App Router'daki Route Handlers, `app` klasörü içinde özel request handler yazmaya izin veriyor; bu sayede ayrı bir backend kurmadan `/api/generate-blueprint` gibi endpoint'ler yapılabilir. Vercel, Next.js projelerini doğrudan CLI veya Git entegrasyonu ile deploy edebiliyor; environment variable yönetimi de Vercel tarafında proje ortamlarına göre yapılabiliyor. Supabase ise AI uygulamaları için Postgres ve pgvector ile embedding saklama, indexleme ve sorgulamayı destekliyor.
 
-### Tek Kişi İçin Daha Hızlı Alternatif
+### Hızlı Başlangıç Alternatifi
 
 Daha da basitleştirmek istersen:
 
@@ -971,11 +971,11 @@ Bootcamp takvimi:
 | Madde | İçerik |
 | --- | --- |
 | Backlog dağıtma mantığı | P0 story'ler seçildi; repo, README, fikir önceliklendirildi |
-| Daily Scrum notları | Solo geliştirme; README/Slack günlük kısa notlar |
+| Daily Scrum notları | Sprint başında solo; takım oluşunca Slack/WhatsApp günlük short sync |
 | Sprint Board updates | GitHub Projects / Trello screenshot'ları |
 | Ürün durumu | Fikir, backlog, wireframe, landing copy screenshot'ları |
-| Sprint Review | Takım ulaşılamadı, tek kişi ilerlendi; mobil→web pivot yapıldı; fikir/repo/backlog hazır |
-| Sprint Retrospective | İletişim kanalları yeniden denenecek; Sprint 2'de Next.js kurulumu ve kodlamaya başlanacak |
+| Sprint Review | Takım sprint sonuna doğru 3 kişiye tamamlandı; mobil→web pivot yapıldı; fikir/repo/backlog hazır |
+| Sprint Retrospective | Takım iletişim kanalları oturtuldu; Sprint 2'de üç kişi tam kapasite kodlamaya geçilecek |
 
 ### Sprint 2 — 6–19 Temmuz (Çalışan MVP)
 
@@ -1037,11 +1037,11 @@ Bootcamp takvimi:
 
 ---
 
-## 22. Tek Kişiyle Uygulanabilir Minimum Plan
+## 22. Görev Dağılımı ve Minimum Plan
 
-Takımdan hâlâ dönüş yoksa bu scope'u uygula:
+Takım 3 kişidir. Aşağıdaki scope Sprint 2'den itibaren üç kişiyle yürütülür.
 
-### Tek Kişi MVP
+### MVP Scope
 1. Landing page
 2. New Project form
 3. Pixie workspace görünümü
@@ -1051,19 +1051,17 @@ Takımdan hâlâ dönüş yoksa bu scope'u uygula:
 7. Bootcamp Mode basic
 8. Vercel deploy
 
-### Takım Gelirse Eklenecekler
+### Görev Dağılımı
 
-| Takım arkadaşı | Verilecek iş |
-| --- | --- |
-| Kişi 1 | UI/UX ve pixie avatarları |
-| Kişi 2 | Supabase ve database |
-| Kişi 3 | AI prompt/agent pipeline |
-| Kişi 4 | README, video, sunum, test |
+| Kişi | Rol | Sorumluluk |
+| --- | --- | --- |
+| Muhammed Köseoğlu | Product Owner | Ürün vizyonu, backlog önceliklendirme, UI/UX, pixie avatarları, demo |
+| Alperen Avan | Scrum Master | Sprint yönetimi, iletişim, Supabase ve database, dokümantasyon |
+| Kemal Ersin Özkan | Developer | Frontend (Next.js), AI prompt/agent pipeline, kod kalitesi |
 
-### Takım arkadaşlarına atılacak mesaj
-> Merhaba arkadaşlar, bootcamp süreci ilerlediği için projeyi bekletmeden başlatıyorum. Fikir olarak "BuildPixies" adında bir web uygulaması üzerinde ilerliyorum: kullanıcı fikrini yazıyor, sevimli AI pixie agent'ları (Product, UX, Tech, QA, Scrum) bu fikri ürün brief'i, MVP scope, backlog, UX flow, tech plan ve README export'una dönüştürüyor. Web-first SaaS olarak tasarlıyorum, Vercel'e deploy edilecek.
->
-> Bugün/yarın repo, README, landing page ve backlog hazırlamaya başlıyorum. Katılabilecek olanlar lütfen hangi alanda destek olmak istediğini yazsın: frontend (Next.js), backend/AI (Supabase + OpenAI), UI/UX, dokümantasyon, video/sunum. Dönüş alamazsam projeyi tek başıma minimum MVP ile ilerleteceğim ve asistanımıza durumu bildireceğim.
+### Takım iletişim kanalı
+> Slack + WhatsApp üzerinden günlük short sync'ler. Sprint başında planning,
+> sonunda review + retro. Asistan ile haftalık ofis saatleri.
 
 ---
 
@@ -1196,7 +1194,7 @@ Hedef kitle çok net: Bootcamp teams, Hackathon participants, Junior builders, S
 | AI output çok uzun olur | UI bozulur | Section-based output |
 | Agent pipeline yavaş olur | Demo kötü görünür | Loading states + sample fallback |
 | Supabase auth vakit alır | Geliştirme yavaşlar | İlk MVP'de authsuz proje ID |
-| Takım gelmez | Scope büyür | Tek kişi MVP sınırı |
+| Takım içi koordinasyon kopukluğu | Geliştirme yavaşlar | Günlük sync + net rol dağılımı |
 | Deploy problemi | Teslim riski | Erken Vercel deploy |
 | Prompt çıktısı tutarsız | Ürün kalitesi düşer | JSON schema + validation |
 | README eksik kalır | Puan kaybı | Her sprint sonunda güncelleme |
@@ -1288,7 +1286,7 @@ Alternatif CTA'lar:
 - Bootcamp teslimine daha uygun
 - Canlı link verilebilir
 - Agent ve output deneyimi daha rahat gösterilir
-- Tek kişiyle MVP çıkarmak daha mümkün
+- Üç kişilik takımla MVP çıkarmak daha mümkün
 - "Cute but useful" marka dili daha güçlü görünür
 - AI agent + hafıza + orkestrasyon puanlarına direkt oynar
 

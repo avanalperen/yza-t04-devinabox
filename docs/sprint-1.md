@@ -41,32 +41,34 @@ README, backlog ve proje iskeletini (Next.js + mimari) oturtmak.
 ## Bootcamp Gereksinimleri (README'de zorunlu 6 madde)
 
 1. **Backlog dağıtma mantığı** — P0 story'ler seçildi; repo, README, fikir ve
-   Next.js iskeleti önceliklendirildi. Tek geliştirici; sprint puan hedefi
-   gerçekçi tutuldu.
-2. **Daily Scrum notları** — Solo geliştirme; günlük kısa notlar Slack/README
-   üzerinden. Özetleri bu dosyada toplanacak.
+   Next.js iskeleti önceliklendirildi. Sprint başında tek geliştiriciydi;
+   sprint sonuna doğru takım (3 kişi) oluştu. Puan hedefi gerçekçi tutuldu.
+2. **Daily Scrum notları** — Sprint başında solo yürüdü; takım oluşunca
+   Slack/WhatsApp üzerinden günlük short sync'lere geçildi. Özetleri bu
+   dosyada toplanır.
 3. **Sprint board updates** — GitHub Projects / Trello board screenshot'ları
    sprint sonunda eklenecek.
 4. **Ürün durumu** — Geliştirme ortamı ayağa kalktı; landing, dashboard, new
    project, workspace ve output hub iskeletleri çalışır durumda. Ekran
    görüntüleri 5 Temmuz'da eklenecek.
 5. **Sprint Review** — Mobil→web pivot yapıldı; fikir/repo/README/backlog/plan
-   hazır; Next.js + AI orchestrator iskeleti kuruldu. Takım ulaşılamadı, tek
-   kişi ilerlendi.
-6. **Sprint Retrospective** — İletişim kanalları yeniden denenecek; Sprint 2'de
-   gerçek AI generation akışını ve pixie animasyonlarını güçlendirmek gerekiyor.
+   hazır; Next.js + AI orchestrator iskeleti kuruldu. Takım sprint sonuna
+   doğru 3 kişiye tamamlandı.
+6. **Sprint Retrospective** — Takım iletişim kanalları oturtuldu; Sprint 2'de
+   üç kişi tam kapasite kodlamaya geçilecek; gerçek AI generation akışını
+   ve pixie animasyonlarını güçlendirmek gerekiyor.
 
 ## Sprint Review
 
 Alınan kararlar:
 - Mobil uygulama yerine web uygulamasına pivot (demo/deploy/output avantajı).
 - Ürün adı BuildPixies olarak belirlendi.
-- Tek kişi MVP scope'u benimsendi (plan bölüm 22).
+- Takım 3 kişiye tamamlandı: PO, SM, Developer (plan bölüm 22).
 - Next.js App Router + Route Handlers + Supabase + OpenAI stack'i seçildi.
 - Tailwind v4 + shadcn/ui (base-nova) benimsendi.
 
-Çıkan ürünün çalışmasında sorun yok; geliştirme ortamı ayağa kalktı. Katılımcı:
-Muhammed Köseoğlu (solo).
+Çıkan ürünün çalışmasında sorun yok; geliştirme ortamı ayağa kalktı.
+Katılımcılar: Muhammed Köseoğlu, Alperen Avan, Kemal Ersin Özkan.
 
 ## Sprint Retrospective
 
