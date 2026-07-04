@@ -34,6 +34,8 @@ BuildPixies
 
 ## Takım Elemanları
 
+## Takım Elemanları
+
 <table>
   <tr>
     <th>Name</th>
@@ -45,7 +47,7 @@ BuildPixies
     <td>Product Owner</td>
     <td>
       <a href="https://github.com/Vartmor" target="_blank"><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="20" height="20" /></a>
-      <a href="#" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" width="20" height="20"/></a>
+      <a href="https://www.linkedin.com/in/muhammed-koseoglu/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" width="20" height="20"/></a>
     </td>
   </tr>
   <tr>
@@ -53,7 +55,7 @@ BuildPixies
     <td>Scrum Master</td>
     <td>
       <a href="https://github.com/avanalperen" target="_blank"><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="20" height="20" /></a>
-      <a href="#" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" width="20" height="20"/></a>
+      <a href="https://www.linkedin.com/in/alperenavan/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" width="20" height="20"/></a>
     </td>
   </tr>
   <tr>
