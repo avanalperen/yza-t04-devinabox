@@ -12,6 +12,20 @@ README export.
 
 ---
 
+## Local Setup
+
+This repo targets Node `24.15.0`. If your shell does not expose `node`/`npm`,
+run `nvm use` from the project root first; `.nvmrc` and `.node-version` are
+included for version managers.
+
+```bash
+nvm use
+npm install
+npm run dev
+```
+
+---
+
 # Takım İsmi
 
 BuildPixies

@@ -9,7 +9,7 @@ import type { Blueprint } from "@/types/output";
 import type { PixieStatus } from "@/types/pixie";
 import { PIXIES } from "@/types/pixie";
 
-const pipelineNames = ["Pria", "Luma", "Tinker", "Bugsy", "Sprinta"];
+const pipelineNames = PIXIES.map((pixie) => pixie.name);
 
 export function Workspace({ project }: { project: Project }) {
   const [blueprint, setBlueprint] = useState<Blueprint | null>(null);

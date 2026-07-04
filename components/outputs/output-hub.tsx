@@ -42,14 +42,30 @@ export function OutputHub({
   return (
     <Tabs defaultValue="product" className="w-full">
       <TabsList className="flex flex-wrap justify-start">
+        <TabsTrigger value="plan">Plan</TabsTrigger>
         <TabsTrigger value="product">Product</TabsTrigger>
+        <TabsTrigger value="market">Market</TabsTrigger>
         <TabsTrigger value="scope">Scope</TabsTrigger>
         <TabsTrigger value="ux">UX</TabsTrigger>
         <TabsTrigger value="tech">Tech</TabsTrigger>
+        <TabsTrigger value="code">Code</TabsTrigger>
         <TabsTrigger value="backlog">Backlog</TabsTrigger>
         <TabsTrigger value="tests">Tests</TabsTrigger>
         <TabsTrigger value="readme">README</TabsTrigger>
       </TabsList>
+
+      <TabsContent value="plan" className="rounded-xl border bg-card p-5">
+        <Row label="Summary">{b.orchestrationPlan.summary}</Row>
+        <Row label="Missing information">
+          <List items={b.orchestrationPlan.missingInformation} />
+        </Row>
+        <Row label="Recommended sequence">
+          <List items={b.orchestrationPlan.recommendedSequence} />
+        </Row>
+        <Row label="Guardrails">
+          <List items={b.orchestrationPlan.guardrails} />
+        </Row>
+      </TabsContent>
 
       <TabsContent value="product" className="rounded-xl border bg-card p-5">
         <Row label="Project name">{b.productBrief.projectName}</Row>
@@ -59,6 +75,15 @@ export function OutputHub({
         <Row label="Value">{b.productBrief.mainValue}</Row>
         <Row label="Use cases"><List items={b.productBrief.useCases} /></Row>
         <Row label="Success metrics"><List items={b.productBrief.successMetrics} /></Row>
+      </TabsContent>
+
+      <TabsContent value="market" className="rounded-xl border bg-card p-5">
+        <Row label="Competitors"><List items={b.marketAnalysis.competitors} /></Row>
+        <Row label="Positioning">{b.marketAnalysis.positioning}</Row>
+        <Row label="Differentiation">
+          <List items={b.marketAnalysis.differentiation} />
+        </Row>
+        <Row label="Market risks"><List items={b.marketAnalysis.marketRisks} /></Row>
       </TabsContent>
 
       <TabsContent value="scope" className="rounded-xl border bg-card p-5">
@@ -100,6 +125,21 @@ export function OutputHub({
         <Row label="Database tables"><List items={b.techPlan.databaseTables} /></Row>
         <Row label="API routes"><List items={b.techPlan.apiRoutes} /></Row>
         <Row label="Risks"><List items={b.techPlan.risks} /></Row>
+      </TabsContent>
+
+      <TabsContent value="code" className="rounded-xl border bg-card p-5">
+        <Row label="File tree">
+          <div className="flex flex-col gap-2">
+            {b.codeSkeleton.fileTree.map((file, i) => (
+              <div key={i} className="rounded-lg border p-3">
+                <p className="font-mono text-xs font-medium">{file.path}</p>
+                <p className="text-sm text-muted-foreground">{file.purpose}</p>
+              </div>
+            ))}
+          </div>
+        </Row>
+        <Row label="Starter tasks"><List items={b.codeSkeleton.starterTasks} /></Row>
+        <Row label="Conventions"><List items={b.codeSkeleton.conventions} /></Row>
       </TabsContent>
 
       <TabsContent value="backlog" className="rounded-xl border bg-card p-5">

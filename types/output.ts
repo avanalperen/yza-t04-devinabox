@@ -1,14 +1,23 @@
 export type OutputType =
+  | "orchestration_plan"
   | "product_brief"
+  | "market_analysis"
   | "mvp_scope"
   | "backlog"
   | "ux_flow"
   | "tech_plan"
+  | "code_skeleton"
   | "test_plan"
   | "sprint_plan"
   | "readme"
-  | "pitch"
-  | "code_skeleton";
+  | "pitch";
+
+export interface OrchestrationPlan {
+  summary: string;
+  missingInformation: string[];
+  recommendedSequence: string[];
+  guardrails: string[];
+}
 
 export interface ProductBrief {
   projectName: string;
@@ -18,6 +27,13 @@ export interface ProductBrief {
   mainValue: string;
   useCases: string[];
   successMetrics: string[];
+}
+
+export interface MarketAnalysis {
+  competitors: string[];
+  positioning: string;
+  differentiation: string[];
+  marketRisks: string[];
 }
 
 export interface MvpScope {
@@ -65,6 +81,15 @@ export interface TechPlan {
   risks: string[];
 }
 
+export interface CodeSkeleton {
+  fileTree: {
+    path: string;
+    purpose: string;
+  }[];
+  starterTasks: string[];
+  conventions: string[];
+}
+
 export interface TestCase {
   name: string;
   type: "happy" | "edge" | "error";
@@ -89,10 +114,13 @@ export interface SprintPlan {
 }
 
 export interface Blueprint {
+  orchestrationPlan: OrchestrationPlan;
   productBrief: ProductBrief;
+  marketAnalysis: MarketAnalysis;
   mvpScope: MvpScope;
   uxFlow: UxFlow;
   techPlan: TechPlan;
+  codeSkeleton: CodeSkeleton;
   backlog: Backlog;
   testPlan: TestPlan;
   sprintPlan: SprintPlan;

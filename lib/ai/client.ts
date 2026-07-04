@@ -36,5 +36,31 @@ export async function runJsonCompletion(
     temperature: 0.7,
   });
   const content = completion.choices[0]?.message?.content ?? "{}";
-  return JSON.parse(content);
+  try {
+    return JSON.parse(content);
+  } catch (error) {
+    throw new Error(
+      `OpenAI returned invalid JSON: ${error instanceof Error ? error.message : "parse failed"}`,
+    );
+  }
+}
+
+export async function runTextCompletion(
+  system: string,
+  user: string,
+): Promise<string> {
+  const client = createOpenAIClient();
+  if (!client) {
+    throw new Error("OpenAI is not configured. Set OPENAI_API_KEY.");
+  }
+  const model = process.env.OPENAI_MODEL || "gpt-4o-mini";
+  const completion = await client.chat.completions.create({
+    model,
+    messages: [
+      { role: "system", content: system },
+      { role: "user", content: user },
+    ],
+    temperature: 0.5,
+  });
+  return completion.choices[0]?.message?.content?.trim() ?? "";
 }

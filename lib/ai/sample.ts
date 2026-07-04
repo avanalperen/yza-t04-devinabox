@@ -3,6 +3,25 @@ import type { Blueprint } from "@/types/output";
 export function buildSampleBlueprint(rawIdea: string): Blueprint {
   const idea = rawIdea.trim() || "a habit tracker for students";
   return {
+    orchestrationPlan: {
+      summary:
+        "Turn the rough idea into a focused MVP blueprint before writing code.",
+      missingInformation: [
+        "Exact launch platform",
+        "Team size",
+        "Must-have integrations",
+      ],
+      recommendedSequence: [
+        "Clarify the core user problem",
+        "Choose a narrow MVP scope",
+        "Map the first user journey",
+        "Build the smallest working demo",
+      ],
+      guardrails: [
+        "Avoid social features before the core loop works",
+        "Keep AI calls behind server routes",
+      ],
+    },
     productBrief: {
       projectName: "Habitly",
       oneLiner: `An AI-assisted ${idea.toLowerCase()} that keeps users consistent.`,
@@ -17,6 +36,19 @@ export function buildSampleBlueprint(rawIdea: string): Blueprint {
       successMetrics: [
         "7-day retention > 40%",
         "Average streak length > 5 days",
+      ],
+    },
+    marketAnalysis: {
+      competitors: ["Habitica", "Streaks", "Notion habit templates"],
+      positioning:
+        "A beginner-friendly AI planning and habit consistency tool for students.",
+      differentiation: [
+        "AI nudges are tied to the user's stated goal",
+        "Bootcamp-ready roadmap and demo checklist are included",
+      ],
+      marketRisks: [
+        "Habit tracking is crowded",
+        "Users may ignore notifications if nudges are generic",
       ],
     },
     mvpScope: {
@@ -67,6 +99,36 @@ export function buildSampleBlueprint(rawIdea: string): Blueprint {
       databaseTables: ["habits", "checkins", "users"],
       apiRoutes: ["/api/habits", "/api/checkins", "/api/nudge"],
       risks: ["Streak logic edge cases", "AI nudge latency"],
+    },
+    codeSkeleton: {
+      fileTree: [
+        {
+          path: "app/page.tsx",
+          purpose: "Landing or dashboard entry point",
+        },
+        {
+          path: "app/api/habits/route.ts",
+          purpose: "Create and list habits through a server route",
+        },
+        {
+          path: "components/habits/habit-card.tsx",
+          purpose: "Display each habit and its current streak",
+        },
+        {
+          path: "lib/db/habits.ts",
+          purpose: "Keep persistence logic outside UI components",
+        },
+      ],
+      starterTasks: [
+        "Create the habits table",
+        "Build the new habit form",
+        "Implement daily check-in validation",
+      ],
+      conventions: [
+        "Use server routes for writes",
+        "Keep AI prompt logic in lib/ai",
+        "Validate request bodies before writing to storage",
+      ],
     },
     backlog: {
       items: [
@@ -140,6 +202,15 @@ export function buildSampleBlueprint(rawIdea: string): Blueprint {
         },
       ],
     },
-    readme: `# Habitly\n\nAn AI-assisted habit tracker.\n\n## Problem\nPeople struggle to stay consistent.\n\n## Stack\nNext.js, Supabase, OpenAI.\n`,
+    readme: `# Habitly
+
+An AI-assisted habit tracker.
+
+## Problem
+People struggle to stay consistent.
+
+## Stack
+Next.js, Supabase, OpenAI.
+`,
   };
 }

@@ -1,6 +1,13 @@
 import { z } from "zod";
 import type { BlueprintSection } from "@/types/output";
 
+export const orchestrationPlanSchema = z.object({
+  summary: z.string(),
+  missingInformation: z.array(z.string()),
+  recommendedSequence: z.array(z.string()),
+  guardrails: z.array(z.string()),
+});
+
 export const productBriefSchema = z.object({
   projectName: z.string(),
   oneLiner: z.string(),
@@ -9,6 +16,13 @@ export const productBriefSchema = z.object({
   mainValue: z.string(),
   useCases: z.array(z.string()),
   successMetrics: z.array(z.string()),
+});
+
+export const marketAnalysisSchema = z.object({
+  competitors: z.array(z.string()),
+  positioning: z.string(),
+  differentiation: z.array(z.string()),
+  marketRisks: z.array(z.string()),
 });
 
 export const mvpScopeSchema = z.object({
@@ -60,6 +74,17 @@ export const techPlanSchema = z.object({
   risks: z.array(z.string()),
 });
 
+export const codeSkeletonSchema = z.object({
+  fileTree: z.array(
+    z.object({
+      path: z.string(),
+      purpose: z.string(),
+    }),
+  ),
+  starterTasks: z.array(z.string()),
+  conventions: z.array(z.string()),
+});
+
 export const testPlanSchema = z.object({
   happyPath: z.array(
     z.object({
@@ -92,11 +117,14 @@ export const schemas: Record<
   Exclude<BlueprintSection, "readme">,
   z.ZodTypeAny
 > = {
+  orchestrationPlan: orchestrationPlanSchema,
   productBrief: productBriefSchema,
+  marketAnalysis: marketAnalysisSchema,
   mvpScope: mvpScopeSchema,
   backlog: backlogSchema,
   uxFlow: uxFlowSchema,
   techPlan: techPlanSchema,
+  codeSkeleton: codeSkeletonSchema,
   testPlan: testPlanSchema,
   sprintPlan: sprintPlanSchema,
 };

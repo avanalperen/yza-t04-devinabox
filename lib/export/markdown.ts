@@ -7,6 +7,11 @@ export function exportMarkdown(project: Project, blueprint: Blueprint): string {
 
   lines.push(`# ${b.productBrief.projectName || project.title}`, "");
   lines.push(`> ${b.productBrief.oneLiner}`, "");
+  lines.push("## Build Plan", b.orchestrationPlan.summary, "");
+  lines.push("### Guardrails");
+  b.orchestrationPlan.guardrails.forEach((g) => lines.push(`- ${g}`));
+  lines.push("");
+
   lines.push("## Problem", b.productBrief.problem, "");
   lines.push(
     "## Target Users",
@@ -14,6 +19,14 @@ export function exportMarkdown(project: Project, blueprint: Blueprint): string {
     "",
   );
   lines.push("## Value Proposition", b.productBrief.mainValue, "");
+
+  lines.push("## Market Analysis");
+  lines.push("### Competitors");
+  b.marketAnalysis.competitors.forEach((c) => lines.push(`- ${c}`));
+  lines.push("### Positioning", b.marketAnalysis.positioning);
+  lines.push("### Differentiation");
+  b.marketAnalysis.differentiation.forEach((d) => lines.push(`- ${d}`));
+  lines.push("");
 
   lines.push("## MVP Scope");
   lines.push("### Must have");
@@ -43,6 +56,14 @@ export function exportMarkdown(project: Project, blueprint: Blueprint): string {
   b.techPlan.databaseTables.forEach((t) => lines.push(`- ${t}`));
   lines.push("### API routes");
   b.techPlan.apiRoutes.forEach((r) => lines.push(`- ${r}`));
+  lines.push("");
+
+  lines.push("## Code Skeleton");
+  b.codeSkeleton.fileTree.forEach((file) =>
+    lines.push(`- \`${file.path}\` — ${file.purpose}`),
+  );
+  lines.push("### Starter tasks");
+  b.codeSkeleton.starterTasks.forEach((task) => lines.push(`- ${task}`));
   lines.push("");
 
   lines.push("## Product Backlog");
