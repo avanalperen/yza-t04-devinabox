@@ -51,14 +51,14 @@
 
 | Alan | Durum |
 | --- | --- |
-| **Bugün** | 4 Temmuz 2026 Cumartesi |
-| **Bootcamp süreci** | Sprint 1 dönüyor (19 Haziran – 5 Temmuz), Sprint 2 yarın başlıyor |
+| **Bugün** | 5 Temmuz 2026 Pazar |
+| **Bootcamp süreci** | Sprint 1'in son günü; Sprint 2 hazırlıkları ve bazı Sprint 2 kod işleri erkenden tamamlandı |
 | **Takım durumu** | 3 kişi: Muhammed Köseoğlu (PO), Alperen Avan (SM), Kemal Ersin Özkan (Dev) |
 | **Asistan bildirimi** | Takım oluştu; asistan ile iletişim kuruldu |
 | **Ürün teslimi** | 2 Ağustos 2026 23:59 |
 | **Top 10 sunum** | 14 Ağustos 2026 (tarih değişebilir) — YZ'den top 7, No-Code'tan top 3 |
-| **Repo** | Local init edildi, ilk commit atıldı; GitHub'a push bekliyor |
-| **Pivot kararı** | Mobil uygulama → **Web uygulaması** (henüz kod yokken, değiştirmek kolay) |
+| **Repo** | GitHub'a pushlandı; `main` branch'i `origin/main` ile senkron |
+| **Pivot kararı** | Mobil uygulama → **Web uygulaması** kararı kabul edildi ve Next.js app olarak uygulandı |
 
 ### Bootcamp Gereksinimleri (her sprint sonunda README'de zorunlu)
 
@@ -70,6 +70,23 @@ Her sprint sonunda aşağıdaki 6 madde GitHub README'ye eklenmek zorundadır. A
 4. **Ürün durumu** — Ekran görüntüleri, çalışır durum kanıtı
 5. **Sprint Review** — Alınan kararlar, tamamlanan/ertelenen işler, katılımcılar
 6. **Sprint Retrospective** — Neler iyi gitti, neler iyileştirilmeli, aksiyon maddeleri
+
+### Kod Doğrulama Özeti (5 Temmuz 2026)
+
+Bu bölüm, planın artık sadece niyet dokümanı değil, repo gerçekliğiyle hizalı
+yaşayan ürün planı olması için eklendi.
+
+| Alan | Koddan doğrulanan durum |
+| --- | --- |
+| Landing / dashboard / new project / workspace | **Yapıldı** — `app/page.tsx`, `app/dashboard/page.tsx`, `app/projects/new/page.tsx`, `app/projects/[id]/page.tsx` |
+| Project create/list/detail | **Yapıldı** — `app/api/projects/route.ts`, `app/api/projects/[id]/route.ts`, `lib/projects.ts` |
+| Blueprint generation | **Yapıldı** — `lib/ai/orchestrator.ts`, `lib/ai/prompts.ts`, `lib/ai/schemas.ts` |
+| Job + polling modeli | **Yapıldı** — `app/api/generation-jobs/*`, `lib/generation-jobs.ts`, `components/project/workspace.tsx` |
+| Supabase Auth/RLS temeli | **Yapıldı** — `proxy.ts`, `components/auth/session-bootstrap.tsx`, `supabase/migrations/202607050001_auth_rls_generation_jobs.sql` |
+| Output Hub + README export | **Yapıldı** — `components/outputs/output-hub.tsx`, `app/api/export-readme/route.ts`, `lib/export/markdown.ts` |
+| Regenerate section | **Kısmen yapıldı** — API var (`app/api/regenerate-output/route.ts`), UI kontrolü henüz yok |
+| Bootcamp Mode | **Sonraki sprint** — planlandı, henüz route/UI yok |
+| JSON export / feedback kayıtları | **Sonraki sprint** — henüz route/UI yok |
 
 ---
 
@@ -295,21 +312,23 @@ Bootcamp için en önemli export: **README.md**.
 
 ### MVP'de Kesin Olacaklar
 
-| Özellik | Açıklama | Öncelik |
-| --- | --- | --- |
-| Landing page | Ürünü anlatan ana sayfa | P0 |
-| Dashboard | Projeleri listeleme | P0 |
-| Yeni fikir oluşturma | Wizard veya tek form | P0 |
-| Pixie workspace | Agent kartları ve çalışma durumu | P0 |
-| Product Brief üretimi | Problem, hedef kitle, değer önerisi | P0 |
-| MVP Scope üretimi | Must-have / nice-to-have ayrımı | P0 |
-| Backlog üretimi | User story + priority | P0 |
-| UX Flow üretimi | Ekran listesi ve kullanıcı akışı | P0 |
-| Tech Plan üretimi | Stack, DB, API, architecture | P0 |
-| Test Plan üretimi | Test senaryoları ve riskler | P1 |
-| README export | Markdown çıktısı | P1 |
-| Project memory | Kararlar ve önceki çıktıların saklanması | P1 |
-| Bootcamp Mode | Sprint planı / review / retro taslağı | P1 |
+| Özellik | Açıklama | Öncelik | Kod durumu |
+| --- | --- | --- | --- |
+| Landing page | Ürünü anlatan ana sayfa | P0 | **Yapıldı** — `app/page.tsx`, `components/landing/*` |
+| Dashboard | Projeleri listeleme | P0 | **Yapıldı** — `app/dashboard/page.tsx`, `components/project/project-card.tsx` |
+| Yeni fikir oluşturma | Wizard veya tek form | P0 | **Yapıldı** — `app/projects/new/page.tsx`, `components/project/new-project-form.tsx` |
+| Pixie workspace | Agent kartları ve çalışma durumu | P0 | **Yapıldı** — `components/project/workspace.tsx`, `components/pixies/*` |
+| Product Brief üretimi | Problem, hedef kitle, değer önerisi | P0 | **Yapıldı** — `productBrief` schema + prompt + Output Hub |
+| MVP Scope üretimi | Must-have / nice-to-have ayrımı | P0 | **Yapıldı** — `mvpScope` schema + prompt + Output Hub |
+| Backlog üretimi | User story + priority | P0 | **Yapıldı** — `backlog` schema + prompt + Output Hub |
+| UX Flow üretimi | Ekran listesi ve kullanıcı akışı | P0 | **Yapıldı** — `uxFlow` schema + prompt + Output Hub |
+| Tech Plan üretimi | Stack, DB, API, architecture | P0 | **Yapıldı** — `techPlan` schema + prompt + Output Hub |
+| Test Plan üretimi | Test senaryoları ve riskler | P1 | **Yapıldı** — `testPlan` schema + prompt + Output Hub |
+| README export | Markdown çıktısı | P1 | **Yapıldı** — `lib/export/markdown.ts`, `app/api/export-readme/route.ts` |
+| Project memory | Kararlar ve önceki çıktıların saklanması | P1 | **Kısmen yapıldı** — proje + blueprint persist var; pgvector/decision memory yok |
+| Supabase owner/RLS | Public çok-kullanıcı güvenliği | P0 | **Yapıldı** — anonymous auth + `owner_id` RLS migration |
+| Generation jobs | Uzun AI üretimini job status ile izleme | P0 | **Yapıldı** — `generation_jobs` table + polling API |
+| Bootcamp Mode | Sprint planı / review / retro taslağı | P1 | **Sonraki sprint** — henüz route/UI yok |
 
 ### MVP'de Olmayacaklar
 
@@ -338,7 +357,7 @@ Bootcamp için en önemli export: **README.md**.
 | --- | --- | --- |
 | Frontend | **Next.js + TypeScript** | Web app, landing, dashboard, API route uyumu |
 | Styling | **Tailwind CSS + shadcn/ui** | Hızlı, temiz, modern UI |
-| Animation | **Framer Motion** | Pixie kartları ve durum animasyonları |
+| Animation | **motion** (Framer ekosistemi) | Pixie kartları ve durum animasyonları; ağır animasyon polish Sprint 3 |
 | Backend | **Next.js Route Handlers** | Ayrı backend kurmadan API yazılır |
 | Auth | **Supabase Auth** (anonymous owner mode, sonra email/OAuth upgrade) | Hızlı başlangıç + owner bazlı güvenlik |
 | Database | **Supabase Postgres** | Proje, output, backlog kayıtları |
@@ -375,6 +394,8 @@ User
 Next.js Web App
  ↓
 /api/projects
+/api/generation-jobs
+/api/generation-jobs/[id]
 /api/generate-blueprint
 /api/regenerate-output
 /api/export-readme
@@ -383,10 +404,14 @@ AI Orchestrator Service
  ↓
 Pixie Agents
  ↓
-Supabase Postgres
+Supabase Auth + Postgres RLS
  ↓
 Output Hub
 ```
+
+> Kod durumu: Yeni ana üretim akışı `/api/generation-jobs` üzerinden job
+> oluşturur; workspace sonucu `/api/generation-jobs/[id]` ile poll eder.
+> `/api/generate-blueprint` geriye uyumluluk için hâlâ durur.
 
 ### Agent Pipeline
 
@@ -424,17 +449,48 @@ OpenAI Agents SDK'de handoff, bir agent'ın işi başka uzman agent'a devretmesi
 | Alan | Tip | Açıklama |
 | --- | --- | --- |
 | id | uuid | Project id |
+| owner_id | uuid | Supabase Auth kullanıcısı; RLS sahiplik anahtarı |
 | title | text | Proje adı |
 | raw_idea | text | Kullanıcının ham fikri |
 | goal | text | Bootcamp / startup / portfolio |
 | platform | text | Web / mobile / extension |
 | target_audience | text | Hedef kullanıcı |
 | constraints | jsonb | Süre, ekip, bütçe |
-| status | text | draft / generating / ready |
+| output_depth | text | quick / detailed / bootcamp-ready |
+| blueprint | jsonb | Üretilmiş tam blueprint çıktısı |
+| status | text | draft / generating / ready / failed |
 | created_at | timestamp | Oluşturma tarihi |
 | updated_at | timestamp | Güncelleme tarihi |
 
-### `pixie_runs`
+**Kod durumu:** **Yapıldı.** İlk schema `202607040001_initial_schema.sql`, owner/RLS
+ekleri `202607050001_auth_rls_generation_jobs.sql`, uygulama erişimi
+`lib/projects.ts`.
+
+### `generation_jobs`
+
+| Alan | Tip | Açıklama |
+| --- | --- | --- |
+| id | uuid | Job id |
+| project_id | uuid | Bağlı proje; null olabilir |
+| owner_id | uuid | Supabase Auth kullanıcısı; RLS sahiplik anahtarı |
+| status | text | queued / running / succeeded / failed |
+| error | text | Hata varsa |
+| blueprint | jsonb | Job sonucunda oluşan blueprint |
+| created_at | timestamp | Tarih |
+| updated_at | timestamp | Son güncelleme |
+| started_at | timestamp | Çalışmaya başlama |
+| completed_at | timestamp | Bitiş |
+
+**Kod durumu:** **Yapıldı.** API: `app/api/generation-jobs/*`, storage:
+`lib/generation-jobs.ts`, runner: `lib/generation-runner.ts`.
+
+### Roadmap Veri Modelleri
+
+Aşağıdaki tablolar ürün stratejisinde değerli, fakat mevcut kodda henüz ayrı
+tablo olarak yok. Şimdilik `projects.blueprint` JSONB alanı bütün çıktı
+paketini saklıyor.
+
+#### `pixie_runs` — Sonraki sprint
 
 | Alan | Tip | Açıklama |
 | --- | --- | --- |
@@ -448,7 +504,7 @@ OpenAI Agents SDK'de handoff, bir agent'ın işi başka uzman agent'a devretmesi
 | error | text | Hata varsa |
 | created_at | timestamp | Tarih |
 
-### `outputs`
+#### `outputs` — Sonraki sprint
 
 | Alan | Tip | Açıklama |
 | --- | --- | --- |
@@ -462,7 +518,7 @@ OpenAI Agents SDK'de handoff, bir agent'ın işi başka uzman agent'a devretmesi
 | created_by | text | Hangi pixie |
 | created_at | timestamp | Tarih |
 
-### `backlog_items`
+#### `backlog_items` — Sonraki sprint
 
 | Alan | Tip | Açıklama |
 | --- | --- | --- |
@@ -475,7 +531,7 @@ OpenAI Agents SDK'de handoff, bir agent'ın işi başka uzman agent'a devretmesi
 | status | text | todo / doing / done |
 | acceptance_criteria | jsonb | Kabul kriterleri |
 
-### `decisions`
+#### `decisions` — Sonraki sprint
 
 | Alan | Tip | Açıklama |
 | --- | --- | --- |
@@ -487,7 +543,7 @@ OpenAI Agents SDK'de handoff, bir agent'ın işi başka uzman agent'a devretmesi
 | created_by | text | Pixie/user |
 | created_at | timestamp | Tarih |
 
-### `memory_chunks`
+#### `memory_chunks` — Sprint 3 / pgvector
 
 | Alan | Tip | Açıklama |
 | --- | --- | --- |
@@ -574,52 +630,83 @@ Bu ürünün profesyonel görünmesi için AI çıktıları düz paragraf değil
 
 ## 14. API Tasarımı
 
-Next.js içinde şu route'lar yeterli:
+Next.js içinde mevcut route'lar:
 
-| Route | Method | Amaç |
-| --- | --- | --- |
-| `/api/projects` | GET | Projeleri listele |
-| `/api/projects` | POST | Yeni proje oluştur |
-| `/api/projects/[id]` | GET | Proje detayını getir |
-| `/api/generate-blueprint` | POST | Tüm pixie pipeline'ını çalıştır |
-| `/api/regenerate-output` | POST | Tek bölümü tekrar üret |
-| `/api/export-readme` | POST | README markdown üret |
-| `/api/save-feedback` | POST | Kullanıcı feedback'ini kaydet |
+| Route | Method | Amaç | Kod durumu |
+| --- | --- | --- | --- |
+| `/api/projects` | GET | Projeleri listele | **Yapıldı** |
+| `/api/projects` | POST | Yeni proje oluştur | **Yapıldı** |
+| `/api/projects/[id]` | GET | Proje detayını getir | **Yapıldı** |
+| `/api/generation-jobs` | POST | Blueprint generation job başlat | **Yapıldı** |
+| `/api/generation-jobs/[id]` | GET | Job durumunu ve sonucu getir | **Yapıldı** |
+| `/api/generate-blueprint` | POST | Geriye uyumlu direkt pipeline endpoint'i | **Yapıldı** |
+| `/api/regenerate-output` | POST | Tek bölümü tekrar üret | **Kısmen** — API var, UI kontrolü yok |
+| `/api/export-readme` | POST | README markdown üret | **Yapıldı** |
+| `/api/save-feedback` | POST | Kullanıcı feedback'ini kaydet | **Sonraki sprint** |
 
-### `/api/generate-blueprint` Input
+### `/api/generation-jobs` Input
 
 ```json
 {
-  "project_id": "uuid",
-  "raw_idea": "I want to build an AI habit tracker for students...",
-  "goal": "bootcamp",
-  "platform": "web",
-  "target_audience": "students",
-  "constraints": {
-    "team_size": 1,
-    "timeline": "4 weeks",
-    "budget": "free tools"
+  "projectId": "uuid"
+}
+```
+
+Alternatif olarak kaydedilmemiş fikir için:
+
+```json
+{
+  "input": {
+    "rawIdea": "I want to build an AI habit tracker for students...",
+    "goal": "bootcamp",
+    "platform": "web",
+    "targetAudience": "students",
+    "constraints": {
+      "teamSize": 1,
+      "timeline": "4 weeks",
+      "budget": "free tools"
+    },
+    "outputDepth": "bootcamp-ready"
   }
 }
 ```
 
-### Output
+### Job Başlatma Output'u
 
 ```json
 {
-  "project_id": "uuid",
-  "status": "ready",
-  "outputs": {
-    "product_brief": {},
-    "mvp_scope": {},
-    "ux_flow": {},
-    "tech_plan": {},
-    "backlog": {},
-    "test_plan": {},
-    "readme": "markdown"
+  "job": {
+    "id": "uuid",
+    "projectId": "uuid",
+    "status": "queued",
+    "createdAt": "timestamp",
+    "updatedAt": "timestamp"
   }
 }
 ```
+
+### Job Polling Output'u
+
+```json
+{
+  "job": {
+    "id": "uuid",
+    "status": "succeeded",
+    "blueprint": {
+      "productBrief": {},
+      "mvpScope": {},
+      "uxFlow": {},
+      "techPlan": {},
+      "backlog": {},
+      "testPlan": {},
+      "readme": "markdown"
+    }
+  }
+}
+```
+
+> Kod durumu: Request validation `lib/api/schemas.ts`, response persistence
+> `lib/projects.ts` ve job persistence `lib/generation-jobs.ts` içinde.
 
 ---
 
@@ -720,9 +807,12 @@ Sekmeler: Overview · Product · UX · Tech · Backlog · Tests · Docs · Expor
 
 Her sekmede:
 - Markdown preview
-- Copy button
-- Regenerate button
-- "Make shorter" / "Make more technical" / "Adapt for bootcamp"
+- Copy button — **Sonraki sprint**
+- Regenerate button — **Kısmen yapıldı** (`/api/regenerate-output` var, UI bağlantısı yok)
+- "Make shorter" / "Make more technical" / "Adapt for bootcamp" — **Sonraki sprint**
+
+Mevcut kodda Output Hub; Plan, Product, Market, Scope, UX, Tech, Code, Backlog,
+Tests ve README sekmelerini gösterir. README sekmesinde download butonu vardır.
 
 ---
 
@@ -825,6 +915,12 @@ buildpixies/
     api/
       projects/
         route.ts
+        [id]/
+          route.ts
+      generation-jobs/
+        route.ts
+        [id]/
+          route.ts
       generate-blueprint/
         route.ts
       regenerate-output/
@@ -833,6 +929,7 @@ buildpixies/
         route.ts
 
   components/
+    auth/
     landing/
     pixies/
     project/
@@ -851,14 +948,24 @@ buildpixies/
         qa.ts
         scrum.ts
     supabase/
+      config.ts
       client.ts
       server.ts
     export/
       markdown.ts
+    api/
+      http.ts
+      rate-limit.ts
+      schemas.ts
+    generation-jobs.ts
+    generation-runner.ts
+    projects.ts
+    storage.ts
 
   types/
-    project.ts
+    generation-job.ts
     output.ts
+    project.ts
     pixie.ts
 
   docs/
@@ -881,54 +988,65 @@ buildpixies/
 
 ### Epic 1 — Landing & Onboarding
 
-| ID | User Story | Öncelik |
-| --- | --- | --- |
-| BP-001 | Kullanıcı olarak ürünün ne yaptığını landing page'de anlamak istiyorum | P0 |
-| BP-002 | Kullanıcı olarak örnek blueprint görmek istiyorum | P1 |
-| BP-003 | Kullanıcı olarak hızlıca yeni fikir girmek istiyorum | P0 |
+| ID | User Story | Öncelik | Kod durumu |
+| --- | --- | --- | --- |
+| BP-001 | Kullanıcı olarak ürünün ne yaptığını landing page'de anlamak istiyorum | P0 | **Yapıldı** — `app/page.tsx`, `components/landing/*` |
+| BP-002 | Kullanıcı olarak örnek blueprint görmek istiyorum | P1 | **Yapıldı** — statik output preview var (`components/landing/output-preview.tsx`) |
+| BP-003 | Kullanıcı olarak hızlıca yeni fikir girmek istiyorum | P0 | **Yapıldı** — `components/project/new-project-form.tsx` |
 
 ### Epic 2 — Project Creation
 
-| ID | User Story | Öncelik |
-| --- | --- | --- |
-| BP-004 | Kullanıcı olarak yeni proje oluşturmak istiyorum | P0 |
-| BP-005 | Kullanıcı olarak hedef kitle ve platform seçmek istiyorum | P0 |
-| BP-006 | Kullanıcı olarak bootcamp/startup/portfolio amacı seçmek istiyorum | P1 |
+| ID | User Story | Öncelik | Kod durumu |
+| --- | --- | --- | --- |
+| BP-004 | Kullanıcı olarak yeni proje oluşturmak istiyorum | P0 | **Yapıldı** — `POST /api/projects`, `lib/projects.ts` |
+| BP-005 | Kullanıcı olarak hedef kitle ve platform seçmek istiyorum | P0 | **Yapıldı** — form alanları + Zod schema |
+| BP-006 | Kullanıcı olarak bootcamp/startup/portfolio amacı seçmek istiyorum | P1 | **Yapıldı** — goal select + API schema |
 
 ### Epic 3 — Pixie Workspace
 
-| ID | User Story | Öncelik |
-| --- | --- | --- |
-| BP-007 | Kullanıcı olarak pixie takımımı görmek istiyorum | P0 |
-| BP-008 | Kullanıcı olarak hangi pixie'nin çalıştığını görmek istiyorum | P0 |
-| BP-009 | Kullanıcı olarak tamamlanan çıktıları açmak istiyorum | P0 |
+| ID | User Story | Öncelik | Kod durumu |
+| --- | --- | --- | --- |
+| BP-007 | Kullanıcı olarak pixie takımımı görmek istiyorum | P0 | **Yapıldı** — `components/pixies/pixie-team.tsx` |
+| BP-008 | Kullanıcı olarak hangi pixie'nin çalıştığını görmek istiyorum | P0 | **Kısmen yapıldı** — UI status var; gerçek per-pixie streaming/event henüz yok |
+| BP-009 | Kullanıcı olarak tamamlanan çıktıları açmak istiyorum | P0 | **Yapıldı** — `components/outputs/output-hub.tsx` sekmeleri |
 
 ### Epic 4 — AI Blueprint Generation
 
-| ID | User Story | Öncelik |
-| --- | --- | --- |
-| BP-010 | Kullanıcı olarak product brief üretmek istiyorum | P0 |
-| BP-011 | Kullanıcı olarak MVP scope almak istiyorum | P0 |
-| BP-012 | Kullanıcı olarak UX flow almak istiyorum | P0 |
-| BP-013 | Kullanıcı olarak tech architecture almak istiyorum | P0 |
-| BP-014 | Kullanıcı olarak backlog almak istiyorum | P0 |
-| BP-015 | Kullanıcı olarak test planı almak istiyorum | P1 |
+| ID | User Story | Öncelik | Kod durumu |
+| --- | --- | --- | --- |
+| BP-010 | Kullanıcı olarak product brief üretmek istiyorum | P0 | **Yapıldı** — `productBrief` schema/prompt/output |
+| BP-011 | Kullanıcı olarak MVP scope almak istiyorum | P0 | **Yapıldı** — `mvpScope` schema/prompt/output |
+| BP-012 | Kullanıcı olarak UX flow almak istiyorum | P0 | **Yapıldı** — `uxFlow` schema/prompt/output |
+| BP-013 | Kullanıcı olarak tech architecture almak istiyorum | P0 | **Yapıldı** — `techPlan` schema/prompt/output |
+| BP-014 | Kullanıcı olarak backlog almak istiyorum | P0 | **Yapıldı** — `backlog` schema/prompt/output |
+| BP-015 | Kullanıcı olarak test planı almak istiyorum | P1 | **Yapıldı** — `testPlan` schema/prompt/output |
 
 ### Epic 5 — Export
 
-| ID | User Story | Öncelik |
-| --- | --- | --- |
-| BP-016 | Kullanıcı olarak çıktıları markdown olarak kopyalamak istiyorum | P1 |
-| BP-017 | Kullanıcı olarak README taslağı üretmek istiyorum | P1 |
-| BP-018 | Kullanıcı olarak JSON export almak istiyorum | P2 |
+| ID | User Story | Öncelik | Kod durumu |
+| --- | --- | --- | --- |
+| BP-016 | Kullanıcı olarak çıktıları markdown olarak kopyalamak istiyorum | P1 | **Kısmen yapıldı** — README markdown download var; copy button yok |
+| BP-017 | Kullanıcı olarak README taslağı üretmek istiyorum | P1 | **Yapıldı** — `lib/export/markdown.ts`, `/api/export-readme` |
+| BP-018 | Kullanıcı olarak JSON export almak istiyorum | P2 | **Sonraki sprint** |
 
 ### Epic 6 — Bootcamp Mode
 
-| ID | User Story | Öncelik |
-| --- | --- | --- |
-| BP-019 | Kullanıcı olarak sprint notlarımı düzenlemek istiyorum | P1 |
-| BP-020 | Kullanıcı olarak review/retro taslağı almak istiyorum | P1 |
-| BP-021 | Kullanıcı olarak backlog dağıtma mantığı metni üretmek istiyorum | P1 |
+| ID | User Story | Öncelik | Kod durumu |
+| --- | --- | --- | --- |
+| BP-019 | Kullanıcı olarak sprint notlarımı düzenlemek istiyorum | P1 | **Sonraki sprint** |
+| BP-020 | Kullanıcı olarak review/retro taslağı almak istiyorum | P1 | **Sonraki sprint** |
+| BP-021 | Kullanıcı olarak backlog dağıtma mantığı metni üretmek istiyorum | P1 | **Sonraki sprint** |
+
+### Epic 7 — Güvenlik, Kalıcılık ve Operasyon
+
+| ID | User Story | Öncelik | Kod durumu |
+| --- | --- | --- | --- |
+| BP-022 | Kullanıcı olarak projelerimin başkasına görünmemesini istiyorum | P0 | **Yapıldı** — Supabase `owner_id` + RLS |
+| BP-023 | Kullanıcı olarak uzun AI üretimini sayfa donmadan takip etmek istiyorum | P0 | **Yapıldı** — `generation_jobs` + polling |
+| BP-024 | Geliştirici olarak bilinen moderate audit uyarılarını kapatmak istiyorum | P0 | **Yapıldı** — `postcss@8.5.10` override |
+| BP-025 | Geliştirici olarak gerçek durable queue/SSE streaming istiyorum | P1 | **Sonraki sprint** |
+| BP-026 | Kullanıcı olarak anonim hesabımı email/OAuth hesaba bağlamak istiyorum | P1 | **Sonraki sprint** |
+| BP-027 | Ürün sahibi olarak public abuse/quota/CAPTCHA koruması istiyorum | P1 | **Sonraki sprint** |
 
 ---
 
@@ -947,7 +1065,7 @@ Bootcamp takvimi:
 
 #### Yapılacaklar
 - [x] Ürün adı seçildi: **BuildPixies**
-- [x] Public GitHub repo aç (`avanalperen/yza-t04-devinabox`)
+- [x] Public GitHub repo aç ve pushla (`avanalperen/BuildPixies` redirect'iyle güncel)
 - [x] README template ekle (`BootcampScrumTemplate` formatında)
 - [x] Ürün açıklaması yaz
 - [x] Hedef kitleyi yaz
@@ -955,7 +1073,7 @@ Bootcamp takvimi:
 - [x] Web pivot kararını `docs/decision-log.md` içine yaz
 - [x] İlk wireframe'i çiz
 - [x] Landing page taslak metnini hazırla
-- [ ] Takıma ve asistana durum mesajı gönder
+- [ ] Takıma ve asistana durum mesajı gönder (koddan doğrulanamaz; iletişim kanıtı gerekli)
 - [x] Sprint 1 review ve retro yaz
 
 #### Definition of Done
@@ -981,22 +1099,22 @@ Bootcamp takvimi:
 
 **Sprint hedefi:** Kullanıcı fikir girsin, BuildPixies workspace açılsın ve ilk gerçek blueprint çıktısı üretilsin.
 
-| Gün | İş |
-| --- | --- |
-| 6 Temmuz | Next.js projesi kur, Tailwind/shadcn ayarla |
-| 7 Temmuz | Landing page tasarla |
-| 8 Temmuz | Dashboard ve New Project ekranı |
-| 9 Temmuz | Supabase project tablosu |
-| 10 Temmuz | Project create/list akışı |
-| 11 Temmuz | Pixie workspace UI |
-| 12 Temmuz | AI prompt schemas |
-| 13 Temmuz | Product Brief generation |
-| 14 Temmuz | MVP Scope + Backlog generation |
-| 15 Temmuz | UX Flow generation |
-| 16 Temmuz | Tech Plan generation |
-| 17 Temmuz | Output Hub |
-| 18 Temmuz | Hata düzeltme, screenshots |
-| 19 Temmuz | Sprint 2 README, review, retro |
+| Gün | İş | Durum |
+| --- | --- | --- |
+| 6 Temmuz | Next.js projesi kur, Tailwind/shadcn ayarla | **Yapıldı** — `package.json`, `app/*`, `components/ui/*` |
+| 7 Temmuz | Landing page tasarla | **Yapıldı** — `components/landing/*` |
+| 8 Temmuz | Dashboard ve New Project ekranı | **Yapıldı** — `app/dashboard`, `app/projects/new` |
+| 9 Temmuz | Supabase Auth/RLS canlı proje ayarı ve anon sign-in kontrolü | **Kod yapıldı** — migration + proxy; canlı Supabase ayarı deploy sırasında doğrulanacak |
+| 10 Temmuz | Project create/list akışı | **Yapıldı** — `/api/projects`, `lib/projects.ts` |
+| 11 Temmuz | Pixie workspace UI | **Yapıldı** — `components/project/workspace.tsx`, `components/pixies/*` |
+| 12 Temmuz | AI prompt schemas | **Yapıldı** — `lib/ai/prompts.ts`, `lib/ai/schemas.ts` |
+| 13 Temmuz | Product Brief generation | **Yapıldı** |
+| 14 Temmuz | MVP Scope + Backlog generation | **Yapıldı** |
+| 15 Temmuz | UX Flow generation | **Yapıldı** |
+| 16 Temmuz | Tech Plan generation | **Yapıldı** |
+| 17 Temmuz | Output Hub | **Yapıldı** — sekmeli çıktı hub + README download |
+| 18 Temmuz | Hata düzeltme, screenshots | **Kısmen yapıldı** — Sprint 1 screenshots var; Sprint 2 final polish kalır |
+| 19 Temmuz | Sprint 2 README, review, retro | **Zamanı gelmedi** |
 
 #### Definition of Done
 - Canlı veya local çalışan web app var
@@ -1010,22 +1128,22 @@ Bootcamp takvimi:
 
 **Sprint hedefi:** Ürünü jüri demosuna hazır hale getirmek: agent derinliği, export, Bootcamp Mode, polish, video.
 
-| Gün | İş |
-| --- | --- |
-| 20 Temmuz | Agent pipeline'ı güçlendir |
-| 21 Temmuz | Project memory / decisions tablosu |
-| 22 Temmuz | Regenerate section özelliği |
-| 23 Temmuz | README export |
-| 24 Temmuz | Bootcamp Mode basic |
-| 25 Temmuz | Test Plan output |
-| 26 Temmuz | Landing page polish |
-| 27 Temmuz | Workspace animasyonları |
-| 28 Temmuz | Deploy denemesi (Vercel) |
-| 29 Temmuz | Demo data hazırla |
-| 30 Temmuz | README final screenshots |
-| 31 Temmuz | Video script |
-| 1 Ağustos | 3 dakikalık video çekimi |
-| 2 Ağustos | Final test + teslim |
+| Gün | İş | Durum |
+| --- | --- | --- |
+| 20 Temmuz | Agent pipeline'ı güçlendir | **Kısmen yapıldı** — role-based pipeline var; Agents SDK handoff yok |
+| 21 Temmuz | Project memory / decisions tablosu | **Sonraki sprint** |
+| 22 Temmuz | Regenerate section özelliği | **Kısmen yapıldı** — API var, UI yok |
+| 23 Temmuz | README export | **Yapıldı** |
+| 24 Temmuz | Bootcamp Mode basic | **Sonraki sprint** |
+| 25 Temmuz | Test Plan output | **Yapıldı** |
+| 26 Temmuz | Landing page polish | **Kısmen yapıldı** — temel landing var, final polish kalır |
+| 27 Temmuz | Workspace animasyonları | **Kısmen yapıldı** — status UI var, motion polish yok |
+| 28 Temmuz | Deploy denemesi (Vercel) | **Sonraki sprint** |
+| 29 Temmuz | Demo data hazırla | **Kısmen yapıldı** — sample fallback var; curated demo project kalır |
+| 30 Temmuz | README final screenshots | **Kısmen yapıldı** — Sprint 1 screenshots var; final screenshots kalır |
+| 31 Temmuz | Video script | **Planlandı** — bölüm 28 var; video script dosyası yok |
+| 1 Ağustos | 3 dakikalık video çekimi | **Sonraki sprint** |
+| 2 Ağustos | Final test + teslim | **Sonraki sprint** |
 
 #### Definition of Done
 - Uygulama deploy edilmiş veya deploy edilebilir durumda
@@ -1034,6 +1152,21 @@ Bootcamp takvimi:
 - Sprint 1, 2, 3 belgeleri tamam
 - Ürün demo akışı sorunsuz
 - En az bir sample project hazır
+
+### İleri Sprint İyileştirmeleri
+
+| İyileştirme | Neden önemli | Önerilen sprint |
+| --- | --- | --- |
+| Regenerate UI kontrolleri | API var ama kullanıcı sekme bazlı tekrar üretimi tetikleyemiyor | Sprint 2 sonu |
+| Copy Markdown ve JSON export | Bootcamp tesliminde çıktı paylaşımı kolaylaşır | Sprint 2 sonu |
+| Bootcamp Mode basic | Ürünün akademi bağlamındaki özgünlüğünü artırır | Sprint 3 |
+| Durable queue veya SSE streaming | Next `after()` iyi temel; public production için daha dayanıklı job altyapısı gerekir | Sprint 3 |
+| Email/OAuth account linking | Anonymous auth demo için iyi; kalıcı kullanıcı hesabı için yükseltme gerekir | Sprint 3 |
+| Quota, Turnstile/CAPTCHA, usage limit | Public AI endpoint maliyeti ve abuse riskini azaltır | Sprint 3 |
+| Vercel + canlı Supabase smoke | Local build yetmez; final teslim canlı link ister | Sprint 3 |
+| Curated demo project + video script dosyası | 3 dakikalık demo akışını risksizleştirir | Sprint 3 |
+| Per-pixie run/event logging | Pixie status'ları gerçek pipeline olaylarına bağlanır | Sprint 3 / sonrası |
+| pgvector memory + decisions | Proje hafızası ve tekrar üretim kalitesi güçlenir | Sprint 3 / sonrası |
 
 ---
 
@@ -1045,11 +1178,12 @@ Takım 3 kişidir. Aşağıdaki scope Sprint 2'den itibaren üç kişiyle yürü
 1. Landing page
 2. New Project form
 3. Pixie workspace görünümü
-4. Tek endpoint ile blueprint generation
+4. Job endpoint + polling ile blueprint generation
 5. Output Hub
 6. README export
-7. Bootcamp Mode basic
-8. Vercel deploy
+7. Supabase owner/RLS temeli
+8. Bootcamp Mode basic
+9. Vercel deploy
 
 ### Görev Dağılımı
 
@@ -1169,7 +1303,7 @@ Gösterilecek demo:
 - Project flow var
 - Outputs var
 - Export var
-- Sample project var
+- Sample fallback var; final curated demo project Sprint 3'te hazırlanacak
 
 ### Pazara Uygunluk
 Hedef kitle çok net: Bootcamp teams, Hackathon participants, Junior builders, Solo founders.
@@ -1178,9 +1312,9 @@ Hedef kitle çok net: Bootcamp teams, Hackathon participants, Junior builders, S
 - Role-based AI agents
 - Orchestrator
 - Structured JSON outputs
-- Project memory
-- Regeneration by section
-- Bootcamp-specific documentation agent
+- Blueprint persistence ile temel project memory
+- Regeneration by section API
+- Bootcamp-specific documentation agent hedefi
 - Guardrail: realistic MVP scope
 
 > Final değerlendirmede YZ tarafında "yapay zeka öğeleri" 35 puanlık büyük bir alan; ön değerlendirme tarafında da AI agent, hafıza, orkestrasyon gibi teknik yönetimler ayrıca puanlanıyor.
@@ -1197,6 +1331,8 @@ Hedef kitle çok net: Bootcamp teams, Hackathon participants, Junior builders, S
 | Takım içi koordinasyon kopukluğu | Geliştirme yavaşlar | Günlük sync + net rol dağılımı |
 | Deploy problemi | Teslim riski | Erken Vercel deploy |
 | Prompt çıktısı tutarsız | Ürün kalitesi düşer | JSON schema + validation |
+| Public AI endpoint abuse | Maliyet / kota riski | Rate limit var; Sprint 3'te quota + Turnstile/CAPTCHA |
+| Paket güvenlik uyarıları | Deploy güveni düşer | `npm audit --omit=dev` takip edilir; PostCSS override eklendi |
 | README eksik kalır | Puan kaybı | Her sprint sonunda güncelleme |
 | Tasarım fazla çocuksu olur | Ciddiyet azalır | Cute SaaS dengesi |
 

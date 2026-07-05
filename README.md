@@ -1,54 +1,8 @@
-# BuildPixies
-
-> Your tiny AI product team that turns ideas into launch-ready MVP plans.
-
-BuildPixies is a web-first AI product-building workspace. You drop a messy idea,
-a team of specialized "pixie" AI agents (Product, UX, Tech, QA, Scrum, Docs)
-analyzes it together and returns a structured MVP blueprint: product brief, MVP
-scope, backlog, UX flow, tech architecture, test plan, sprint plan and a
-README export.
-
-**Tagline:** "Turn messy ideas into build-ready MVPs."
-
----
-
-## Local Setup
-
-This repo targets Node `24.15.0`. If your shell does not expose `node`/`npm`,
-run `nvm use` from the project root first; `.nvmrc` and `.node-version` are
-included for version managers.
-
-```bash
-nvm use
-npm install
-npm run dev
-```
-
-Supabase ile kalıcı storage kullanacaksanız başlangıç şemasını uygulayın:
-
-```bash
-supabase db push
-```
-
-Supabase ortam değişkenleri:
-
-```bash
-NEXT_PUBLIC_SUPABASE_URL=...
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=...
-# Legacy projelerde NEXT_PUBLIC_SUPABASE_ANON_KEY de desteklenir.
-```
-
-Hosted deploy'larda `BUILDPIXIES_REQUIRE_SUPABASE=1` kullanın. Local geliştirmede
-Supabase yoksa `.local/buildpixies-projects.json` fallback'i devreye girer.
-Şifresiz demo akışı için Supabase Auth > Anonymous Sign-Ins açık olmalıdır.
-Gerekirse otomatik anonim oturum açmayı `BUILDPIXIES_ENABLE_ANON_AUTH=0` ve
-`NEXT_PUBLIC_BUILDPIXIES_ENABLE_ANON_AUTH=0` ile kapatabilirsiniz.
-
----
-
-# Takım İsmi
+# **Takım İsmi**
 
 BuildPixies
+
+---
 
 # Ürün İle İlgili Bilgiler
 
@@ -65,7 +19,7 @@ BuildPixies
     <td>Product Owner</td>
     <td>
       <a href="https://github.com/Vartmor" target="_blank"><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="20" height="20" /></a>
-      <a href="https://www.linkedin.com/in/muhammed-koseoglu/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" width="20" height="20"/></a>
+      <a href="https://www.linkedin.com/in/muhammed-koseoglu/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" width="20" height="20" /></a>
     </td>
   </tr>
   <tr>
@@ -73,266 +27,406 @@ BuildPixies
     <td>Scrum Master</td>
     <td>
       <a href="https://github.com/avanalperen" target="_blank"><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="20" height="20" /></a>
-      <a href="https://www.linkedin.com/in/alperenavan/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" width="20" height="20"/></a>
+      <a href="https://www.linkedin.com/in/alperenavan/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" width="20" height="20" /></a>
     </td>
   </tr>
   <tr>
-    <td><a href="#" target="_blank">Kemal Ersin Özkan</a></td>
+    <td>Kemal Ersin Özkan</td>
     <td>Developer</td>
-    <td>
-      <a href="#" target="_blank"><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="20" height="20" /></a>
-      <a href="#" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" width="20" height="20"/></a>
-    </td>
+    <td>GitHub / LinkedIn eklenecek</td>
   </tr>
 </table>
 
 ## Ürün İsmi
 
-BuildPixies
+**BuildPixies**
 
 ## Ürün Açıklaması
 
-BuildPixies, fikri olan ama ürüne nereden başlayacağını bilmeyen kişilere; uzman
-AI agent'lardan oluşan tatlı bir mini takım (pixie'ler) aracılığıyla ürün
-planı, backlog, mimari, tasarım akışı ve kod başlangıcı üreten web tabanlı bir
-AI product planning workspace'idir. Kullanıcı dağınık fikrini yazar, pixie
-takımı bunu yapılandırılmış MVP blueprint'ine dönüştürür ve README olarak
-export eder.
+BuildPixies, fikri olan ama ürüne nereden başlayacağını bilmeyen kullanıcılar
+için tasarlanmış web tabanlı bir **AI product planning workspace**'idir.
+Kullanıcı dağınık fikrini yazar; ürün, UX, teknik mimari, QA, scrum ve dokümantasyon
+rollerindeki pixie agent'lar bu fikri yapılandırılmış bir MVP blueprint'ine
+dönüştürür.
+
+Ürün tek bir "kod yazdırma aracı" değil; fikirden uygulanabilir ürün planına
+giden yolu yönetir. Çıktılar product brief, MVP scope, UX flow, tech plan,
+backlog, test planı, sprint planı ve README export gibi teslim edilebilir
+formatlarda hazırlanır.
+
+**Tagline:** Turn messy ideas into build-ready MVPs.
 
 ## Ürün Özellikleri
 
-### Mevcut MVP akışı
+### Mevcut MVP Akışı
 
-- Fikirden yapılandırılmış product brief üretimi (problem, hedef kitle, değer)
-- MVP scope (must-have / nice-to-have / out-of-scope ayrımı)
-- User story + priority içeren backlog üretimi
-- Kullanıcı akışı ve ekran haritası (UX flow)
-- Stack, veri modeli, API planı içeren tech architecture
-- Pazar açısı ve farklılaşma özeti
-- Başlangıç dosya ağacı / code skeleton önerisi
-- Test senaryoları ve demo öncesi kontrol listesi
-- 3 sprintlik sprint planı
-- README.md export (markdown download)
-- Pixie karakterli workspace (her agent'ın durumu görünür)
-- Proje ve blueprint çıktısının local fallback veya Supabase `projects.blueprint`
-  alanında saklanması
-- Supabase Auth anonim oturum + `owner_id` bazlı RLS ile proje/job sahipliği
-- Uzun AI generation akışı için `generation_jobs` durum modeli ve UI polling
-- Next/PostCSS audit uyarısını kapatan güvenli `postcss@8.5.10` override
+- Fikirden yapılandırılmış product brief üretimi
+- MVP scope: must-have / nice-to-have / out-of-scope ayrımı
+- User story, priority ve acceptance criteria içeren backlog üretimi
+- UX flow: kullanıcı yolculuğu, ekran listesi, empty/error state önerileri
+- Tech plan: stack, veri modeli, API planı, mimari riskler
+- Market angle ve farklılaşma özeti
+- Code skeleton: başlangıç dosya ağacı ve geliştirme görevleri
+- Test planı: happy path, edge case, güvenlik riskleri, demo checklist
+- Sprint planı ve README.md export
+- Pixie workspace: agent kartları ve durum görünümü
+- Supabase veya local JSON fallback ile proje/blueprint saklama
+- Supabase Auth anonymous owner mode + `owner_id` bazlı RLS temeli
+- Uzun AI üretimi için `generation_jobs` durum modeli ve UI polling
 
-### Roadmap / Sprint 3 hedefleri
+### Roadmap
 
-- Bootcamp Mode (sprint notlarını Scrum formatına dönüştürme — roadmap)
-- OpenAI Agents SDK handoff ve kalıcı project memory (pgvector)
-- Anon kullanıcıyı email/OAuth hesabına yükseltme
-- Harici durable queue veya SSE streaming ile AI pipeline sertleştirmesi
-- Public deploy için abuse prevention, CAPTCHA/Turnstile ve quota katmanı
+- Bootcamp Mode: sprint notlarını review/retro/README formatına dönüştürme
+- Regenerate UI kontrolleri ve markdown copy/json export
+- OpenAI Agents SDK handoff, tracing ve guardrail katmanı
+- pgvector ile project memory ve decision memory
+- Email/OAuth account linking
+- Durable queue veya SSE streaming
+- Vercel canlı deploy, quota, Turnstile/CAPTCHA ve abuse prevention
 
 ## Hedef Kitle
 
-- Bootcamp / hackathon katılımcıları
+- Bootcamp ve hackathon katılımcıları
 - Solo founder / indie hacker'lar
-- Junior developer / freelancer'lar
-- Fikri olan ama MVP scope çıkaramayan herkes
+- Junior developer ve freelancer'lar
+- Fikri olan ama MVP scope, backlog ve teknik plan çıkaramayan küçük ekipler
 
 ## Product Backlog URL
 
-Backlog bu README'nin "Product Backlog" bölümünde ve `docs/plan.md` bölüm 20'de
-tutulmaktadır. Sprint board olarak GitHub Projects kullanılması planlanmıştır.
+- [GitHub Issues Board](https://github.com/avanalperen/BuildPixies/issues)
+- Detaylı ürün planı: [`docs/plan.md`](docs/plan.md)
+- Sprint kararları: [`docs/decision-log.md`](docs/decision-log.md)
 
 ---
 
 # Product Backlog
 
-| ID | User Story | Öncelik |
-| --- | --- | --- |
-| BP-001 | Kullanıcı olarak ürünün ne yaptığını landing page'de anlamak istiyorum | P0 |
-| BP-002 | Kullanıcı olarak örnek blueprint görmek istiyorum | P1 |
-| BP-003 | Kullanıcı olarak hızlıca yeni fikir girmek istiyorum | P0 |
-| BP-004 | Kullanıcı olarak yeni proje oluşturmak istiyorum | P0 |
-| BP-005 | Kullanıcı olarak hedef kitle ve platform seçmek istiyorum | P0 |
-| BP-007 | Kullanıcı olarak pixie takımımı görmek istiyorum | P0 |
-| BP-008 | Kullanıcı olarak hangi pixie'nin çalıştığını görmek istiyorum | P0 |
-| BP-010 | Kullanıcı olarak product brief üretmek istiyorum | P0 |
-| BP-011 | Kullanıcı olarak MVP scope almak istiyorum | P0 |
-| BP-012 | Kullanıcı olarak UX flow almak istiyorum | P0 |
-| BP-013 | Kullanıcı olarak tech architecture almak istiyorum | P0 |
-| BP-014 | Kullanıcı olarak backlog almak istiyorum | P0 |
-| BP-015 | Kullanıcı olarak test planı almak istiyorum | P1 |
-| BP-016 | Kullanıcı olarak çıktıları markdown olarak kopyalamak istiyorum | P1 |
-| BP-017 | Kullanıcı olarak README taslağı üretmek istiyorum | P1 |
-| BP-019 | Kullanıcı olarak sprint notlarımı düzenlemek istiyorum | P1 |
+| ID | User Story | Öncelik | Durum |
+| --- | --- | --- | --- |
+| BP-001 | Kullanıcı olarak ürünün ne yaptığını landing page'de anlamak istiyorum | P0 | Done |
+| BP-002 | Kullanıcı olarak örnek blueprint görmek istiyorum | P1 | Done |
+| BP-003 | Kullanıcı olarak hızlıca yeni fikir girmek istiyorum | P0 | Done |
+| BP-004 | Kullanıcı olarak yeni proje oluşturmak istiyorum | P0 | Done |
+| BP-005 | Kullanıcı olarak hedef kitle ve platform seçmek istiyorum | P0 | Done |
+| BP-006 | Kullanıcı olarak bootcamp/startup/portfolio amacı seçmek istiyorum | P1 | Done |
+| BP-007 | Kullanıcı olarak pixie takımımı görmek istiyorum | P0 | Done |
+| BP-008 | Kullanıcı olarak hangi pixie'nin çalıştığını görmek istiyorum | P0 | Partial |
+| BP-009 | Kullanıcı olarak tamamlanan çıktıları açmak istiyorum | P0 | Done |
+| BP-010 | Kullanıcı olarak product brief üretmek istiyorum | P0 | Done |
+| BP-011 | Kullanıcı olarak MVP scope almak istiyorum | P0 | Done |
+| BP-012 | Kullanıcı olarak UX flow almak istiyorum | P0 | Done |
+| BP-013 | Kullanıcı olarak tech architecture almak istiyorum | P0 | Done |
+| BP-014 | Kullanıcı olarak backlog almak istiyorum | P0 | Done |
+| BP-015 | Kullanıcı olarak test planı almak istiyorum | P1 | Done |
+| BP-016 | Kullanıcı olarak çıktıları markdown olarak kopyalamak istiyorum | P1 | Partial |
+| BP-017 | Kullanıcı olarak README taslağı üretmek istiyorum | P1 | Done |
+| BP-018 | Kullanıcı olarak JSON export almak istiyorum | P2 | Sprint 2/3 |
+| BP-019 | Kullanıcı olarak sprint notlarımı düzenlemek istiyorum | P1 | Sprint 3 |
+| BP-020 | Kullanıcı olarak review/retro taslağı almak istiyorum | P1 | Sprint 3 |
+| BP-021 | Kullanıcı olarak backlog dağıtma mantığı metni üretmek istiyorum | P1 | Sprint 3 |
+| BP-022 | Kullanıcı olarak projelerimin başkasına görünmemesini istiyorum | P0 | Done |
+| BP-023 | Kullanıcı olarak uzun AI üretimini sayfa donmadan takip etmek istiyorum | P0 | Done |
+| BP-024 | Geliştirici olarak bilinen moderate audit uyarılarını kapatmak istiyorum | P0 | Done |
+| BP-025 | Geliştirici olarak durable queue/SSE streaming istiyorum | P1 | Sprint 3 |
+| BP-026 | Kullanıcı olarak anonim hesabımı email/OAuth hesaba bağlamak istiyorum | P1 | Sprint 3 |
+| BP-027 | Ürün sahibi olarak public abuse/quota/CAPTCHA koruması istiyorum | P1 | Sprint 3 |
 
 ---
 
 # Sprint 1
 
-**Sprint dönemi:** 19 Haziran – 5 Temmuz 2026
-**Sprint hedefi:** BuildPixies web pivot kararını belgelemek; repo, plan, README,
-backlog ve proje iskeletini (Next.js + mimari) oturtmak.
+## Sprint Notları
 
-- **Backlog düzeni ve Story seçimleri**: Sprint 1, ürünün temellerine ayrıldı.
-  P0 story'lerden proje iskeleti, README ve backlog önceliklendirildi. Sprint
-  başında tek geliştiriciydi; sprint sonuna doğru takım (3 kişi) oluştu. Puan
-  hedefi gerçekçi tutuldu:
-  fikir/repo/README/backlog/plan + Next.js kurulumu ve landing iskeleti.
-  Seçilen P0 story'ler: BP-001, BP-003, BP-004, BP-007, BP-010–BP-014
-  (iskelet seviyesinde).
+- **Sprint dönemi:** 19 Haziran – 5 Temmuz 2026
+- **Sprint hedefi:** BuildPixies web pivot kararını netleştirmek, repo ve
+  dokümantasyon temelini oluşturmak, çalışan Next.js iskeletini ve ilk MVP
+  akışını ayağa kaldırmak.
+- **Sprint içinde tamamlanması tahmin edilen puan:** 100 puan
+- **Tamamlanan puan:** 100 puan
+- **Sprint sonucu:** Sprint 1 hedefi tamamlandı. Ürün fikri, plan, README,
+  backlog, web pivot kararı, Next.js iskeleti, temel ekranlar, AI blueprint
+  pipeline'ı, local/Supabase storage temeli ve Sprint 1 ekran görüntüleri hazır.
 
-- **Daily Scrum**: Sprint başında solo yürüdü; takım oluşunca Slack/WhatsApp
-  üzerinden günlük short sync'lere geçildi. Günlük özet:
-  - **27 Haz**: Bootcamp başlangıcı. Takım oluşturuldu (Slack). Fikir
-    aranıyor.
-  - **28–30 Haz**: Fikir bulma ve pazar araştırması. Mobil uygulama
-    fikri tartışıldı.
-  - **1 Tem**: BuildPixies fikri netleşti. Web-first karar alındı
-    (`docs/decision-log.md`).
-  - **2 Tem**: Proje planı yazıldı (`docs/plan.md`). Bootcamp
-    kılavuzu okundu, değerlendirme kriterleri hizalandı.
-  - **3 Tem**: Takım 3 kişiye tamamlandı (PO, SM, Dev). Repo
-    açıldı, README ve backlog yazıldı.
-  - **4 Tem**: Next.js + Tailwind + shadcn/ui kurulumu, tüm iskelet
-    sayfaları ve API route'ları yazıldı. Ekran görüntüleri alındı.
+## Puan Tamamlama Mantığı
 
-- **Sprint board update**: Sprint board GitHub Issues üzerinden
-  yönetilmektedir. Tüm P0 story'ler açıldı ve "done" olarak
-  işaretlendi.
-  [GitHub Issues Board](https://github.com/avanalperen/yza-t04-devinabox/issues)
+Sprint 1'de toplam hedef 100 puan olarak belirlendi. Sprintin ana amacı final
+ürünü bitirmek değil, Sprint 2'de hızlı geliştirme yapabilmek için sağlam bir
+temel oluşturmaktı. Bu nedenle puanların çoğu ürün stratejisi, repo düzeni,
+README/backlog, karar kayıtları ve çalışan web iskeletine ayrıldı.
 
-  | Story | Title | Priority | Sprint | Status |
-  | --- | --- | --- | --- | --- |
-  | [BP-001](https://github.com/avanalperen/yza-t04-devinabox/issues/1) | Landing page | P0 | 1 | Done |
-  | [BP-003](https://github.com/avanalperen/yza-t04-devinabox/issues/2) | New project wizard | P0 | 1 | Done |
-  | [BP-004](https://github.com/avanalperen/yza-t04-devinabox/issues/3) | Project creation API | P0 | 1 | Done |
-  | [BP-007](https://github.com/avanalperen/yza-t04-devinabox/issues/4) | Pixie team view | P0 | 1 | Done |
-  | [BP-008](https://github.com/avanalperen/yza-t04-devinabox/issues/5) | Pixie status tracking | P0 | 1 | Done |
-  | [BP-010](https://github.com/avanalperen/yza-t04-devinabox/issues/6) | Product Brief generation | P0 | 1 | Done |
-  | [BP-011](https://github.com/avanalperen/yza-t04-devinabox/issues/7) | MVP Scope generation | P0 | 1 | Done |
-  | [BP-012](https://github.com/avanalperen/yza-t04-devinabox/issues/8) | UX Flow generation | P0 | 1 | Done |
-  | [BP-013](https://github.com/avanalperen/yza-t04-devinabox/issues/9) | Tech Architecture generation | P0 | 1 | Done |
-  | [BP-014](https://github.com/avanalperen/yza-t04-devinabox/issues/10) | Backlog generation | P0 | 1 | Done |
+| Kategori | Puan | Durum |
+| --- | ---: | --- |
+| Ürün fikri, hedef kitle ve web pivot kararı | 15 | Done |
+| README ve Bootcamp şablon düzeni | 15 | Done |
+| Product backlog ve sprint planı | 15 | Done |
+| Next.js + Tailwind + shadcn/ui proje iskeleti | 15 | Done |
+| Landing, dashboard, new project ve workspace ekranları | 20 | Done |
+| AI prompt pipeline ve structured output şemaları | 10 | Done |
+| Storage, auth/RLS ve generation job temeli | 10 | Done |
 
-- **Ürün Durumu**: Ekran görüntüleri (4 Temmuz 2026):
+## Backlog Düzeni ve Story Seçimleri
 
-  **Landing Page (Hero)**
-  ![Landing Hero](public/screenshots/landing-hero.png)
+Sprint 1 backlog'u, önce ürünün "temel taşı" olacak story'lere ayrıldı. İlk
+öncelik ürünün ne olduğunu anlatmak, kullanıcıdan fikir almak, workspace'i
+göstermek ve blueprint çıktısı üretebilecek altyapıyı oluşturmaktı.
 
-  **Landing Page (Full)**
-  ![Landing Full](public/screenshots/landing.png)
+| Story | Başlık | Öncelik | Sprint | Durum |
+| --- | --- | --- | --- | --- |
+| BP-001 | Landing page | P0 | 1 | Done |
+| BP-003 | New project wizard | P0 | 1 | Done |
+| BP-004 | Project creation API | P0 | 1 | Done |
+| BP-005 | Target audience/platform seçimi | P0 | 1 | Done |
+| BP-007 | Pixie team view | P0 | 1 | Done |
+| BP-008 | Pixie status tracking | P0 | 1 | Partial |
+| BP-009 | Output Hub sekmeleri | P0 | 1 | Done |
+| BP-010 | Product Brief generation | P0 | 1 | Done |
+| BP-011 | MVP Scope generation | P0 | 1 | Done |
+| BP-012 | UX Flow generation | P0 | 1 | Done |
+| BP-013 | Tech Architecture generation | P0 | 1 | Done |
+| BP-014 | Backlog generation | P0 | 1 | Done |
+| BP-015 | Test Plan generation | P1 | 1 | Done |
+| BP-017 | README export | P1 | 1 | Done |
+| BP-022 | Owner bazlı Supabase RLS | P0 | 1 | Done |
+| BP-023 | Generation job + polling | P0 | 1 | Done |
 
-  **Dashboard (Empty State)**
-  ![Dashboard](public/screenshots/dashboard.png)
+## Daily Scrum
 
-  **New Project Wizard**
-  ![New Project](public/screenshots/new-project.png)
+Sprint 1'in ilk kısmı fikir keşfi ve takım oluşumu ile geçti. Takım sprint
+sonuna doğru 3 kişiye tamamlandığı için günlük iletişim Slack/WhatsApp kısa
+sync'leri üzerinden yürütüldü. Scrum kayıtları metin özeti olarak aşağıdadır;
+iletişim ekran görüntüleri takım içi kanallardan ayrıca eklenebilir.
 
-  **Pixie Workspace**
-  ![Workspace](public/screenshots/workspace.png)
+| Tarih | Daily Scrum Özeti |
+| --- | --- |
+| 27 Haziran | Bootcamp başlangıcı yapıldı, takım iletişim kanalları kuruldu, fikir arayışı başladı. |
+| 28 Haziran | İlk ürün fikirleri değerlendirildi; mobil uygulama alternatifi tartışıldı. |
+| 29 Haziran | Hedef kitle ve bootcamp teslim kriterleri incelendi; ürünün uygulanabilirliği konuşuldu. |
+| 30 Haziran | Pazar ve problem alanı daraltıldı; fikirden ürüne planlama ihtiyacı öne çıktı. |
+| 1 Temmuz | BuildPixies fikri netleşti; mobil yerine web-first ürün kararı alındı. |
+| 2 Temmuz | `docs/plan.md` yazıldı, bootcamp kılavuzu ve referans README'ler incelendi. |
+| 3 Temmuz | Takım rolleri netleşti; PO, SM ve Developer dağılımı README'ye işlendi. |
+| 4 Temmuz | Next.js + Tailwind + shadcn/ui kurulumu, temel ekranlar, API route'ları ve screenshotlar hazırlandı. |
+| 5 Temmuz | API validation, blueprint persistence, Supabase owner/RLS, generation job/polling ve audit düzeltmeleri tamamlandı. |
 
-  Mevcut durum: Next.js 16 + TypeScript + Tailwind v4 + shadcn/ui kurulu;
-  landing page, dashboard, new project form, pixie workspace ve output hub
-  iskeletleri çalışır durumda; AI orchestrator (role-based pipeline) ve API
-  route'ları hazır.
+## Sprint Board Update
 
-- **Sprint Review**: Alınan kararlar: (1) Mobil uygulama yerine web uygulamasına
-  pivot yapıldı — demo, deploy ve output deneyimi açısından web daha uygun
-  (`docs/decision-log.md`). (2) Ürün adı BuildPixies olarak belirlendi. (3)
-  Takım 3 kişiye tamamlandı (Product Owner, Scrum Master, Developer). (4)
-  Next.js App Router + Route Handlers + Supabase + OpenAI stack'i seçildi.
-  Çıkan ürünün çalışmasında sorun yok; geliştirme ortamı ayağa kalktı.
-  Katılımcılar: Muhammed Köseoğlu, Alperen Avan, Kemal Ersin Özkan.
+Sprint board GitHub Issues üzerinden takip edilmektedir. Sprint 1 sonunda P0
+story'lerin büyük bölümü tamamlandı; BP-008 gerçek per-pixie event/streaming
+bağlantısı kalacağı için partial bırakıldı.
 
-- **Sprint Retrospective:**
-  - Takım sprint sonuna doğru oluştu; Sprint 2'de tam kapasite üç kişi
-    devam edilecek.
-  - Sprint 2'de kodlamaya hızlı başlamak için Sprint 1'de iskelet
-    tamamlandı — iyi karar.
-  - Sprint 2'de gerçek AI generation akışını ve pixie animasyonlarını
-    güçlendirmek gerekiyor.
+[Sprint Board / GitHub Issues](https://github.com/avanalperen/BuildPixies/issues)
+
+| Board Kolonu | Sprint 1 Sonu Durum |
+| --- | --- |
+| Done | Landing, new project, project API, pixie workspace, output hub, AI blueprint sections, README export, RLS/job temeli |
+| In Progress | Per-pixie gerçek event/streaming, UI regenerate kontrolleri |
+| Backlog | Bootcamp Mode, JSON export, account linking, durable queue/SSE, Vercel deploy hardening |
+
+## Ürün Durumu
+
+Sprint 1 sonunda uygulama local ortamda çalışır durumdadır. Ekran görüntüleri
+`public/screenshots/` altında tutulmaktadır.
+
+<details>
+  <summary><h3>Sprint 1 - Ekran Görüntüleri</h3></summary>
+
+### Landing Page - Hero
+
+![Landing Hero](public/screenshots/landing-hero.png)
+
+### Landing Page - Full
+
+![Landing Full](public/screenshots/landing.png)
+
+### Dashboard - Empty State
+
+![Dashboard](public/screenshots/dashboard.png)
+
+### New Project Wizard
+
+![New Project](public/screenshots/new-project.png)
+
+### Pixie Workspace
+
+![Workspace](public/screenshots/workspace.png)
+
+</details>
+
+## Teknik Doğrulama
+
+| Alan | Kod Kanıtı | Durum |
+| --- | --- | --- |
+| Landing / dashboard / new project / workspace | `app/page.tsx`, `app/dashboard/page.tsx`, `app/projects/new/page.tsx`, `app/projects/[id]/page.tsx` | Done |
+| Project create/list/detail | `app/api/projects/*`, `lib/projects.ts` | Done |
+| Blueprint pipeline | `lib/ai/orchestrator.ts`, `lib/ai/prompts.ts`, `lib/ai/schemas.ts` | Done |
+| Job + polling | `app/api/generation-jobs/*`, `lib/generation-jobs.ts`, `components/project/workspace.tsx` | Done |
+| Supabase owner/RLS | `proxy.ts`, `components/auth/session-bootstrap.tsx`, `supabase/migrations/202607050001_auth_rls_generation_jobs.sql` | Done |
+| README export | `app/api/export-readme/route.ts`, `lib/export/markdown.ts` | Done |
+| Audit | `package.json` override: `postcss@8.5.10`; `npm audit --omit=dev` sonucu 0 vulnerability | Done |
+
+## Sprint Review
+
+Sprint 1 review sonucunda aşağıdaki kararlar alındı:
+
+- Mobil uygulama yerine web uygulamasına pivot yapıldı. Web, demo, deploy ve
+  uzun blueprint çıktıları için daha uygun bulundu.
+- Ürün adı **BuildPixies** olarak netleştirildi.
+- Takım rolleri Product Owner, Scrum Master ve Developer olarak belirlendi.
+- Next.js App Router + Route Handlers + Supabase + OpenAI stack'i seçildi.
+- Ürün sadece fikir olarak kalmadı; landing, dashboard, new project form,
+  pixie workspace, output hub, AI pipeline ve storage temeli çalışır hale geldi.
+- Sprint 2 için asıl odaklar UI polish, canlı Supabase/Vercel doğrulaması,
+  regenerate/copy/export kontrolleri ve Bootcamp Mode olarak belirlendi.
+
+**Sprint Review Katılımcıları:** Muhammed Köseoğlu, Alperen Avan, Kemal Ersin
+Özkan.
+
+## Sprint Retrospective
+
+### İyi Gidenler
+
+- Web-first pivot kararı erken alındığı için ürün yönü netleşti.
+- README, plan ve decision log beraber ilerledi; ürün hafızası dağılmadı.
+- Next.js iskeleti hızlı kuruldu ve ekran görüntüleri Sprint 1 içinde alındı.
+- AI çıktıları için schema validation ve fallback yaklaşımı erken eklendi.
+- Public production riskleri Sprint 1 sonunda görünür hale getirildi ve
+  Supabase owner/RLS ile generation job temeli şimdiden atıldı.
+
+### İyileştirilmesi Gerekenler
+
+- Sprint board ekran görüntüsü GitHub Issues üzerinden ayrıca export edilmeli.
+- Daily Scrum ekran görüntüleri README'ye eklenebilir hale getirilmeli.
+- Per-pixie gerçek event/streaming henüz UI status'larına bağlanmadı.
+- Bootcamp Mode henüz ürün içinde yok; Sprint 3'e bırakıldı.
+- Vercel canlı deploy ve canlı Supabase smoke henüz yapılmadı.
+
+### Sprint 2 Aksiyonları
+
+- Vercel deploy denemesi ve canlı ortam değişkenleri doğrulaması yapılacak.
+- Output Hub'a copy markdown, JSON export ve regenerate UI kontrolleri eklenecek.
+- Sprint 2 sonunda board screenshot, product screenshot ve review/retro güncellenecek.
+- Demo için curated sample project hazırlanacak.
 
 ---
 
 # Sprint 2
 
-> Sprint 2 (6–19 Temmuz 2026) başlangıcı. İçerik sprint süresince doldurulacak.
+> Sprint 2 (6–19 Temmuz 2026) başlangıcı. Çalışan MVP'nin polish, deploy ve
+> kullanıcı deneyimi sertleştirme süreci bu bölümde sprint sonunda
+> belgelenecektir.
 
 ---
 
 # Sprint 3
 
-> Sprint 3 (20 Temmuz – 2 Ağustos 2026) başlangıcı. İçerik sprint süresince
-> doldurulacak.
+> Sprint 3 (20 Temmuz – 2 Ağustos 2026) başlangıcı. AI derinliği, Bootcamp Mode,
+> demo video ve final teslim çıktıları bu bölümde tamamlanacaktır.
 
 ---
 
 # Technical Architecture
 
-**Current stack:** Next.js 16 (App Router, Turbopack) · TypeScript · Tailwind
-CSS v4 · shadcn/ui/base-ui · Supabase Postgres (project + blueprint storage) ·
-Supabase Auth anonymous owner mode + RLS · generation job polling · OpenAI API
-role-based prompt pipeline · local JSON fallback for development.
+**Current stack:** Next.js 16 App Router · TypeScript · Tailwind CSS v4 ·
+shadcn/ui/base-ui · Supabase Postgres · Supabase Auth anonymous owner mode +
+RLS · OpenAI API role-based prompt pipeline · generation job polling · local
+JSON fallback for development.
 
 **Roadmap stack:** OpenAI Agents SDK handoff · pgvector project memory · durable
 queue/SSE streaming · account linking · Vercel deploy hardening.
 
-**Klasör yapısı (Clean Architecture):**
+## Klasör Yapısı
 
-```
+```text
 buildpixies/
   app/
-    page.tsx                      # Landing
-    dashboard/page.tsx           # Projeleri listele
-    projects/new/page.tsx        # Yeni fikir wizard
-    projects/[id]/page.tsx       # Pixie workspace
+    page.tsx
+    dashboard/page.tsx
+    projects/new/page.tsx
+    projects/[id]/page.tsx
     api/
-      projects/route.ts          # GET list / POST create
-      projects/[id]/route.ts     # GET detail
-      generate-blueprint/route.ts
-      regenerate-output/route.ts
-      export-readme/route.ts
+      projects/
+      generation-jobs/
+      generate-blueprint/
+      regenerate-output/
+      export-readme/
   components/
-    landing/   navbar, hero, how-it-works, pixie-section, output-preview, footer
-    pixies/    pixie-card, pixie-team
-    project/   project-card, new-project-form, workspace
-    outputs/   output-hub
-    ui/        shadcn primitives
+    auth/
+    landing/
+    pixies/
+    project/
+    outputs/
+    ui/
   lib/
-    ai/        orchestrator, client, prompts, schemas, sample, pixies/
-    supabase/  client, server
-    export/    markdown
+    ai/
+    api/
+    export/
+    supabase/
+    generation-jobs.ts
+    generation-runner.ts
     projects.ts
-  types/       project, output, pixie
-  docs/        plan, decision-log, sprint-1/2/3, bootcamp kılavuzu
+    storage.ts
+  supabase/migrations/
+  types/
+  docs/
 ```
 
 # AI Agent Architecture
 
-BuildPixies, fikri uzman agent'lara bölüyor. Her pixie bir rol üstlenir:
+BuildPixies, fikri uzman pixie rollerine bölerek işler:
 
-- **Pip** (Orchestrator) — fikri analiz eder, işleri dağıtır
-- **Pria** (Product) — product brief
-- **Moxie** (Market) — pazar açısı
-- **Luma** (UX) — kullanıcı akışı, ekran haritası
-- **Tinker** (Tech) — stack, veri modeli, API planı
-- **Bitsy** (Code) — kod iskeleti
-- **Quill** (Docs) — README, pitch
-- **Bugsy** (QA) — test senaryoları, riskler
-- **Sprinta** (Scrum) — backlog, sprint planı
+- **Pip** — Orchestrator, fikri analiz eder ve işleri sıraya koyar.
+- **Pria** — Product brief ve MVP scope üretir.
+- **Moxie** — Pazar açısı ve farklılaşma üretir.
+- **Luma** — UX flow ve ekran haritası çıkarır.
+- **Tinker** — Tech plan, veri modeli ve API önerisi üretir.
+- **Bitsy** — Code skeleton ve başlangıç görevleri üretir.
+- **Bugsy** — Test planı, riskler ve demo checklist üretir.
+- **Sprinta** — Backlog ve sprint planı üretir.
+- **Quill** — README ve dokümantasyon çıktısını üretir.
 
 **Pipeline:** Raw idea → Pip → Pria → Moxie → Luma → Tinker → Bitsy → Bugsy →
 Sprinta → Quill → Blueprint.
 
-Sprint 2'de çalışan mimari role-based prompt pipeline'dır. OpenAI anahtarı yoksa
-uygulama sample blueprint ile çalışır; bu fallback demo güvenliği içindir ve
-gerçek AI çıktısı gibi sunulmamalıdır. Sprint 3 hedefi OpenAI Agents SDK ile
-gerçek handoff + project memory (pgvector) + owner bazlı guardrails katmanıdır.
+Sprint 1 sonunda çalışan mimari role-based prompt pipeline'dır. OpenAI anahtarı
+yoksa uygulama sample blueprint ile çalışır; bu fallback demo güvenliği içindir
+ve gerçek AI çıktısı gibi sunulmamalıdır. Sprint 3 hedefi OpenAI Agents SDK
+handoff, project memory ve guardrail katmanını güçlendirmektir.
+
+# Local Setup
+
+Bu repo Node `24.15.0` hedefler. Shell'de `node`/`npm` görünmüyorsa proje
+kökünde `nvm use` çalıştırın.
+
+```bash
+nvm use
+npm install
+npm run dev
+```
+
+Supabase ile kalıcı storage kullanacaksanız migration'ları uygulayın:
+
+```bash
+supabase db push
+```
+
+Gerekli ortam değişkenleri:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=...
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=...
+# Legacy projelerde NEXT_PUBLIC_SUPABASE_ANON_KEY de desteklenir.
+```
+
+Hosted deploy'larda `BUILDPIXIES_REQUIRE_SUPABASE=1` kullanın. Local geliştirmede
+Supabase yoksa `.local/buildpixies-projects.json` ve
+`.local/buildpixies-generation-jobs.json` fallback'i devreye girer. Şifresiz
+demo akışı için Supabase Auth > Anonymous Sign-Ins açık olmalıdır.
 
 # Screenshots
 
-Sprint 1 ekran görüntüleri yukarıdaki Sprint 1 / Ürün Durumu bölümünde
-listelenmiştir. Sprint 2 ve Sprint 3 sonunda bu bölüm final demo akışıyla
-güncellenecektir.
+Sprint 1 ekran görüntüleri `Sprint 1 / Ürün Durumu` bölümünde listelenmiştir.
+Sprint 2 ve Sprint 3 sonunda bu bölüm final demo akışıyla güncellenecektir.
 
 # Demo Video
 
-> 3 dakikalık YouTube videosu son sprintte eklenecek (2 Ağustos 23:59'a kadar).
+> 3 dakikalık YouTube videosu son sprintte eklenecek.
