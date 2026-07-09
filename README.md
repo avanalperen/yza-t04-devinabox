@@ -35,6 +35,11 @@ BuildPixies
     <td>Developer</td>
     <td>GitHub / LinkedIn eklenecek</td>
   </tr>
+  <tr>
+    <td>Selin Akkaş</td>
+    <td>Developer</td>
+    <td>GitHub / LinkedIn eklenecek</td>
+  </tr>
 </table>
 
 ## Ürün İsmi
