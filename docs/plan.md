@@ -87,6 +87,7 @@ yaşayan ürün planı olması için eklendi.
 | Output Hub + README export | **Yapıldı** — `components/outputs/output-hub.tsx`, `app/api/export-readme/route.ts`, `lib/export/markdown.ts` |
 | Regenerate section | **Yapıldı** — UI kontrolü, server-side validation ve proje kaydına persistence var |
 | Bootcamp Mode | **Yapıldı** — gerçek ilerleme notlarından Daily/Review/Retro/README/ürün durumu/backlog taslağı; UI, API ve persistence hazır |
+| Kritik demo E2E + CI | **Yapıldı** — Playwright landing→project→blueprint→export→Bootcamp→dashboard akışını doğrular; GitHub Actions kalite kapısı var |
 | JSON export / feedback kayıtları | **Kısmen yapıldı** — JSON export hazır; feedback kaydı sonraki sprintte |
 
 ---
@@ -1082,6 +1083,7 @@ buildpixies/
 | BP-025 | Geliştirici olarak gerçek durable queue/SSE streaming istiyorum | P1 | **Kısmen yapıldı** — durable Vercel Queue hazır; SSE bekliyor |
 | BP-026 | Kullanıcı olarak anonim hesabımı email/OAuth hesaba bağlamak istiyorum | P1 | **Sonraki sprint** |
 | BP-027 | Ürün sahibi olarak public abuse/quota/CAPTCHA koruması istiyorum | P1 | **Sonraki sprint** |
+| BP-028 | Geliştirici olarak kritik demo akışını her değişiklikte doğrulamak istiyorum | P1 | **Yapıldı** — Playwright E2E + GitHub Actions |
 
 ---
 
@@ -1148,7 +1150,7 @@ Bootcamp takvimi:
 | 15 Temmuz | UX Flow generation | **Yapıldı** |
 | 16 Temmuz | Tech Plan generation | **Yapıldı** |
 | 17 Temmuz | Output Hub | **Yapıldı** — sekmeli çıktı hub + README download |
-| 18 Temmuz | Hata düzeltme, screenshots | **Kısmen yapıldı** — Sprint 1 screenshots var; Sprint 2 final polish kalır |
+| 18 Temmuz | Hata düzeltme, screenshots | **Kısmen yapıldı** — kritik E2E ve link semantiği tamam; Sprint 2 screenshot'ları kalır |
 | 19 Temmuz | Sprint 2 README, review, retro | **Zamanı gelmedi** |
 
 #### Definition of Done
@@ -1158,6 +1160,7 @@ Bootcamp takvimi:
 - Pixie kartları görünüyor
 - Output Hub çalışıyor
 - README güncel
+- Kritik demo yolculuğu production build üzerinde E2E geçiyor
 
 ### Sprint 3 — 20 Temmuz – 2 Ağustos (AI Derinliği + Polish + Demo)
 
@@ -1364,6 +1367,7 @@ Hedef kitle çok net: Bootcamp teams, Hackathon participants, Junior builders, S
 | Takım içi koordinasyon kopukluğu | Geliştirme yavaşlar | Günlük sync + net rol dağılımı |
 | Deploy problemi | Teslim riski | Erken Vercel deploy |
 | Prompt çıktısı tutarsız | Ürün kalitesi düşer | JSON schema + validation |
+| Demo akışı regresyonu | Sunum sırasında temel yolculuk kırılır | Production build üzerinde Playwright E2E + PR/push CI kalite kapısı |
 | Public AI endpoint abuse | Maliyet / kota riski | Rate limit var; Sprint 3'te quota + Turnstile/CAPTCHA |
 | Paket güvenlik uyarıları | Deploy güveni düşer | `npm audit --omit=dev` takip edilir; PostCSS override eklendi |
 | README eksik kalır | Puan kaybı | Her sprint sonunda güncelleme |
