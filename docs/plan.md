@@ -51,8 +51,8 @@
 
 | Alan | Durum |
 | --- | --- |
-| **Bugün** | 5 Temmuz 2026 Pazar |
-| **Bootcamp süreci** | Sprint 1'in son günü; Sprint 2 hazırlıkları ve bazı Sprint 2 kod işleri erkenden tamamlandı |
+| **Bugün** | 16 Temmuz 2026 Perşembe |
+| **Bootcamp süreci** | Sprint 2'nin son geliştirme günleri; MVP kapsamı tamamlandı, canlı deploy kanıtları ve sprint kapanış belgeleri hazırlanıyor |
 | **Takım durumu** | 3 kişi: Muhammed Köseoğlu (PO), Alperen Avan (SM), Kemal Ersin Özkan (Dev) |
 | **Asistan bildirimi** | Takım oluştu; asistan ile iletişim kuruldu |
 | **Ürün teslimi** | 2 Ağustos 2026 23:59 |
@@ -71,7 +71,7 @@ Her sprint sonunda aşağıdaki 6 madde GitHub README'ye eklenmek zorundadır. A
 5. **Sprint Review** — Alınan kararlar, tamamlanan/ertelenen işler, katılımcılar
 6. **Sprint Retrospective** — Neler iyi gitti, neler iyileştirilmeli, aksiyon maddeleri
 
-### Kod Doğrulama Özeti (5 Temmuz 2026)
+### Kod Doğrulama Özeti (16 Temmuz 2026)
 
 Bu bölüm, planın artık sadece niyet dokümanı değil, repo gerçekliğiyle hizalı
 yaşayan ürün planı olması için eklendi.
@@ -82,10 +82,11 @@ yaşayan ürün planı olması için eklendi.
 | Project create/list/detail | **Yapıldı** — `app/api/projects/route.ts`, `app/api/projects/[id]/route.ts`, `lib/projects.ts` |
 | Blueprint generation | **Yapıldı** — `lib/ai/orchestrator.ts`, `lib/ai/prompts.ts`, `lib/ai/schemas.ts` |
 | Job + polling modeli | **Yapıldı** — `app/api/generation-jobs/*`, `lib/generation-jobs.ts`, `components/project/workspace.tsx` |
+| Durable queue + dağıtık rate limit | **Yapıldı** — Vercel Queue worker/lease akışı ve Supabase owner bazlı atomik kota |
 | Supabase Auth/RLS temeli | **Yapıldı** — `proxy.ts`, `components/auth/session-bootstrap.tsx`, `supabase/migrations/202607050001_auth_rls_generation_jobs.sql` |
 | Output Hub + README export | **Yapıldı** — `components/outputs/output-hub.tsx`, `app/api/export-readme/route.ts`, `lib/export/markdown.ts` |
 | Regenerate section | **Yapıldı** — UI kontrolü, server-side validation ve proje kaydına persistence var |
-| Bootcamp Mode | **Sonraki sprint** — planlandı, henüz route/UI yok |
+| Bootcamp Mode | **Yapıldı** — gerçek ilerleme notlarından Daily/Review/Retro/README/ürün durumu/backlog taslağı; UI, API ve persistence hazır |
 | JSON export / feedback kayıtları | **Kısmen yapıldı** — JSON export hazır; feedback kaydı sonraki sprintte |
 
 ---
@@ -328,7 +329,7 @@ Bootcamp için en önemli export: **README.md**.
 | Project memory | Kararlar ve önceki çıktıların saklanması | P1 | **Kısmen yapıldı** — proje + blueprint persist var; pgvector/decision memory yok |
 | Supabase owner/RLS | Public çok-kullanıcı güvenliği | P0 | **Yapıldı** — anonymous auth + `owner_id` RLS migration |
 | Generation jobs | Uzun AI üretimini job status ile izleme | P0 | **Yapıldı** — `generation_jobs` table + polling API |
-| Bootcamp Mode | Sprint planı / review / retro taslağı | P1 | **Sonraki sprint** — henüz route/UI yok |
+| Bootcamp Mode | Sprint notu / review / retro / README / backlog taslağı | P1 | **Yapıldı** — source-grounded üretim, Markdown export ve proje kaydı |
 
 ### MVP'de Olmayacaklar
 
@@ -398,7 +399,10 @@ Next.js Web App
 /api/generation-jobs/[id]
 /api/generate-blueprint
 /api/regenerate-output
+/api/bootcamp-report
 /api/export-readme
+ ↓
+Vercel Queue + leased generation worker / direct Bootcamp report generator
  ↓
 AI Orchestrator Service
  ↓
@@ -409,9 +413,11 @@ Supabase Auth + Postgres RLS
 Output Hub
 ```
 
-> Kod durumu: Yeni ana üretim akışı `/api/generation-jobs` üzerinden job
-> oluşturur; workspace sonucu `/api/generation-jobs/[id]` ile poll eder.
-> `/api/generate-blueprint` geriye uyumluluk için hâlâ durur.
+> Kod durumu: Yeni ana üretim akışı `/api/generation-jobs` üzerinden durable
+> queue job'ı oluşturur; worker lease/idempotency korumasıyla üretir ve workspace
+> sonucu `/api/generation-jobs/[id]` ile poll eder. `/api/generate-blueprint`
+> geriye uyumluluk için hâlâ durur. Bootcamp raporu tek, sınırlı bir üretim
+> olduğu için ayrı, owner-scoped `/api/bootcamp-report` route'unda çalışır.
 
 ### Agent Pipeline
 
@@ -458,13 +464,14 @@ OpenAI Agents SDK'de handoff, bir agent'ın işi başka uzman agent'a devretmesi
 | constraints | jsonb | Süre, ekip, bütçe |
 | output_depth | text | quick / detailed / bootcamp-ready |
 | blueprint | jsonb | Üretilmiş tam blueprint çıktısı |
+| bootcamp_report | jsonb | Son source-grounded Bootcamp Mode raporu |
 | status | text | draft / generating / ready / failed |
 | created_at | timestamp | Oluşturma tarihi |
 | updated_at | timestamp | Güncelleme tarihi |
 
 **Kod durumu:** **Yapıldı.** İlk schema `202607040001_initial_schema.sql`, owner/RLS
-ekleri `202607050001_auth_rls_generation_jobs.sql`, uygulama erişimi
-`lib/projects.ts`.
+ekleri `202607050001_auth_rls_generation_jobs.sql`, Bootcamp Mode alanı
+`202607160002_bootcamp_mode.sql`, uygulama erişimi `lib/projects.ts`.
 
 ### `generation_jobs`
 
@@ -474,15 +481,33 @@ ekleri `202607050001_auth_rls_generation_jobs.sql`, uygulama erişimi
 | project_id | uuid | Bağlı proje; null olabilir |
 | owner_id | uuid | Supabase Auth kullanıcısı; RLS sahiplik anahtarı |
 | status | text | queued / running / succeeded / failed |
+| input | jsonb | Worker'ın yeniden deneyebileceği kalıcı generation input'u |
 | error | text | Hata varsa |
 | blueprint | jsonb | Job sonucunda oluşan blueprint |
+| attempt_count | integer | Lease alma / yeniden deneme sayısı |
+| lease_token | uuid | Yalnızca lease sahibi worker'ın tamamlayabilmesi için token |
+| lease_expires_at | timestamp | Stale worker recovery zamanı |
+| queue_message_id | text | Vercel Queue mesajı ile korelasyon anahtarı |
 | created_at | timestamp | Tarih |
 | updated_at | timestamp | Son güncelleme |
 | started_at | timestamp | Çalışmaya başlama |
 | completed_at | timestamp | Bitiş |
 
-**Kod durumu:** **Yapıldı.** API: `app/api/generation-jobs/*`, storage:
-`lib/generation-jobs.ts`, runner: `lib/generation-runner.ts`.
+**Kod durumu:** **Yapıldı.** API: `app/api/generation-jobs/*`, queue consumer:
+`app/api/queues/generate-blueprint/route.ts`, storage/worker:
+`lib/generation-jobs.ts`, `lib/generation-worker.ts`.
+
+### `rate_limit_buckets`
+
+| Alan | Tip | Açıklama |
+| --- | --- | --- |
+| owner_id | uuid | Auth kullanıcısı ve kota sahiplik anahtarı |
+| bucket | text | Endpoint grubu (`ai:bootcamp`, `ai:generate` vb.) |
+| window_started_at | timestamp | Sabit kota penceresinin başlangıcı |
+| request_count | integer | Pencere içindeki atomik istek sayısı |
+
+**Kod durumu:** **Yapıldı.** `consume_rate_limit` security-definer RPC'si
+uygulama instance'larından bağımsız, owner bazlı kotayı atomik uygular.
 
 ### Roadmap Veri Modelleri
 
@@ -641,6 +666,7 @@ Next.js içinde mevcut route'lar:
 | `/api/generation-jobs/[id]` | GET | Job durumunu ve sonucu getir | **Yapıldı** |
 | `/api/generate-blueprint` | POST | Geriye uyumlu direkt pipeline endpoint'i | **Yapıldı** |
 | `/api/regenerate-output` | POST | Tek bölümü tekrar üret ve blueprint'i kaydet | **Yapıldı** |
+| `/api/bootcamp-report` | POST | Gerçek ilerleme notlarından Scrum belge paketi üret ve projeye kaydet | **Yapıldı** |
 | `/api/export-json` | POST | Blueprint'i JSON olarak dışa aktar | **Yapıldı** |
 | `/api/export-readme` | POST | README markdown üret | **Yapıldı** |
 | `/api/save-feedback` | POST | Kullanıcı feedback'ini kaydet | **Sonraki sprint** |
@@ -839,6 +865,13 @@ BuildPixies bunu şu formatlara dönüştürür:
 - Product status summary
 - Backlog update explanation
 
+**Kod durumu: Yapıldı.** Workspace içindeki Bootcamp Mode formu sprint adı,
+hedefi ve gerçek ilerleme notlarını alır. `/api/bootcamp-report` isteği Zod ile
+doğrulanır, owner bazlı rate limit uygulanır ve sonuç `projects.bootcamp_report`
+alanına kaydedilir. OpenAI çıktısı strict schema ile kontrol edilir; API anahtarı
+yokken source-grounded deterministic fallback kullanılır. Markdown kopyalama ve
+`.md` indirme kontrolleri de hazırdır.
+
 > Bootcamp dokümanında sprint sonunda beklenen belgeler açıkça backlog dağıtma mantığı, daily scrum notları, sprint board updates, ürün durumu, sprint review ve retrospective olarak listeleniyor. BuildPixies'in Bootcamp Mode'u bu gereksinimi doğrudan ürün özelliğine dönüştürüyor.
 
 ### Etik Konumlandırma
@@ -1035,9 +1068,9 @@ buildpixies/
 
 | ID | User Story | Öncelik | Kod durumu |
 | --- | --- | --- | --- |
-| BP-019 | Kullanıcı olarak sprint notlarımı düzenlemek istiyorum | P1 | **Sonraki sprint** |
-| BP-020 | Kullanıcı olarak review/retro taslağı almak istiyorum | P1 | **Sonraki sprint** |
-| BP-021 | Kullanıcı olarak backlog dağıtma mantığı metni üretmek istiyorum | P1 | **Sonraki sprint** |
+| BP-019 | Kullanıcı olarak sprint notlarımı düzenlemek istiyorum | P1 | **Yapıldı** — Daily Scrum ve ürün durumu taslağı |
+| BP-020 | Kullanıcı olarak review/retro taslağı almak istiyorum | P1 | **Yapıldı** — evidence ve missing-information ayrımıyla |
+| BP-021 | Kullanıcı olarak backlog dağıtma mantığı metni üretmek istiyorum | P1 | **Yapıldı** — done/in-progress/carried-over açıklaması |
 
 ### Epic 7 — Güvenlik, Kalıcılık ve Operasyon
 
@@ -1046,7 +1079,7 @@ buildpixies/
 | BP-022 | Kullanıcı olarak projelerimin başkasına görünmemesini istiyorum | P0 | **Yapıldı** — Supabase `owner_id` + RLS |
 | BP-023 | Kullanıcı olarak uzun AI üretimini sayfa donmadan takip etmek istiyorum | P0 | **Yapıldı** — `generation_jobs` + polling |
 | BP-024 | Geliştirici olarak bilinen moderate audit uyarılarını kapatmak istiyorum | P0 | **Yapıldı** — `postcss@8.5.10` override |
-| BP-025 | Geliştirici olarak gerçek durable queue/SSE streaming istiyorum | P1 | **Sonraki sprint** |
+| BP-025 | Geliştirici olarak gerçek durable queue/SSE streaming istiyorum | P1 | **Kısmen yapıldı** — durable Vercel Queue hazır; SSE bekliyor |
 | BP-026 | Kullanıcı olarak anonim hesabımı email/OAuth hesaba bağlamak istiyorum | P1 | **Sonraki sprint** |
 | BP-027 | Ürün sahibi olarak public abuse/quota/CAPTCHA koruması istiyorum | P1 | **Sonraki sprint** |
 
@@ -1136,7 +1169,7 @@ Bootcamp takvimi:
 | 21 Temmuz | Project memory / decisions tablosu | **Sonraki sprint** |
 | 22 Temmuz | Regenerate section özelliği | **Erken tamamlandı** — PR #11 ve post-merge persistence düzeltmesi |
 | 23 Temmuz | README export | **Yapıldı** |
-| 24 Temmuz | Bootcamp Mode basic | **Sonraki sprint** |
+| 24 Temmuz | Bootcamp Mode basic | **Erken tamamlandı** — 16 Temmuz; UI/API/persistence/export |
 | 25 Temmuz | Test Plan output | **Yapıldı** |
 | 26 Temmuz | Landing page polish | **Kısmen yapıldı** — temel landing var, final polish kalır |
 | 27 Temmuz | Workspace animasyonları | **Kısmen yapıldı** — status UI var, motion polish yok |
@@ -1159,7 +1192,7 @@ Bootcamp takvimi:
 
 | İyileştirme | Neden önemli | Önerilen sprint |
 | --- | --- | --- |
-| Bootcamp Mode basic | Ürünün akademi bağlamındaki özgünlüğünü artırır | Sprint 3 |
+| Bootcamp Mode basic | **Erken tamamlandı** — source-grounded belge paketi ve Markdown export | Sprint 3 |
 | SSE streaming / per-pixie events | Durable Vercel Queue tamamlandı; UI gerçek pipeline event'lerini henüz göstermiyor | Sprint 3 |
 | Email/OAuth account linking | Anonymous auth demo için iyi; kalıcı kullanıcı hesabı için yükseltme gerekir | Sprint 3 |
 | Quota, Turnstile/CAPTCHA, usage limit | Public AI endpoint maliyeti ve abuse riskini azaltır | Sprint 3 |
