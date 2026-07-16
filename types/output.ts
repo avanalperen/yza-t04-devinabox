@@ -113,6 +113,39 @@ export interface SprintPlan {
   }[];
 }
 
+export interface BootcampReport {
+  sprintName: string;
+  sprintGoal?: string;
+  sourceNotes: string;
+  generatedAt: string;
+  dailyScrum: {
+    completed: string[];
+    inProgress: string[];
+    blockers: string[];
+    next: string[];
+  };
+  sprintReview: {
+    summary: string;
+    completed: string[];
+    evidence: string[];
+    notCompleted: string[];
+  };
+  sprintRetrospective: {
+    wentWell: string[];
+    challenges: string[];
+    actions: string[];
+  };
+  readmeSprintSection: string;
+  productStatus: string;
+  backlogUpdate: {
+    done: string[];
+    inProgress: string[];
+    carriedOver: string[];
+    explanation: string;
+  };
+  missingInformation: string[];
+}
+
 export interface Blueprint {
   orchestrationPlan: OrchestrationPlan;
   productBrief: ProductBrief;

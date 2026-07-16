@@ -79,6 +79,15 @@ export const regenerateOutputRequestSchema = z
     message: "projectId or input is required",
   });
 
+export const bootcampReportRequestSchema = z
+  .object({
+    projectId: z.string().trim().min(1).max(160),
+    sprintName: z.string().trim().min(1).max(120).default("Current Sprint"),
+    sprintGoal: z.string().trim().min(1).max(500).optional(),
+    progressNotes: z.string().trim().min(20).max(8_000),
+  })
+  .strict();
+
 export const exportReadmeRequestSchema = z
   .object({
     projectId: z.string().trim().min(1).max(160).optional(),

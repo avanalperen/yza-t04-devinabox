@@ -10,6 +10,7 @@ const policies = {
   "ai:generation-jobs": { limit: 5, windowMs: 60_000 },
   "ai:generate": { limit: 5, windowMs: 60_000 },
   "ai:regenerate": { limit: 10, windowMs: 60_000 },
+  "ai:bootcamp": { limit: 5, windowMs: 60_000 },
   "projects:create": { limit: 30, windowMs: 60_000 },
 } as const;
 

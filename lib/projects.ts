@@ -1,5 +1,5 @@
 import type { Project, CreateProjectInput } from "@/types/project";
-import type { Blueprint } from "@/types/output";
+import type { Blueprint, BootcampReport } from "@/types/output";
 import {
   assertStorageAvailable,
   canUseLocalFileStore,
@@ -187,6 +187,31 @@ export async function saveProjectBlueprint(
   }
 }
 
+export async function saveProjectBootcampReport(
+  id: string,
+  bootcampReport: BootcampReport,
+): Promise<void> {
+  assertStorageAvailable();
+  const updatedAt = new Date().toISOString();
+  const context = await getSupabaseUserClient();
+  if (context) {
+    const { supabase, userId } = context;
+    const { error } = await supabase
+      .from("projects")
+      .update({ bootcamp_report: bootcampReport, updated_at: updatedAt })
+      .eq("id", id)
+      .eq("owner_id", userId);
+    if (error) throw error;
+    return;
+  }
+  await hydrateMemoryFromDisk();
+  const existing = memory.get(id);
+  if (existing) {
+    memory.set(id, { ...existing, bootcampReport, updatedAt });
+    await persistMemoryToDisk();
+  }
+}
+
 function rowToProject(row: Record<string, unknown>): Project {
   return {
     id: String(row.id),
@@ -199,6 +224,7 @@ function rowToProject(row: Record<string, unknown>): Project {
     constraints: (row.constraints as Project["constraints"]) ?? {},
     outputDepth: row.output_depth as Project["outputDepth"],
     blueprint: row.blueprint as Project["blueprint"],
+    bootcampReport: row.bootcamp_report as Project["bootcampReport"],
     status: (row.status as Project["status"]) ?? "draft",
     createdAt: String(row.created_at ?? new Date().toISOString()),
     updatedAt: String(row.updated_at ?? new Date().toISOString()),

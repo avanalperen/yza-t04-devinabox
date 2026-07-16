@@ -1,6 +1,6 @@
 begin;
 
-select plan(21);
+select plan(23);
 
 select has_table(
   'public',
@@ -12,6 +12,12 @@ select has_column(
   'generation_jobs',
   'input',
   'generation jobs persist their input'
+);
+select has_column(
+  'public',
+  'projects',
+  'bootcamp_report',
+  'projects persist their latest bootcamp report'
 );
 select ok(
   has_function_privilege(
@@ -66,6 +72,11 @@ select is(
   (select allowed from public.consume_rate_limit('ai:generation-jobs')),
   true,
   'request five is allowed'
+);
+select is(
+  (select allowed from public.consume_rate_limit('ai:bootcamp')),
+  true,
+  'bootcamp report generation has a dedicated quota'
 );
 
 create temporary table denied_request on commit drop as

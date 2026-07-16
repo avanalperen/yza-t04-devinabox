@@ -114,6 +114,62 @@ export const sprintPlanSchema = z.object({
   ).min(1),
 }).strict();
 
+const stringList = z.array(text);
+
+const noteId = z.string().regex(/^N(?:[1-9]|[1-3][0-9]|40)$/);
+
+export const bootcampClassificationSchema = z.object({
+  completedNoteIds: z.array(noteId),
+  inProgressNoteIds: z.array(noteId),
+  blockerNoteIds: z.array(noteId),
+  nextNoteIds: z.array(noteId),
+  unclassifiedNoteIds: z.array(noteId),
+}).strict().superRefine((classification, ctx) => {
+  const allIds = Object.values(classification).flat();
+  if (new Set(allIds).size !== allIds.length) {
+    ctx.addIssue({
+      code: "custom",
+      message: "Each source note must appear in only one classification",
+    });
+  }
+});
+
+export const bootcampReportContentSchema = z.object({
+  dailyScrum: z.object({
+    completed: stringList,
+    inProgress: stringList,
+    blockers: stringList,
+    next: stringList,
+  }).strict(),
+  sprintReview: z.object({
+    summary: text,
+    completed: stringList,
+    evidence: stringList,
+    notCompleted: stringList,
+  }).strict(),
+  sprintRetrospective: z.object({
+    wentWell: stringList,
+    challenges: stringList,
+    actions: stringList,
+  }).strict(),
+  readmeSprintSection: text,
+  productStatus: text,
+  backlogUpdate: z.object({
+    done: stringList,
+    inProgress: stringList,
+    carriedOver: stringList,
+    explanation: text,
+  }).strict(),
+  missingInformation: stringList,
+}).strict();
+
+export const bootcampReportSchema = bootcampReportContentSchema.extend({
+  sprintName: text,
+  sprintGoal: text.optional(),
+  sourceNotes: text,
+  generatedAt: z.iso.datetime(),
+}).strict();
+
 export const blueprintSchema = z.object({
   orchestrationPlan: orchestrationPlanSchema,
   productBrief: productBriefSchema,

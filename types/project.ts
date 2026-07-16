@@ -1,4 +1,4 @@
-import type { Blueprint } from "@/types/output";
+import type { Blueprint, BootcampReport } from "@/types/output";
 
 export type ProjectStatus = "draft" | "generating" | "ready" | "failed";
 
@@ -37,6 +37,7 @@ export interface Project {
   constraints: ProjectConstraints;
   outputDepth?: OutputDepth;
   blueprint?: Blueprint;
+  bootcampReport?: BootcampReport;
   status: ProjectStatus;
   createdAt: string;
   updatedAt: string;

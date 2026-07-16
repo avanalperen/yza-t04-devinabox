@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { PixieTeam } from "@/components/pixies/pixie-team";
 import { OutputHub } from "@/components/outputs/output-hub";
+import { BootcampMode } from "@/components/project/bootcamp-mode";
 import type { Project } from "@/types/project";
 import type { GenerationJob } from "@/types/generation-job";
 import type { Blueprint, BlueprintSection } from "@/types/output";
@@ -253,6 +254,8 @@ export function Workspace({ project }: { project: Project }) {
             </p>
           </section>
         )}
+
+        <BootcampMode project={project} />
       </div>
     </div>
   );
