@@ -1,45 +1,10 @@
 import { z } from "zod";
 import { blueprintSchema } from "@/lib/ai/schemas";
+import { createProjectInputSchema } from "@/lib/schemas/project";
 
-const projectGoalSchema = z.enum([
-  "bootcamp",
-  "startup",
-  "portfolio",
-  "client",
-  "hackathon",
-]);
+export { createProjectInputSchema } from "@/lib/schemas/project";
 
-const projectPlatformSchema = z.enum([
-  "web",
-  "mobile",
-  "extension",
-  "ai-tool",
-  "marketplace",
-  "desktop",
-]);
-
-const outputDepthSchema = z.enum(["quick", "detailed", "bootcamp-ready"]);
-
-const projectConstraintsSchema = z
-  .object({
-    teamSize: z.number().int().min(1).max(20).optional(),
-    timeline: z.string().trim().min(1).max(120).optional(),
-    budget: z.string().trim().min(1).max(120).optional(),
-    techPreference: z.string().trim().min(1).max(240).optional(),
-  })
-  .strict();
-
-export const createProjectInputSchema = z
-  .object({
-    title: z.string().trim().min(1).max(120).optional(),
-    rawIdea: z.string().trim().min(10).max(4_000),
-    goal: projectGoalSchema.default("bootcamp"),
-    platform: projectPlatformSchema.default("web"),
-    targetAudience: z.string().trim().min(1).max(500).default("builders"),
-    constraints: projectConstraintsSchema.optional(),
-    outputDepth: outputDepthSchema.default("bootcamp-ready").optional(),
-  })
-  .strict();
+export const resourceIdSchema = z.string().uuid();
 
 export const createProjectRequestSchema = createProjectInputSchema;
 
@@ -59,7 +24,7 @@ export const blueprintSectionSchema = z.enum([
 
 export const generateBlueprintRequestSchema = z
   .object({
-    projectId: z.string().trim().min(1).max(160).optional(),
+    projectId: resourceIdSchema.optional(),
     input: createProjectInputSchema.optional(),
   })
   .strict()
@@ -69,7 +34,7 @@ export const generateBlueprintRequestSchema = z
 
 export const regenerateOutputRequestSchema = z
   .object({
-    projectId: z.string().trim().min(1).max(160).optional(),
+    projectId: resourceIdSchema.optional(),
     input: createProjectInputSchema.optional(),
     section: blueprintSectionSchema,
     previousOutputs: blueprintSchema.optional(),
@@ -81,7 +46,7 @@ export const regenerateOutputRequestSchema = z
 
 export const bootcampReportRequestSchema = z
   .object({
-    projectId: z.string().trim().min(1).max(160),
+    projectId: resourceIdSchema,
     sprintName: z.string().trim().min(1).max(120).default("Current Sprint"),
     sprintGoal: z.string().trim().min(1).max(500).optional(),
     progressNotes: z.string().trim().min(20).max(8_000),
@@ -90,14 +55,14 @@ export const bootcampReportRequestSchema = z
 
 export const exportReadmeRequestSchema = z
   .object({
-    projectId: z.string().trim().min(1).max(160).optional(),
+    projectId: resourceIdSchema.optional(),
     blueprint: blueprintSchema,
   })
   .strict();
 
 export const exportJsonRequestSchema = z
   .object({
-    projectId: z.string().trim().min(1).max(160).optional(),
+    projectId: resourceIdSchema.optional(),
     blueprint: blueprintSchema,
   })
   .strict();

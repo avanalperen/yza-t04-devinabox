@@ -1,3 +1,5 @@
+import "server-only";
+
 import { z } from "zod";
 import {
   AuthRequiredError,
@@ -29,8 +31,35 @@ export async function parseJsonWithSchema<T extends z.ZodTypeAny>(
   options: { maxBytes?: number } = {},
 ): Promise<ParseResult<z.infer<T>>> {
   const maxBytes = options.maxBytes ?? 16_384;
-  const contentLength = Number(request.headers.get("content-length") ?? 0);
-  if (contentLength > maxBytes) {
+  const mediaType = request.headers
+    .get("content-type")
+    ?.split(";", 1)[0]
+    .trim()
+    .toLowerCase();
+  if (
+    !mediaType ||
+    (mediaType !== "application/json" && !mediaType.endsWith("+json"))
+  ) {
+    return {
+      ok: false,
+      response: jsonError("Content-Type must be application/json", 415),
+    };
+  }
+
+  const contentLengthHeader = request.headers.get("content-length");
+  const contentLength = contentLengthHeader
+    ? Number(contentLengthHeader)
+    : undefined;
+  if (
+    contentLength !== undefined &&
+    (!Number.isSafeInteger(contentLength) || contentLength < 0)
+  ) {
+    return {
+      ok: false,
+      response: jsonError("Invalid Content-Length header", 400),
+    };
+  }
+  if (contentLength !== undefined && contentLength > maxBytes) {
     return {
       ok: false,
       response: jsonError("Request body is too large", 413),
@@ -44,7 +73,7 @@ export async function parseJsonWithSchema<T extends z.ZodTypeAny>(
     return { ok: false, response: jsonError("Could not read request body", 400) };
   }
 
-  if (raw.length > maxBytes) {
+  if (new TextEncoder().encode(raw).byteLength > maxBytes) {
     return {
       ok: false,
       response: jsonError("Request body is too large", 413),

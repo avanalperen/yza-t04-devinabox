@@ -1,3 +1,5 @@
+import "server-only";
+
 import { AuthRequiredError } from "@/lib/errors";
 import { getSupabaseUserClient, requiresSupabase } from "@/lib/storage";
 

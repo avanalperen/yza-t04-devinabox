@@ -1,5 +1,8 @@
+import "server-only";
+
 import type { Project, CreateProjectInput } from "@/types/project";
 import type { Blueprint, BootcampReport } from "@/types/output";
+import { projectSchema } from "@/lib/schemas/project";
 import {
   assertStorageAvailable,
   canUseLocalFileStore,
@@ -24,8 +27,12 @@ async function hydrateMemoryFromDisk(): Promise<void> {
   globalStore.__buildpixiesMemoryLoaded = true;
   try {
     const raw = await readFile(projectsStorePath, "utf8");
-    const projects = JSON.parse(raw) as Project[];
-    projects.forEach((project) => memory.set(project.id, project));
+    const stored = JSON.parse(raw) as unknown;
+    if (!Array.isArray(stored)) return;
+    stored.forEach((candidate) => {
+      const parsed = projectSchema.safeParse(candidate);
+      if (parsed.success) memory.set(parsed.data.id, parsed.data);
+    });
   } catch {
     // Missing or unreadable local fallback is fine; memory starts empty.
   }
@@ -45,17 +52,10 @@ async function persistMemoryToDisk(): Promise<void> {
   }
 }
 
-function newId(): string {
-  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
-    return crypto.randomUUID();
-  }
-  return `proj_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-}
-
 function toProject(input: CreateProjectInput): Project {
   const now = new Date().toISOString();
   return {
-    id: newId(),
+    id: crypto.randomUUID(),
     title: input.title?.trim() || input.rawIdea.slice(0, 60) || "Untitled idea",
     rawIdea: input.rawIdea,
     goal: input.goal,
@@ -213,7 +213,7 @@ export async function saveProjectBootcampReport(
 }
 
 function rowToProject(row: Record<string, unknown>): Project {
-  return {
+  return projectSchema.parse({
     id: String(row.id),
     ownerId: row.owner_id ? String(row.owner_id) : undefined,
     title: String(row.title ?? ""),
@@ -222,11 +222,11 @@ function rowToProject(row: Record<string, unknown>): Project {
     platform: (row.platform as Project["platform"]) ?? "web",
     targetAudience: String(row.target_audience ?? ""),
     constraints: (row.constraints as Project["constraints"]) ?? {},
-    outputDepth: row.output_depth as Project["outputDepth"],
-    blueprint: row.blueprint as Project["blueprint"],
-    bootcampReport: row.bootcamp_report as Project["bootcampReport"],
-    status: (row.status as Project["status"]) ?? "draft",
+    outputDepth: row.output_depth ?? "bootcamp-ready",
+    blueprint: row.blueprint ?? undefined,
+    bootcampReport: row.bootcamp_report ?? undefined,
+    status: row.status ?? "draft",
     createdAt: String(row.created_at ?? new Date().toISOString()),
     updatedAt: String(row.updated_at ?? new Date().toISOString()),
-  };
+  });
 }

@@ -1,6 +1,9 @@
+import "server-only";
+
 import type { Blueprint } from "@/types/output";
 import type { GenerationJob } from "@/types/generation-job";
 import type { CreateProjectInput } from "@/types/project";
+import { generationJobSchema } from "@/lib/schemas/generation-job";
 import {
   assertStorageAvailable,
   canUseLocalFileStore,
@@ -21,13 +24,6 @@ globalStore.__buildpixiesGenerationJobs = memory;
 
 const jobsStorePath = localStorePath("buildpixies-generation-jobs.json");
 
-function newId(): string {
-  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
-    return crypto.randomUUID();
-  }
-  return `job_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-}
-
 async function hydrateMemoryFromDisk(): Promise<void> {
   if (globalStore.__buildpixiesGenerationJobsLoaded || !canUseLocalFileStore()) {
     return;
@@ -35,8 +31,12 @@ async function hydrateMemoryFromDisk(): Promise<void> {
   globalStore.__buildpixiesGenerationJobsLoaded = true;
   try {
     const raw = await readFile(jobsStorePath, "utf8");
-    const jobs = JSON.parse(raw) as GenerationJob[];
-    jobs.forEach((job) => memory.set(job.id, job));
+    const stored = JSON.parse(raw) as unknown;
+    if (!Array.isArray(stored)) return;
+    stored.forEach((candidate) => {
+      const parsed = generationJobSchema.safeParse(candidate);
+      if (parsed.success) memory.set(parsed.data.id, parsed.data);
+    });
   } catch {
     // Missing or unreadable local fallback is fine; memory starts empty.
   }
@@ -64,7 +64,7 @@ export async function createGenerationJob(input: {
   const context = await getSupabaseUserClient();
   const now = new Date().toISOString();
   const job: GenerationJob = {
-    id: newId(),
+    id: crypto.randomUUID(),
     projectId: input.projectId,
     ownerId: context?.userId,
     status: "queued",
@@ -195,7 +195,7 @@ async function updateGenerationJob(
 }
 
 function rowToGenerationJob(row: Record<string, unknown>): GenerationJob {
-  return {
+  return generationJobSchema.parse({
     id: String(row.id),
     projectId: row.project_id ? String(row.project_id) : undefined,
     ownerId: row.owner_id ? String(row.owner_id) : undefined,
@@ -215,5 +215,5 @@ function rowToGenerationJob(row: Record<string, unknown>): GenerationJob {
     updatedAt: String(row.updated_at ?? new Date().toISOString()),
     startedAt: row.started_at ? String(row.started_at) : undefined,
     completedAt: row.completed_at ? String(row.completed_at) : undefined,
-  };
+  });
 }

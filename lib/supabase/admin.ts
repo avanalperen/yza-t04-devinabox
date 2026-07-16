@@ -2,7 +2,7 @@ import "server-only";
 
 import { createClient } from "@supabase/supabase-js";
 import { ServiceUnavailableError } from "@/lib/errors";
-import { getSupabaseAdminConfig } from "@/lib/supabase/config";
+import { getSupabaseAdminConfig } from "@/lib/supabase/admin-config";
 
 export function createAdminClient() {
   const config = getSupabaseAdminConfig();

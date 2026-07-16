@@ -20,6 +20,9 @@ export async function POST(request: NextRequest) {
   const body = parsed.data;
   try {
     let project = body.projectId ? await getProject(body.projectId) : null;
+    if (body.projectId && !project) {
+      return jsonError("Project not found", 404);
+    }
     if (!project) {
       project = {
         id: "export",
@@ -35,7 +38,8 @@ export async function POST(request: NextRequest) {
         updatedAt: new Date().toISOString(),
       };
     }
-    const json = exportJson(project, body.blueprint);
+    const blueprint = project.blueprint ?? body.blueprint;
+    const json = exportJson(project, blueprint);
     return Response.json({ json, filename: "blueprint.json" });
   } catch (error) {
     return jsonError(getSafeErrorMessage(error), getErrorStatus(error));

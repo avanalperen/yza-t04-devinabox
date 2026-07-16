@@ -14,7 +14,7 @@ import { checkRateLimit } from "@/lib/api/rate-limit";
 import { getSafeErrorMessage, jsonError, parseJsonWithSchema } from "@/lib/api/http";
 import { generateBlueprintRequestSchema } from "@/lib/api/schemas";
 import { getErrorStatus, ServiceUnavailableError } from "@/lib/errors";
-import { getSupabaseAdminConfig } from "@/lib/supabase/config";
+import { getSupabaseAdminConfig } from "@/lib/supabase/admin-config";
 
 export const maxDuration = 300;
 

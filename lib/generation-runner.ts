@@ -1,3 +1,5 @@
+import "server-only";
+
 import type { CreateProjectInput } from "@/types/project";
 import { generateBlueprint } from "@/lib/ai/orchestrator";
 import {

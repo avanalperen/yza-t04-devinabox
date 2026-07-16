@@ -1,3 +1,5 @@
+import "server-only";
+
 import path from "node:path";
 import { AuthRequiredError, StorageUnavailableError } from "@/lib/errors";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
