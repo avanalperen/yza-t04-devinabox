@@ -1,6 +1,8 @@
 # Referans Projeler
 
-YZTA Bootcamp 2026 sürecinde örnek/ referans olarak kullanılan repolar. Tüm repolar **git submodule** olarak eklenmiştir; yalnızca okuma ve ilham amacıyla kullanılırlar, kendi projemize doğrudan kod kopyalamak için değildir.
+YZTA Bootcamp 2026 sürecinde örnek/referans olarak kullanılan repolar. Dosyalar
+repo içinde **salt-okunur snapshot** olarak tutulur; yalnızca okuma ve ilham
+amacıyla kullanılır, kendi projemize doğrudan kod kopyalamak için değildir.
 
 > ⚠️ Bootcamp kuralları gereği **hazır proje kullanmak, satın alma yapmak, dışarıdan destek almak diskalifiye sebebidir.** Bu repolar yalnızca Scrum süreci, dökümantasyon yapısı ve teknik yaklaşım için referanstır.
 
@@ -57,33 +59,12 @@ YZTA Bootcamp 2026 sürecinde örnek/ referans olarak kullanılan repolar. Tüm 
 
 ---
 
-## Submodule Yönetimi
+## Snapshot Yönetimi
 
-Bu repolar git submodule olarak izlendiğinden, kendi ana repomuzun geçmişini kirlenmeden güncelleyebiliriz.
-
-### İlk kurulum (fresh clone sonrası)
-```bash
-git submodule update --init --recursive
-```
-
-### Tüm referans repoları en son commit'e güncelle
-```bash
-git submodule update --remote --merge
-```
-
-### Tek bir referansı güncelle
-```bash
-git submodule update --remote references/OUA-zaten-Bootcamp-2023
-```
-
-### Bir referansın belirli bir commit'ine geçmek
-```bash
-cd references/<repo-adi>
-git checkout <commit-hash>
-cd ../..
-git add references/<repo-adi>
-git commit -m "references: <repo-adi> <commit-hash>'e güncellendi"
-```
+Bu klasörler canlı git submodule değildir; fresh clone sonrasında ek bir
+`git submodule` komutu gerekmez. Bir referans güncellenecekse yukarıdaki kaynak
+URL ile mevcut snapshot karşılaştırılır, yalnızca gerekli dokümantasyon
+artifact'ları alınır ve iç içe `.git` klasörleri commit edilmez.
 
 ---
 

@@ -1,0 +1,6 @@
+# Legacy artifacts left at the repository root after the app moved to project/.
+/node_modules/
+/.local/
+/.next/
+/next-env.d.ts
+/references/
