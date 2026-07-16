@@ -1,7 +1,10 @@
 import "server-only";
 
 import OpenAI from "openai";
-import { ServiceUnavailableError } from "@/lib/errors";
+import {
+  AIOutputValidationError,
+  ServiceUnavailableError,
+} from "@/lib/errors";
 
 export type AIProvider = "openrouter" | "openai";
 
@@ -12,6 +15,7 @@ interface AIConfig {
   model: string;
   defaultHeaders?: Record<string, string>;
   timeoutMs: number;
+  maxRetries: number;
   jsonMaxTokens: number;
   textMaxTokens: number;
 }
@@ -38,6 +42,14 @@ function positiveInteger(
 ): number {
   const parsed = Number(value);
   return Number.isSafeInteger(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+function nonNegativeInteger(
+  value: string | undefined,
+  fallback: number,
+): number {
+  const parsed = Number(value);
+  return Number.isSafeInteger(parsed) && parsed >= 0 ? parsed : fallback;
 }
 
 function normalizeSiteUrl(value: string | undefined): string | undefined {
@@ -85,6 +97,10 @@ export function getAIConfig(): AIConfig | null {
       model: nonEmpty(process.env.OPENROUTER_MODEL) ?? "openrouter/free",
       defaultHeaders: openRouterHeaders(),
       timeoutMs: positiveInteger(process.env.OPENROUTER_TIMEOUT_MS, 90_000),
+      maxRetries: nonNegativeInteger(
+        process.env.OPENROUTER_MAX_RETRIES,
+        4,
+      ),
       jsonMaxTokens: positiveInteger(
         process.env.OPENROUTER_JSON_MAX_TOKENS,
         1_400,
@@ -104,6 +120,7 @@ export function getAIConfig(): AIConfig | null {
       baseURL: nonEmpty(process.env.OPENAI_BASE_URL),
       model: nonEmpty(process.env.OPENAI_MODEL) ?? "gpt-4o-mini",
       timeoutMs: positiveInteger(process.env.OPENAI_TIMEOUT_MS, 45_000),
+      maxRetries: nonNegativeInteger(process.env.OPENAI_MAX_RETRIES, 2),
       jsonMaxTokens: positiveInteger(
         process.env.OPENAI_JSON_MAX_TOKENS,
         1_400,
@@ -128,6 +145,7 @@ export function createAIClient(config = getAIConfig()): OpenAI | null {
     apiKey: config.apiKey,
     baseURL: config.baseURL,
     defaultHeaders: config.defaultHeaders,
+    maxRetries: config.maxRetries,
   });
 }
 
@@ -151,13 +169,38 @@ function requestError(
   error: unknown,
   timedOut: boolean,
 ): ServiceUnavailableError {
+  const apiError = error instanceof OpenAI.APIError ? error : undefined;
+  const providerMetadata =
+    apiError?.error &&
+    typeof apiError.error === "object" &&
+    "metadata" in apiError.error &&
+    apiError.error.metadata &&
+    typeof apiError.error.metadata === "object"
+      ? apiError.error.metadata
+      : undefined;
+  const providerErrorType =
+    providerMetadata &&
+    "error_type" in providerMetadata &&
+    typeof providerMetadata.error_type === "string"
+      ? providerMetadata.error_type
+      : apiError?.type;
+
   console.error("AI provider request failed", {
     provider: config.provider,
     model: config.model,
     errorName: error instanceof Error ? error.name : "UnknownError",
-    status:
-      error instanceof OpenAI.APIError ? error.status : undefined,
+    status: apiError?.status,
+    errorType: providerErrorType,
+    retryAfter: apiError?.headers?.get("retry-after") ?? undefined,
+    requestId: apiError?.requestID ?? undefined,
   });
+
+  if (apiError?.status === 429) {
+    return new ServiceUnavailableError(
+      "AI provider is busy. Please try again in a moment.",
+    );
+  }
+
   return new ServiceUnavailableError(
     timedOut
       ? "AI provider request timed out"
@@ -174,9 +217,7 @@ function parseJsonContent(content: string): unknown {
   try {
     return JSON.parse(normalized || "{}");
   } catch {
-    throw new ServiceUnavailableError(
-      "AI provider returned invalid structured output",
-    );
+    throw new AIOutputValidationError();
   }
 }
 

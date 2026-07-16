@@ -231,5 +231,9 @@ Provider anahtarları yalnızca server environment'ta tutulacak.
   gecikmesine göre genişletilir; upstream hata ayrıntıları client'a sızdırılmaz.
 - Request bazında parameter support zorunlu tutulur ve varsayılan olarak prompt
   data collection'a izin vermeyen provider'larla sınırlandırılır.
+- Geçici `429` ve `5xx` yanıtları `Retry-After` uyumlu SDK backoff mekanizmasıyla
+  sınırlı sayıda yeniden denenir; son hata güvenli tanılama alanlarıyla loglanır.
+- Şema doğrulamasını geçemeyen structured output ilgili bölüm için bir kez daha
+  üretilir; tekrarlanan doğrulama hatası istemciye ayrıntı sızdırmadan `503` olur.
 - Production güvenilirliği gerektiğinde `OPENROUTER_MODEL` ile sabit/ücretli bir
   model seçilebilir.

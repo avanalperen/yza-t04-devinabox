@@ -3,6 +3,7 @@ import type { Blueprint, BlueprintSection } from "@/types/output";
 import { isAIConfigured, runJsonCompletion, runTextCompletion } from "@/lib/ai/client";
 import { buildSampleBlueprint } from "@/lib/ai/sample";
 import { blueprintSchema, validateSection } from "@/lib/ai/schemas";
+import { AIOutputValidationError } from "@/lib/errors";
 import {
   backlogPrompt,
   codePrompt,
@@ -63,18 +64,63 @@ const pipelineBatches: PipelineStep[][] = [
   [pipeline[10]],
 ];
 
+const structuredOutputAttempts = 2;
+const retryInstruction = [
+  "The previous response did not match the required output schema.",
+  "Return exactly one JSON object with the requested fields and value types.",
+  "Do not include markdown fences or additional fields.",
+].join(" ");
+
+class InvalidSectionOutputError extends AIOutputValidationError {
+  constructor(readonly issuePaths: string[]) {
+    super("AI provider returned invalid structured output");
+    this.name = "InvalidSectionOutputError";
+  }
+}
+
 function assertValidSection(
   section: Exclude<BlueprintSection, "readme">,
   data: unknown,
 ) {
   const parsed = validateSection(section, data);
   if (!parsed.success) {
-    const details = parsed.error.issues
-      .map((issue) => `${issue.path.join(".") || "root"}: ${issue.message}`)
-      .join("; ");
-    throw new Error(`Invalid ${section} output: ${details}`);
+    throw new InvalidSectionOutputError(
+      parsed.error.issues.map((issue) => issue.path.join(".") || "root"),
+    );
   }
   return parsed.data;
+}
+
+async function runStructuredSection(
+  section: Exclude<BlueprintSection, "readme">,
+  system: string,
+  user: string,
+): Promise<unknown> {
+  let lastError: AIOutputValidationError | undefined;
+
+  for (let attempt = 1; attempt <= structuredOutputAttempts; attempt += 1) {
+    try {
+      const retrySystem = attempt === 1
+        ? system
+        : `${system}\n\n${retryInstruction}`;
+      const data = await runJsonCompletion(retrySystem, user);
+      return assertValidSection(section, data);
+    } catch (error) {
+      if (!(error instanceof AIOutputValidationError)) throw error;
+      lastError = error;
+      console.warn("AI structured output validation failed", {
+        section,
+        attempt,
+        maxAttempts: structuredOutputAttempts,
+        issuePaths:
+          error instanceof InvalidSectionOutputError
+            ? error.issuePaths
+            : ["root"],
+      });
+    }
+  }
+
+  throw lastError ?? new AIOutputValidationError();
 }
 
 export async function generateBlueprint(
@@ -99,8 +145,11 @@ export async function generateBlueprint(
       if (step.mode === "markdown") {
         outputs[step.section] = await runTextCompletion(system, user);
       } else {
-        const data = await runJsonCompletion(system, user);
-        outputs[step.section] = assertValidSection(step.section, data);
+        outputs[step.section] = await runStructuredSection(
+          step.section,
+          system,
+          user,
+        );
       }
       onEvent?.({ pixie: step.pixie, section: step.section, status: "done" });
     } catch (error) {
@@ -147,6 +196,9 @@ export async function regenerateSection(
   if (builder.mode === "markdown") {
     return runTextCompletion(system, user);
   }
-  const data = await runJsonCompletion(system, user);
-  return assertValidSection(section as Exclude<BlueprintSection, "readme">, data);
+  return runStructuredSection(
+    section as Exclude<BlueprintSection, "readme">,
+    system,
+    user,
+  );
 }

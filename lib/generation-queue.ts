@@ -6,6 +6,10 @@ export interface BlueprintGenerationMessage {
   jobId: string;
 }
 
+export function getGenerationQueueRegion(): string {
+  return process.env.VERCEL_REGION?.trim() || "iad1";
+}
+
 export function shouldUseDurableGenerationQueue(): boolean {
   return (
     process.env.VERCEL === "1" ||
@@ -16,8 +20,9 @@ export function shouldUseDurableGenerationQueue(): boolean {
 export async function enqueueBlueprintGeneration(
   jobId: string,
 ): Promise<string | null> {
-  const { send } = await import("@vercel/queue");
-  const result = await send<BlueprintGenerationMessage>(
+  const { QueueClient } = await import("@vercel/queue");
+  const queue = new QueueClient({ region: getGenerationQueueRegion() });
+  const result = await queue.send<BlueprintGenerationMessage>(
     BLUEPRINT_GENERATION_TOPIC,
     { jobId },
     {

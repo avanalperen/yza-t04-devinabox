@@ -27,6 +27,13 @@ export class ServiceUnavailableError extends Error {
   }
 }
 
+export class AIOutputValidationError extends ServiceUnavailableError {
+  constructor(message = "AI provider returned invalid structured output") {
+    super(message);
+    this.name = "AIOutputValidationError";
+  }
+}
+
 export function getErrorStatus(error: unknown): number {
   if (
     error instanceof AuthRequiredError ||

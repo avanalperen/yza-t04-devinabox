@@ -443,6 +443,7 @@ oluşturup ignore edilen `.env.local` dosyasına ekleyin:
 OPENROUTER_API_KEY=sk-or-v1-...
 OPENROUTER_MODEL=openrouter/free
 OPENROUTER_SITE_URL=http://localhost:3000
+OPENROUTER_MAX_RETRIES=4
 ```
 
 OpenRouter OpenAI uyumlu endpoint kullandığı için ek SDK gerekmez. Uygulama
@@ -450,6 +451,10 @@ OpenRouter OpenAI uyumlu endpoint kullandığı için ek SDK gerekmez. Uygulama
 OpenAI'ı seçer. API anahtarları server-only tutulmalı ve `NEXT_PUBLIC_` önekiyle
 tanımlanmamalıdır. Ücretsiz router düşük trafik ve demo için uygundur; model
 seçimi istek başına değişebilir ve ücretsiz kota/erişilebilirlik sınırlıdır.
+Geçici `429` ve sunucu hataları, provider'ın `Retry-After` yönlendirmesine uyan
+SDK backoff mekanizmasıyla varsayılan olarak dört kez yeniden denenir.
+Şemaya uymayan structured output yalnızca ilgili bölüm için bir kez daha
+üretilir; ikinci doğrulama da başarısızsa job güvenli bir `503` hatasıyla durur.
 BuildPixies varsayılan olarak yalnızca request parametrelerini destekleyen ve
 prompt verisi toplamayan provider'lara izin verir. Bu güvenli varsayılanı
 genişletmek gerekiyorsa veri etkisi değerlendirilerek

@@ -1,6 +1,9 @@
-import { handleCallback } from "@vercel/queue";
+import { QueueClient } from "@vercel/queue";
 import { z } from "zod";
-import type { BlueprintGenerationMessage } from "@/lib/generation-queue";
+import {
+  getGenerationQueueRegion,
+  type BlueprintGenerationMessage,
+} from "@/lib/generation-queue";
 import {
   failDurableGenerationJob,
   GenerationAttemptError,
@@ -20,7 +23,9 @@ class InvalidQueueMessageError extends Error {
   }
 }
 
-export const POST = handleCallback<BlueprintGenerationMessage>(
+const queue = new QueueClient({ region: getGenerationQueueRegion() });
+
+export const POST = queue.handleCallback<BlueprintGenerationMessage>(
   async (message) => {
     const parsed = queueMessageSchema.safeParse(message);
     if (!parsed.success) throw new InvalidQueueMessageError();
