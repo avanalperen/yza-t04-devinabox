@@ -149,6 +149,9 @@ formatlarda hazırlanır.
 
 # Sprint 1
 
+> Ayrıntılı tarihsel plan, gerçekleşenler ve kanıt denetimi:
+> [`docs/sprint-1.md`](docs/sprint-1.md)
+
 ## Sprint Notları
 
 - **Sprint dönemi:** 19 Haziran – 5 Temmuz 2026
@@ -329,6 +332,9 @@ Sprint 1 review sonucunda aşağıdaki kararlar alındı:
 
 # Sprint 2
 
+> Ayrıntılı aktif uygulama ve kapanış planı:
+> [`docs/sprint-2.md`](docs/sprint-2.md)
+
 > Sprint 2 (6–19 Temmuz 2026) başlangıcı. Çalışan MVP'nin polish, deploy ve
 > kullanıcı deneyimi sertleştirme süreci bu bölümde sprint sonunda
 > belgelenecektir.
@@ -344,6 +350,9 @@ semantiği düzeltildi ve aynı kalite zinciri GitHub Actions'a bağlandı.
 ---
 
 # Sprint 3
+
+> Ayrıntılı final sprint, release, video ve submission planı:
+> [`docs/sprint-3.md`](docs/sprint-3.md)
 
 > Sprint 3 (20 Temmuz – 2 Ağustos 2026) başlangıcı. Bootcamp Mode erkenden
 > tamamlandı; AI derinliği, demo video ve final teslim çıktıları bu bölümde
