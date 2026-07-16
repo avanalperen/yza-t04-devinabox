@@ -1,8 +1,9 @@
+import type { BlueprintSection } from "@/types/output";
 import type { CreateProjectInput } from "@/types/project";
 
 export interface PixieContext {
   input: CreateProjectInput;
-  previousOutputs?: Record<string, unknown>;
+  previousOutputs?: Partial<Record<BlueprintSection, unknown>>;
 }
 
 export type PixiePromptBuilder = (ctx: PixieContext) => {

@@ -159,7 +159,7 @@ export function Workspace({ project }: { project: Project }) {
   }
 
   async function handleRegenerate(section: BlueprintSection) {
-    if (!blueprint) return;
+    if (!blueprint || loading || regeneratingSection) return;
     setError(null);
     setRegeneratingSection(section);
     try {
@@ -167,23 +167,16 @@ export function Workspace({ project }: { project: Project }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          input: {
-            rawIdea: project.rawIdea,
-            goal: project.goal,
-            platform: project.platform,
-            targetAudience: project.targetAudience,
-            constraints: project.constraints,
-            outputDepth: project.outputDepth,
-          },
+          projectId: project.id,
           section,
-          previousOutputs: blueprint,
         }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Regenerate failed");
-      setBlueprint((prev) =>
-        prev ? { ...prev, [section]: data.output } : prev,
-      );
+      setBlueprint((prev) => {
+        if (data.blueprint) return data.blueprint as Blueprint;
+        return prev ? { ...prev, [section]: data.output } : prev;
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Regenerate failed");
     } finally {
@@ -207,8 +200,16 @@ export function Workspace({ project }: { project: Project }) {
           <span>Platform: {project.platform}</span>
           <span>Audience: {project.targetAudience}</span>
         </div>
-        <Button onClick={handleGenerate} disabled={loading} className="pixie-glow">
-          {loading ? "Pixies are working..." : blueprint ? "Regenerate" : "Generate blueprint"}
+        <Button
+          onClick={handleGenerate}
+          disabled={loading || regeneratingSection !== null}
+          className="pixie-glow"
+        >
+          {loading
+            ? "Pixies are working..."
+            : blueprint
+              ? "Regenerate all"
+              : "Generate blueprint"}
         </Button>
         {error && (
           <p role="alert" className="text-sm text-destructive">

@@ -39,16 +39,17 @@ function SectionHeader({
   regeneratingSection?: BlueprintSection | null;
   onRegenerate?: (section: BlueprintSection) => void;
 }) {
-  const isRegenerating = regeneratingSection === section;
+  const isCurrentSection = regeneratingSection === section;
+  const isRegenerating = regeneratingSection != null;
   return (
     <div className="flex justify-end pb-2">
-       <Button
+      <Button
         size="sm"
         variant="default"
-        disabled={isRegenerating}
+        disabled={!onRegenerate || isRegenerating}
         onClick={() => onRegenerate?.(section)}
       >
-        {isRegenerating ? "Regenerating..." : "Regenerate"}
+        {isCurrentSection ? "Regenerating..." : "Regenerate"}
       </Button>
     </div>
   );
@@ -85,6 +86,7 @@ export function OutputHub({
         <TabsTrigger value="code">Code</TabsTrigger>
         <TabsTrigger value="backlog">Backlog</TabsTrigger>
         <TabsTrigger value="tests">Tests</TabsTrigger>
+        <TabsTrigger value="sprints">Sprints</TabsTrigger>
         <TabsTrigger value="readme">README</TabsTrigger>
       </TabsList>
 
@@ -247,6 +249,27 @@ export function OutputHub({
         <Row label="Demo checklist">
           <List items={b.testPlan.demoChecklist} />
         </Row>
+      </TabsContent>
+
+      <TabsContent value="sprints" className="rounded-xl border bg-card p-5">
+        <SectionHeader
+          section="sprintPlan"
+          regeneratingSection={regeneratingSection}
+          onRegenerate={onRegenerate}
+        />
+        <div className="flex flex-col gap-3">
+          {b.sprintPlan.sprints.map((sprint) => (
+            <div key={sprint.name} className="min-w-0 rounded-lg border p-3">
+              <p className="break-words font-medium">{sprint.name}</p>
+              <p className="break-words text-sm text-muted-foreground">
+                {sprint.goal}
+              </p>
+              <div className="mt-2">
+                <List items={sprint.items} />
+              </div>
+            </div>
+          ))}
+        </div>
       </TabsContent>
 
       <TabsContent value="readme" className="rounded-xl border bg-card p-5">

@@ -69,11 +69,15 @@ export const generateBlueprintRequestSchema = z
 
 export const regenerateOutputRequestSchema = z
   .object({
-    input: createProjectInputSchema,
+    projectId: z.string().trim().min(1).max(160).optional(),
+    input: createProjectInputSchema.optional(),
     section: blueprintSectionSchema,
-    previousOutputs: z.record(z.string(), z.unknown()).optional(),
+    previousOutputs: blueprintSchema.optional(),
   })
-  .strict();
+  .strict()
+  .refine((value) => value.projectId || value.input, {
+    message: "projectId or input is required",
+  });
 
 export const exportReadmeRequestSchema = z
   .object({
@@ -83,8 +87,8 @@ export const exportReadmeRequestSchema = z
   .strict();
 
 export const exportJsonRequestSchema = z
-.object({
-  projectId: z.string().trim().min(1).max(160).optional(),
-  blueprint: blueprintSchema,
-})
-.strict();
+  .object({
+    projectId: z.string().trim().min(1).max(160).optional(),
+    blueprint: blueprintSchema,
+  })
+  .strict();

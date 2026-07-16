@@ -106,7 +106,7 @@ export async function generateBlueprint(
 export async function regenerateSection(
   input: CreateProjectInput,
   section: BlueprintSection,
-  previousOutputs?: Record<string, unknown>,
+  previousOutputs?: Partial<Record<BlueprintSection, unknown>>,
 ): Promise<unknown> {
   if (!isOpenAIConfigured()) {
     return buildSampleBlueprint(input.rawIdea)[section];

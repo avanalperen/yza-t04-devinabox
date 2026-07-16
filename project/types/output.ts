@@ -90,16 +90,16 @@ export interface CodeSkeleton {
   conventions: string[];
 }
 
-export interface TestCase {
+export interface TestCase<TType extends "happy" | "edge" | "error"> {
   name: string;
-  type: "happy" | "edge" | "error";
+  type: TType;
   steps: string[];
   expectedResult: string;
 }
 
 export interface TestPlan {
-  happyPath: TestCase[];
-  edgeCases: TestCase[];
+  happyPath: TestCase<"happy">[];
+  edgeCases: TestCase<"edge">[];
   errorMessages: string[];
   securityRisks: string[];
   demoChecklist: string[];
