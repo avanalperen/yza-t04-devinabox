@@ -32,6 +32,14 @@ gerçek blueprint çıktısı üretilsin. Çalışan MVP.
 - Output Hub çalışıyor
 - README güncel
 
+## 16 Temmuz Ara Güncellemesi
+
+- PR #11 ile Markdown copy, JSON export ve bölüm bazlı regenerate UI tamamlandı.
+- Regenerate çıktıları proje blueprint'ine kalıcı olarak yazılıyor.
+- Aynı anda birden fazla regenerate/full generation isteği engellendi.
+- Output Hub'a Sprint Plan sekmesi eklendi.
+- Lint, typecheck, production build ve HTTP persistence smoke testi geçti.
+
 ## Bootcamp Gereksinimleri (Sprint sonunda README'ye)
 
 > Backlog dağıtma mantığı · Daily Scrum notları · Sprint board updates ·

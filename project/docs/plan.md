@@ -84,9 +84,9 @@ yaşayan ürün planı olması için eklendi.
 | Job + polling modeli | **Yapıldı** — `app/api/generation-jobs/*`, `lib/generation-jobs.ts`, `components/project/workspace.tsx` |
 | Supabase Auth/RLS temeli | **Yapıldı** — `proxy.ts`, `components/auth/session-bootstrap.tsx`, `supabase/migrations/202607050001_auth_rls_generation_jobs.sql` |
 | Output Hub + README export | **Yapıldı** — `components/outputs/output-hub.tsx`, `app/api/export-readme/route.ts`, `lib/export/markdown.ts` |
-| Regenerate section | **Kısmen yapıldı** — API var (`app/api/regenerate-output/route.ts`), UI kontrolü henüz yok |
+| Regenerate section | **Yapıldı** — UI kontrolü, server-side validation ve proje kaydına persistence var |
 | Bootcamp Mode | **Sonraki sprint** — planlandı, henüz route/UI yok |
-| JSON export / feedback kayıtları | **Sonraki sprint** — henüz route/UI yok |
+| JSON export / feedback kayıtları | **Kısmen yapıldı** — JSON export hazır; feedback kaydı sonraki sprintte |
 
 ---
 
@@ -640,7 +640,8 @@ Next.js içinde mevcut route'lar:
 | `/api/generation-jobs` | POST | Blueprint generation job başlat | **Yapıldı** |
 | `/api/generation-jobs/[id]` | GET | Job durumunu ve sonucu getir | **Yapıldı** |
 | `/api/generate-blueprint` | POST | Geriye uyumlu direkt pipeline endpoint'i | **Yapıldı** |
-| `/api/regenerate-output` | POST | Tek bölümü tekrar üret | **Kısmen** — API var, UI kontrolü yok |
+| `/api/regenerate-output` | POST | Tek bölümü tekrar üret ve blueprint'i kaydet | **Yapıldı** |
+| `/api/export-json` | POST | Blueprint'i JSON olarak dışa aktar | **Yapıldı** |
 | `/api/export-readme` | POST | README markdown üret | **Yapıldı** |
 | `/api/save-feedback` | POST | Kullanıcı feedback'ini kaydet | **Sonraki sprint** |
 
@@ -807,12 +808,13 @@ Sekmeler: Overview · Product · UX · Tech · Backlog · Tests · Docs · Expor
 
 Her sekmede:
 - Markdown preview
-- Copy button — **Sonraki sprint**
-- Regenerate button — **Kısmen yapıldı** (`/api/regenerate-output` var, UI bağlantısı yok)
+- Copy button — **Yapıldı**
+- Regenerate button — **Yapıldı** (bölüm bazlı üretim ve persistence)
 - "Make shorter" / "Make more technical" / "Adapt for bootcamp" — **Sonraki sprint**
 
 Mevcut kodda Output Hub; Plan, Product, Market, Scope, UX, Tech, Code, Backlog,
-Tests ve README sekmelerini gösterir. README sekmesinde download butonu vardır.
+Tests, Sprints ve README sekmelerini gösterir. README sekmesinde Markdown copy,
+JSON download ve README download kontrolleri vardır.
 
 ---
 
@@ -1025,9 +1027,9 @@ buildpixies/
 
 | ID | User Story | Öncelik | Kod durumu |
 | --- | --- | --- | --- |
-| BP-016 | Kullanıcı olarak çıktıları markdown olarak kopyalamak istiyorum | P1 | **Kısmen yapıldı** — README markdown download var; copy button yok |
+| BP-016 | Kullanıcı olarak çıktıları markdown olarak kopyalamak istiyorum | P1 | **Yapıldı** — Output Hub copy kontrolü |
 | BP-017 | Kullanıcı olarak README taslağı üretmek istiyorum | P1 | **Yapıldı** — `lib/export/markdown.ts`, `/api/export-readme` |
-| BP-018 | Kullanıcı olarak JSON export almak istiyorum | P2 | **Sonraki sprint** |
+| BP-018 | Kullanıcı olarak JSON export almak istiyorum | P2 | **Yapıldı** — `/api/export-json` ve download kontrolü |
 
 ### Epic 6 — Bootcamp Mode
 
@@ -1132,7 +1134,7 @@ Bootcamp takvimi:
 | --- | --- | --- |
 | 20 Temmuz | Agent pipeline'ı güçlendir | **Kısmen yapıldı** — role-based pipeline var; Agents SDK handoff yok |
 | 21 Temmuz | Project memory / decisions tablosu | **Sonraki sprint** |
-| 22 Temmuz | Regenerate section özelliği | **Kısmen yapıldı** — API var, UI yok |
+| 22 Temmuz | Regenerate section özelliği | **Erken tamamlandı** — PR #11 ve post-merge persistence düzeltmesi |
 | 23 Temmuz | README export | **Yapıldı** |
 | 24 Temmuz | Bootcamp Mode basic | **Sonraki sprint** |
 | 25 Temmuz | Test Plan output | **Yapıldı** |
@@ -1157,8 +1159,6 @@ Bootcamp takvimi:
 
 | İyileştirme | Neden önemli | Önerilen sprint |
 | --- | --- | --- |
-| Regenerate UI kontrolleri | API var ama kullanıcı sekme bazlı tekrar üretimi tetikleyemiyor | Sprint 2 sonu |
-| Copy Markdown ve JSON export | Bootcamp tesliminde çıktı paylaşımı kolaylaşır | Sprint 2 sonu |
 | Bootcamp Mode basic | Ürünün akademi bağlamındaki özgünlüğünü artırır | Sprint 3 |
 | Durable queue veya SSE streaming | Next `after()` iyi temel; public production için daha dayanıklı job altyapısı gerekir | Sprint 3 |
 | Email/OAuth account linking | Anonymous auth demo için iyi; kalıcı kullanıcı hesabı için yükseltme gerekir | Sprint 3 |

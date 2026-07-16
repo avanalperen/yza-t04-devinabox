@@ -138,3 +138,31 @@ poll edecek. Next'in mevcut stabil sürümünde güvenli patch olmadığı için
 - Uzun generation akışı kullanıcı arayüzünde job status üzerinden izlenir.
 - Harici durable queue/SSE streaming ve email/OAuth account linking roadmap'e
   bırakılır.
+
+---
+
+## ADR-006 — Output export ve kalıcı bölüm yenileme
+
+**Tarih:** 16 Temmuz 2026
+**Durum:** Kabul edildi
+
+### Bağlam
+
+PR #11, Output Hub'a Markdown kopyalama, JSON export ve bölüm bazlı regenerate
+kontrollerini ekledi. Post-merge incelemede regenerate sonucunun yalnızca client
+state'inde kaldığı ve paralel isteklerin blueprint güncellemelerini birbiriyle
+yarıştırabildiği görüldü.
+
+### Karar
+
+Proje kimliği verilen regenerate istekleri server'daki owner-scoped proje
+verisini kaynak kabul edecek. Üretilen bölüm tam blueprint şemasıyla yeniden
+doğrulanacak ve proje kaydına yazılacak. UI aynı anda yalnızca bir generation
+işlemine izin verecek.
+
+### Sonuçlar
+
+- Bölüm yenilemeleri sayfa yenilendiğinde kaybolmaz.
+- Client'ın gönderdiği eski veya değiştirilmiş proje bağlamı kalıcı kaydı ezmez.
+- Paralel UI isteklerinden doğan son-yazan-kazan veri kaybı önlenir.
+- Sprint Plan çıktısı Output Hub içinde görünür ve yenilenebilir olur.

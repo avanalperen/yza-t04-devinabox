@@ -74,6 +74,8 @@ formatlarda hazırlanır.
 - Code skeleton: başlangıç dosya ağacı ve geliştirme görevleri
 - Test planı: happy path, edge case, güvenlik riskleri, demo checklist
 - Sprint planı ve README.md export
+- Output Hub'da Markdown kopyalama ve JSON indirme
+- Blueprint bölümlerini tek tek yeniden üretme ve proje kaydına yazma
 - Pixie workspace: agent kartları ve durum görünümü
 - Supabase veya local JSON fallback ile proje/blueprint saklama
 - Supabase Auth anonymous owner mode + `owner_id` bazlı RLS temeli
@@ -82,7 +84,6 @@ formatlarda hazırlanır.
 ### Roadmap
 
 - Bootcamp Mode: sprint notlarını review/retro/README formatına dönüştürme
-- Regenerate UI kontrolleri ve markdown copy/json export
 - OpenAI Agents SDK handoff, tracing ve guardrail katmanı
 - pgvector ile project memory ve decision memory
 - Email/OAuth account linking
@@ -123,9 +124,9 @@ formatlarda hazırlanır.
 | BP-013 | Kullanıcı olarak tech architecture almak istiyorum | P0 | Done |
 | BP-014 | Kullanıcı olarak backlog almak istiyorum | P0 | Done |
 | BP-015 | Kullanıcı olarak test planı almak istiyorum | P1 | Done |
-| BP-016 | Kullanıcı olarak çıktıları markdown olarak kopyalamak istiyorum | P1 | Partial |
+| BP-016 | Kullanıcı olarak çıktıları markdown olarak kopyalamak istiyorum | P1 | Done |
 | BP-017 | Kullanıcı olarak README taslağı üretmek istiyorum | P1 | Done |
-| BP-018 | Kullanıcı olarak JSON export almak istiyorum | P2 | Sprint 2/3 |
+| BP-018 | Kullanıcı olarak JSON export almak istiyorum | P2 | Done |
 | BP-019 | Kullanıcı olarak sprint notlarımı düzenlemek istiyorum | P1 | Sprint 3 |
 | BP-020 | Kullanıcı olarak review/retro taslağı almak istiyorum | P1 | Sprint 3 |
 | BP-021 | Kullanıcı olarak backlog dağıtma mantığı metni üretmek istiyorum | P1 | Sprint 3 |
@@ -267,6 +268,7 @@ Sprint 1 sonunda uygulama local ortamda çalışır durumdadır. Ekran görünt�
 | Job + polling | `project/app/api/generation-jobs/*`, `project/lib/generation-jobs.ts`, `project/components/project/workspace.tsx` | Done |
 | Supabase owner/RLS | `project/proxy.ts`, `project/components/auth/session-bootstrap.tsx`, `project/supabase/migrations/202607050001_auth_rls_generation_jobs.sql` | Done |
 | README export | `project/app/api/export-readme/route.ts`, `project/lib/export/markdown.ts` | Done |
+| Output controls | `project/app/api/export-json/route.ts`, `project/app/api/regenerate-output/route.ts`, `project/components/outputs/output-hub.tsx` | Done |
 | Audit | `project/package.json` override: `postcss@8.5.10`; `npm audit --omit=dev` sonucu 0 vulnerability | Done |
 
 ## Sprint Review
@@ -320,6 +322,11 @@ Sprint 1 review sonucunda aşağıdaki kararlar alındı:
 > kullanıcı deneyimi sertleştirme süreci bu bölümde sprint sonunda
 > belgelenecektir.
 
+**16 Temmuz ara güncellemesi:** PR #11 ile Markdown kopyalama, JSON export ve
+bölüm bazlı regenerate kontrolleri tamamlandı. Post-merge incelemede regenerate
+sonuçlarının kalıcı proje kaydına yazılması, eşzamanlı istek koruması ve Sprint
+Plan sekmesi eklendi.
+
 ---
 
 # Sprint 3
@@ -353,6 +360,7 @@ project/
       generation-jobs/
       generate-blueprint/
       regenerate-output/
+      export-json/
       export-readme/
   components/
     auth/
