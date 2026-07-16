@@ -4,7 +4,7 @@
 > merkezi
 > **Sürüm:** 3.0 — Product Experience Reset
 > **Son doğrulama:** 16 Temmuz 2026, Perşembe
-> **Doğrulanan kod referansı:** `6176086 Harden AI generation`
+> **Doğrulanan kod referansı:** `93d2a66 Refine Sprint 1 UX`
 > **Repository:** [avanalperen/BuildPixies](https://github.com/avanalperen/BuildPixies)
 > **Kategori:** Yapay Zeka / Veri Bilimi
 > **Kesin ürün teslimi:** **2 Ağustos 2026 Pazar, 23:59**
@@ -187,11 +187,12 @@ Birbiriyle çelişen bilgi varsa aşağıdaki sıra uygulanır:
 | --- | --- |
 | Repo | Public, default branch `main` |
 | Remote | `avanalperen/BuildPixies` |
-| Son commit | `6176086 Harden AI generation` |
-| Son CI | Quality workflow başarılı; lint, typecheck, build, 3 E2E geçti |
+| Son doğrulanan teknik commit | `93d2a66 Refine Sprint 1 UX` |
+| Son CI | `93d2a66` Quality workflow başarılı |
+| Son yerel kalite zinciri | lint, typecheck, production build, 6 E2E ve audit geçti |
 | PR | PR #11 Selin Akkaş tarafından açıldı ve merge edildi |
 | Canlı homepage | GitHub repo metadata içinde boş; Vercel proje bağı doğrulanmadı |
-| Issue board | 10 issue açık; “done” etiketli olmalarına rağmen kapatılmamış |
+| Issue board | Sprint 1 issue `#1–#10` kabul notlarıyla kapatıldı |
 | Ekip | README'de 4 kişi; resmî ekip formu durumu koddan doğrulanamaz |
 
 ---
@@ -527,16 +528,16 @@ Bu tablo doğrulanmış pazar gerçeği değil, test edilecek ürün hipotezidir
 
 | Sorun | Kod/ürün kanıtı | Kullanıcı etkisi | Karar |
 | --- | --- | --- | --- |
-| “View Demo” gerçek demo değil | Hero CTA `/#features` bağlantısına gidiyor | İddia kanıtlanmıyor | Curated sample blueprint'e bağla |
-| Doğrulanmamış sosyal kanıt | “Loved by 1,000+ creators” metni | Güven zedelenir | Gerçek metrik oluşana kadar kaldır |
+| Curated sample henüz yok | Hero artık “See what you get” ile gerçek özelliklere gider | Hızlı değer kanıtı hâlâ sınırlı | Curated sample blueprint ekle |
+| Doğrulanmamış sosyal kanıt | “Loved by 1,000+ creators” 16 Temmuz'da kaldırıldı | Risk kapandı | Gerçek metrik olmadan geri ekleme |
 | Plan/gerçeklik farkı | Eski plan olmayan `output-preview.tsx` dosyasını Done gösteriyor | Yanlış tamamlanma algısı | Backlog durumlarını yeniden denetle |
-| Tüm pixie'ler aynı anda thinking | UI generate başında tüm statüleri değiştiriyor | Orchestration tiyatro gibi görünür | Gerçek job event'lerine bağla |
+| Ayrıntılı Pixie event'i yok | UI yalnız gerçek job sahibi Pip'i thinking gösteriyor | Bölüm ilerlemesi görünmüyor | Gerçek job event'lerine bağla |
 | Sonuç yalnız finalde açılıyor | Polling `succeeded/failed` bekliyor | 252 saniye boş bekleme | Partial blueprint + event polling |
 | Çıktı aşırı parçalı | 11 yatay tab | Bilgi yükü, öncelik kaybı | Overview + 4 çıktı grubu |
-| Yanlış panel başlığı | Tüm Output Hub “MVP Scope” başlığı altında | Information scent bozuk | “Blueprint”/aktif bölüm başlığı |
+| Panel başlığı | “Blueprint Output” olarak düzeltildi | Risk kapandı | Command Center'da aktif bölüm bağlamı ekle |
 | Bootcamp Mode ana akışa yapışık | Workspace altında sürekli büyük form | Ürün kategorisi karışır | Goal-aware Delivery Pack alanı |
 | Dashboard yalnız kart listesi | Next action/son aktivite yok | Proje yönetimi hissi zayıf | Project health + next action |
-| Sign In bilgi mimarisi belirsiz | Anonymous session var, CTA beklenti yaratıyor | Auth vaadi anlaşılmıyor | Gerçek auth hazır değilse doğru etiketle |
+| Anonymous giriş anlatısı | CTA “Open workspace” olarak düzeltildi | Yanlış auth beklentisi kapandı | Account linking geldiğinde yeniden değerlendir |
 | Tasarım ürünün önünde | Asset referansları birebir uygulandı | Güzel ama jenerik SaaS hissi | Tasarım kabulünü kullanıcı sonucuna bağla |
 
 ### 10.1 Korunacak güçlü alanlar
@@ -999,12 +1000,13 @@ Browser
 | 11-section blueprint | Done | prompts, schemas, orchestrator, live smoke |
 | OpenRouter integration | Done | client, env docs, live inference |
 | AI retry/schema hardening | Done | commit `6176086`, CI success |
+| API/storage runtime boundaries | Done | commit `7702f44`, Zod + server-only + UUID/body guards |
 | Job + polling | Done | job routes/store/UI |
 | Durable queue/lease | Code Complete | queue route, worker, migrations |
 | Supabase RLS/rate limit | Code Complete | migrations + SQL test |
 | Export/regenerate | Done | PR #11 + persistence hardening |
 | Bootcamp Mode | Code Complete | UI/API/schema/persistence/export |
-| E2E/CI | Done | 3 Playwright test, Quality workflow |
+| E2E/CI | Done | 6 Playwright senaryosu, Quality workflow |
 | Design system | Code Complete | assets referansları uygulanmış |
 
 ### 16.2 Partial veya eksik alanlar
@@ -1022,7 +1024,6 @@ Browser
 | Final video | Yok | 31 Temmuz–1 Ağustos |
 | Final screenshots | Sprint 1 görselleri eski tasarım | Sprint 2/3 yeniden çek |
 | Sprint 2 README altı kanıt | Henüz ara güncelleme | 19 Temmuz zorunlu |
-| Issue hygiene | “done” issue'lar açık | 17 Temmuz düzelt |
 | Repo description | Eski “Dev-in-a-Box” anlatısı | Güncelle |
 | Repo homepage | Boş | Deploy sonrası ekle |
 | Team socials | Kemal/Selin bilgileri eksik olabilir | External confirmation |
@@ -1051,18 +1052,18 @@ Story point ölçeği: `1, 2, 3, 5, 8`. 8'den büyük iş bölünür. Owner atam
 
 | Aralık | Durum |
 | --- | --- |
-| BP-001–BP-028 | Çoğu kodlandı; BP-002, BP-008, BP-025 ve deploy/evidence yorumları yeniden açılmalı |
+| BP-001–BP-028 | Özgün Sprint 1 issue'ları kapalı; BP-002R, BP-008R, BP-025R ve deploy/evidence revizyonları açık backlog |
 | BP-029–BP-050 | Product Experience Reset, production, evidence ve final teslim backlog'u |
 
 ### 17.2 Yeni ve revize backlog
 
 | ID | Story / sonuç | P | SP | Durum | Sprint | Önerilen owner | Bağımlılık | Kanıt |
 | --- | --- | ---: | ---: | --- | --- | --- | --- | --- |
-| BP-001R | Landing ürünü 5 saniyede doğru anlatır | P0 | 3 | Planned | S2 | PO + Selin | Copy kararı | Desktop/mobile screenshot + 3 test |
+| BP-001R | Landing ürünü 5 saniyede doğru anlatır | P0 | 3 | In Progress | S2 | PO + Selin | Kullanıcı testi | Doğru copy hazır; desktop/mobile screenshot + 3 test eksik |
 | BP-002R | Gerçek sample blueprint görülebilir | P0 | 5 | Planned | S2 | Selin | Curated data | `/sample` E2E + screenshot |
 | BP-008R | Pixie statüleri gerçek job event'lerinden gelir | P0 | 8 | Planned | S2–S3 | Kemal | Job event contract | API smoke + UI E2E |
 | BP-025R | Partial outputs polling ile açılır; SSE opsiyonel | P0 | 8 | Planned | S3 | Kemal | BP-008R | Long-running E2E |
-| BP-029 | Sahte sosyal kanıt ve ölü CTA kaldırılır | P0 | 1 | Planned | S2 | Selin | Yok | Link test + screenshot |
+| BP-029 | Sahte sosyal kanıt ve ölü CTA kaldırılır | P0 | 1 | Done | S2 | Selin | Yok | `93d2a66`, core E2E |
 | BP-030 | Curated demo project schema-safe ve versiyonlu olur | P0 | 3 | Planned | S2 | PO + Selin | Output schema | Fixture validation |
 | BP-031 | Job events ve partial blueprint persist edilir | P0 | 8 | Planned | S2–S3 | Kemal | Migration/store design | Unit/SQL/API test |
 | BP-032 | Workspace gerçek timeline ve progressive output gösterir | P0 | 8 | Planned | S3 | Kemal + Selin | BP-031 | Playwright |
@@ -1075,11 +1076,11 @@ Story point ölçeği: `1, 2, 3, 5, 8`. 8'den büyük iş bölünür. Owner atam
 | BP-039 | Vercel production deploy | P0 | 5 | Planned | S3 | SM + Kemal | Env/Supabase | Public URL + smoke |
 | BP-040 | Production Supabase migration/auth/RLS smoke | P0 | 5 | Planned | S3 | SM + Kemal | Supabase project | Auth isolation evidence |
 | BP-041 | Public quota + Turnstile/CAPTCHA kararı | P1 | 5 | Planned | S3 | Kemal | Deploy | Abuse test/ADR |
-| BP-042 | Sprint screenshot/evidence klasörü ve naming standardı | P0 | 2 | Planned | S2 | SM | Team artifacts | Relative README links |
+| BP-042 | Sprint screenshot/evidence klasörü ve naming standardı | P0 | 2 | In Progress | S2 | SM | Team artifacts | Sprint 1 yapısı hazır; S2 kanıtları bekliyor |
 | BP-043 | Sprint 2 altı zorunlu README maddesi | P0 | 3 | Planned | S2 | SM + herkes | Evidence | README review |
 | BP-044 | 3 dakikalık video, thumbnail ve doğrulanmış YouTube linki | P0 | 8 | Planned | S3 | PO + SM | RC1 | Incognito link check |
 | BP-045 | Final submission form ve release checklist | P0 | 3 | Planned | S3 | SM | Video/deploy/README | Submission proof |
-| BP-046 | GitHub issue/label/description/homepage hygiene | P0 | 2 | Planned | S2 | SM | Deploy URL kısmi | Board screenshot |
+| BP-046 | GitHub issue/label/description/homepage hygiene | P0 | 2 | In Progress | S2 | SM | Deploy URL kısmi | S1 issue'ları kapalı; description/homepage bekliyor |
 | BP-047 | En az 3 hedef kullanıcı testi | P1 | 3 | Planned | S3 | PO | RC UX | Tarihli bulgu tablosu |
 | BP-048 | AI architecture/trace kanıt sayfası | P0 | 3 | Planned | S3 | Kemal + PO | Event logs | README diagram + demo |
 | BP-049 | Decision memory tablosu ve rationale | P2 | 8 | Planned | S3 sonrası | Kemal | Core freeze | ADR/prototype |
@@ -1185,20 +1186,22 @@ BP-037, BP-039, BP-040, BP-044, BP-045, BP-048.
 - Sprint 1 ürün screenshotları,
 - decision log.
 
-### 19.3 Eksik/iyileştirilecek kanıtlar
+### 19.3 Kanıt kapanışı ve kaynak sınırlamaları
 
 | Kanıt | Durum | Düzeltme |
 | --- | --- | --- |
 | Backlog mantığı | README'de var | Story point ölçeği gelecekte Fibonacci ile standardize edilir |
-| Daily Scrum | Metin var | Gerçek iletişim screenshot'ları varsa redakte edilerek `backfilled` eklenir |
-| Board update | Link ve özet var | Sprint 1 tarihli board screenshot'ı eklenmeli |
+| Daily Scrum | Minimum tamam | Yazılı kanıt paketlendi; gerçek iletişim screenshot'ı bulunursa redakte `backfilled` eklenir |
+| Board update | Minimum tamam / Backfilled | 16 Temmuz closeout screenshot'ı var; tarihsel baş/orta/son gibi sunulmaz |
 | Ürün durumu | 5 screenshot var | Mevcut haliyle yeterli; tarihi/caption korunmalı |
-| Review | Var | Katılımcı ve taşınan iş doğruluğu teyit edilir |
-| Retro | Var | Aksiyon owner/tarih formatına taşınabilir |
+| Review | Tamam | Kararlar/taşınanlar kayıtlı; haricî katılım teyidi kaynak sınırlaması olarak yazıldı |
+| Retro | Tamam | Aksiyonlar owner ve hedefle evidence paketinde kayıtlı |
 
 Tarihsel gerçekliği korumak için mevcut olmayan eski screenshot üretilmez.
 Elde gerçek kaynak varsa sonradan eklenen kanıt açıkça `backfilled on <date>`
 olarak işaretlenir.
+
+Kanıt manifestosu: [`docs/evidence/sprint-1/README.md`](evidence/sprint-1/README.md).
 
 ---
 
@@ -1758,7 +1761,7 @@ Maksimum süre 3 dakikadır; hedef final export **2:50–2:58** olmalıdır.
 - [ ] Takım adı, üyeler, roller.
 - [ ] Ürün adı, açıklama, özellikler, hedef kitle.
 - [ ] Product Backlog URL.
-- [ ] Sprint 1 altı zorunlu madde.
+- [x] Sprint 1 altı zorunlu madde — minimum paket ve kaynak sınırlamaları kayıtlı.
 - [ ] Sprint 2 altı zorunlu madde.
 - [ ] Sprint 3 altı zorunlu madde.
 - [ ] Board screenshotları.
@@ -2027,11 +2030,11 @@ Teknik çözüm istemek yerine süreç/kural netliği için:
 
 - [ ] Bu master plan takım tarafından okunur ve owner'lar teyit edilir.
 - [ ] Resmî roster/ekip formu durumu doğrulanır.
-- [ ] GitHub Issues #1–#10 gerçek state'e getirilir.
+- [x] GitHub Issues #1–#10 gerçek state'e getirilir.
 - [ ] BP-001R, BP-002R, BP-008R, BP-029–BP-046 issue'ları önceliğe göre açılır.
 - [ ] Sprint 2 board screenshotı alınır.
-- [ ] Evidence klasörü/naming standardı oluşturulur.
-- [ ] Landing sahte sosyal kanıt/CTA düzeltmesi başlar.
+- [x] Evidence klasörü/naming standardı oluşturulur — Sprint 1 paketi hazır.
+- [x] Landing sahte sosyal kanıt/CTA düzeltmesi tamamlanır.
 - [ ] Curated sample fixture içeriği PO tarafından kabul edilir.
 
 ### 24–48 saat

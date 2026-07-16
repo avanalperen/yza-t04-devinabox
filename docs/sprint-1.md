@@ -3,10 +3,11 @@
 > **Belge türü:** Tarihsel sprint planı, gerçekleşen iş kaydı ve Bootcamp kanıt denetimi
 > **Sprint:** 1 / 3
 > **Dönem:** 19 Haziran – 5 Temmuz 2026
-> **Durum:** Kapandı; eksik kanıtlar yalnız gerçek kaynakla `backfilled` olarak eklenebilir
+> **Durum:** Kapandı; Bootcamp minimum kanıt paketi tamamlandı, kaynak sınırlamaları açıkça kayıtlı
 > **Sprint hedefi:** Fikir, takım, public repo ve web-first ürün kararını netleştirmek; çalışan Next.js temeli ile ilk idea-to-blueprint akışını kurmak
 > **Master plan:** [`docs/plan.md`](plan.md)
 > **Son tarihsel commit:** `4ee1901 docs: polish sprint 1 readme`
+> **Güncel teknik yeniden doğrulama:** `93d2a66 Refine Sprint 1 UX` — 16 Temmuz 2026, Sprint 1 puanına dahil değildir
 
 Bu dosya Sprint 1'i sonradan daha başarılı göstermek için yeniden yazılmış bir
 anlatı değildir. Sprint kapanışında doğrulanabilen ürün artışını, repo geçmişini,
@@ -151,7 +152,7 @@ dilimlere göre seçildi. Öncelik sırası:
 | BP-004 | Kullanıcı proje oluşturur | P0 | Done | Projects API/storage | Production smoke S3 |
 | BP-005 | Hedef kitle ve platform seçilir | P0 | Done | Wizard alanları | Form sürtünme testi S3 |
 | BP-007 | Kullanıcı pixie takımını görür | P0 | Done | Workspace/pixie cards | Gerçek status S3 |
-| BP-008 | Aktif pixie gerçek çalışma durumunu gösterir | P0 | Partial | Görsel state var, gerçek event yok | BP-008R/BP-031 |
+| BP-008 | Kullanıcı job düzeyi waiting/thinking/done/failed durumunu görür | P0 | Done | Workspace state + erişilebilir status | Ayrıntılı gerçek event BP-008R/BP-031 |
 | BP-009 | Tamamlanan çıktılar açılır | P0 | Done | Output Hub | IA reset S3 |
 | BP-010 | Product Brief üretilebilir | P0 | Done | Prompt/schema/pipeline | Canlı smoke S2 |
 | BP-011 | MVP Scope üretilebilir | P0 | Done | Prompt/schema/pipeline | Command Center S3 |
@@ -219,18 +220,19 @@ Bu işlerin bir kısmı Sprint 2'de tamamlandı; Sprint 1 puanına eklenmez.
 | Zorunlu alan | Sprint 1 içeriği | Durum | Kapanış standardı |
 | --- | --- | --- | --- |
 | Backlog dağıtma mantığı | Temel riskleri önceleyen seçim ve 100 puan tablosu | Mevcut | Tarihsel puan yaklaşımı açıklanmalı |
-| Daily Scrum | 27 Haziran–5 Temmuz metin özeti | Partial | Gerçek kaynak varsa redakte görsel `backfilled` eklenebilir |
-| Sprint Board Updates | GitHub Issues linki ve kolon özeti | Partial | Tarihli Sprint 1 screenshot'ı eksik; yeniden üretilmez |
+| Daily Scrum | 27 Haziran–5 Temmuz yazılı özet | Minimum tamam | [`daily/written-summary.md`](evidence/sprint-1/daily/written-summary.md); özel kanal görseli yok |
+| Sprint Board Updates | Güncel kapatılmış Sprint 1 issue görünümü | Minimum tamam / Backfilled | [`2026-07-16-board-closeout-backfilled.png`](evidence/sprint-1/board/2026-07-16-board-closeout-backfilled.png); tarihsel baş/orta/son değildir |
 | Ürün Durumu | Beş local screenshot | Mevcut | Caption ve tarih korunmalı |
-| Sprint Review | Kararlar ve sonraki odak | Mevcut | Katılımcılar takımca teyit edilmeli |
-| Sprint Retrospective | İyi giden, sorun, aksiyon | Mevcut | Aksiyonlara owner/tarih eklenmeli |
+| Sprint Review | Kararlar, taşınan işler ve repo katılımcı kaydı | Mevcut | [`review/summary.md`](evidence/sprint-1/review/summary.md); haricî katılım teyidi yok |
+| Sprint Retrospective | İyi giden, sorun ve owner/hedef atanmış aksiyonlar | Mevcut | [`retrospective/summary.md`](evidence/sprint-1/retrospective/summary.md) |
 
-### 7.2 Evidence dosya standardı
+### 7.2 Evidence dosya yapısı
 
-Gerçek kaynak bulunursa aşağıdaki yapıya eklenir:
+Kanıt paketi aşağıdaki yapıda tutulur:
 
 ```text
 docs/evidence/sprint-1/
+  README.md
   daily/
   board/
   product/
@@ -386,12 +388,16 @@ eklenmemelidir.
 - [x] Project storage ve generation job temeli var.
 - [x] Sprint 1 ürün screenshotları repository içinde.
 - [x] Review ve retrospective metni var.
-- [ ] Tarihli board screenshot'ı var.
-- [ ] Daily iletişim görselleri redakte edilerek repository içinde.
-- [ ] Review katılımcıları ve aksiyon owner/tarihleri haricî olarak teyit edildi.
+- [x] 16 Temmuz tarihli güncel board closeout screenshot'ı `backfilled` etiketiyle var.
+- [x] Daily Scrum için Bootcamp minimumunu karşılayan tarihli yazılı kanıt var.
+- [x] Review kaydı ile owner/hedef atanmış retrospective aksiyonları var.
+- [x] 16 Temmuz yeniden doğrulamasında lint, typecheck, build, 6 E2E ve audit geçti.
+- [x] Sprint 1 GitHub issue `#1–#10` kabul notlarıyla kapatıldı.
 
-Sprint hedefi ürün/teknik temel açısından kapandı. Son üç eksik madde tarihsel
-kanıt kalitesi açığıdır; gerçek kaynak yoksa açık kalır ve uydurulmaz.
+Sprint hedefi ürün, teknik temel ve Bootcamp minimum repository kanıt paketi
+açısından kapandı. Tarihsel baş/orta/son board görüntüsü, özel kanal görselleri
+ve haricî review katılım teyidi elde değildir. Bunlar kapsam tamamlanmış gibi
+göstermek için üretilmez; yalnız gerçek kaynak bulunursa `backfilled` eklenir.
 
 ---
 

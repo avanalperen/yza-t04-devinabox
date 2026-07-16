@@ -123,7 +123,7 @@ formatlarda hazırlanır.
 | BP-005 | Kullanıcı olarak hedef kitle ve platform seçmek istiyorum | P0 | Done |
 | BP-006 | Kullanıcı olarak bootcamp/startup/portfolio amacı seçmek istiyorum | P1 | Done |
 | BP-007 | Kullanıcı olarak pixie takımımı görmek istiyorum | P0 | Done |
-| BP-008 | Kullanıcı olarak hangi pixie'nin çalıştığını görmek istiyorum | P0 | Partial |
+| BP-008 | Kullanıcı olarak job düzeyi Pixie çalışma durumunu görmek istiyorum | P0 | Done |
 | BP-009 | Kullanıcı olarak tamamlanan çıktıları açmak istiyorum | P0 | Done |
 | BP-010 | Kullanıcı olarak product brief üretmek istiyorum | P0 | Done |
 | BP-011 | Kullanıcı olarak MVP scope almak istiyorum | P0 | Done |
@@ -151,6 +151,9 @@ formatlarda hazırlanır.
 
 > Ayrıntılı tarihsel plan, gerçekleşenler ve kanıt denetimi:
 > [`docs/sprint-1.md`](docs/sprint-1.md)
+>
+> Bootcamp minimum altı kanıt manifestosu:
+> [`docs/evidence/sprint-1/README.md`](docs/evidence/sprint-1/README.md)
 
 ## Sprint Notları
 
@@ -194,7 +197,7 @@ göstermek ve blueprint çıktısı üretebilecek altyapıyı oluşturmaktı.
 | BP-004 | Project creation API | P0 | 1 | Done |
 | BP-005 | Target audience/platform seçimi | P0 | 1 | Done |
 | BP-007 | Pixie team view | P0 | 1 | Done |
-| BP-008 | Pixie status tracking | P0 | 1 | Partial |
+| BP-008 | Job düzeyi Pixie status tracking | P0 | 1 | Done |
 | BP-009 | Output Hub sekmeleri | P0 | 1 | Done |
 | BP-010 | Product Brief generation | P0 | 1 | Done |
 | BP-011 | MVP Scope generation | P0 | 1 | Done |
@@ -227,11 +230,13 @@ iletişim ekran görüntüleri takım içi kanallardan ayrıca eklenebilir.
 
 ## Sprint Board Update
 
-Sprint board GitHub Issues üzerinden takip edilmektedir. Sprint 1 sonunda P0
-story'lerin büyük bölümü tamamlandı; BP-008 gerçek per-pixie event/streaming
-bağlantısı kalacağı için partial bırakıldı.
+Sprint board GitHub Issues üzerinden takip edilmektedir. Sprint 1'in özgün
+job-düzeyi story'leri 16 Temmuz yeniden doğrulamasında kapatıldı. Ayrıntılı
+per-Pixie event/streaming işi BP-008R/BP-031 olarak sonraki kapsamdadır.
 
-[Sprint Board / GitHub Issues](https://github.com/avanalperen/BuildPixies/issues)
+[Sprint 1 Closed Board](https://github.com/avanalperen/BuildPixies/issues?q=state%3Aclosed%20label%3Asprint-1)
+
+![Sprint 1 Board Closeout — Backfilled 16 July 2026](docs/evidence/sprint-1/board/2026-07-16-board-closeout-backfilled.png)
 
 | Board Kolonu | Sprint 1 Sonu Durum |
 | --- | --- |
@@ -282,7 +287,7 @@ Sprint 1 sonunda uygulama local ortamda çalışır durumdadır. Ekran görünt�
 | Bootcamp Mode | `app/api/bootcamp-report/route.ts`, `components/project/bootcamp-mode.tsx`, `lib/ai/bootcamp.ts` | Done |
 | README export | `app/api/export-readme/route.ts`, `lib/export/markdown.ts` | Done |
 | Output controls | `app/api/export-json/route.ts`, `app/api/regenerate-output/route.ts`, `components/outputs/output-hub.tsx` | Done |
-| Demo E2E + CI | `e2e/demo-flow.spec.ts`, `playwright.config.ts`, `.github/workflows/quality.yml` | Done |
+| Demo E2E + CI | `e2e/demo-flow.spec.ts`, `playwright.config.ts`, `.github/workflows/quality.yml`; 6/6 senaryo | Done |
 | Audit | `package.json` override: `postcss@8.5.10`; `npm audit --omit=dev` sonucu 0 vulnerability | Done |
 
 ## Sprint Review
