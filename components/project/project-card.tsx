@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import type { Project } from "@/types/project";
+import { PIXIES } from "@/types/pixie";
 
 const presentation: Record<
   Project["status"],
@@ -13,13 +14,13 @@ const presentation: Record<
     progress: "bg-outline-variant",
   },
   generating: {
-    count: 3,
-    label: "Drafting UX Flow",
+    count: 1,
+    label: "Building Blueprint",
     dot: "bg-primary-fixed-dim",
     progress: "bg-primary/50",
   },
   ready: {
-    count: 7,
+    count: PIXIES.length,
     label: "Blueprint Ready",
     dot: "bg-[#ffb95f] shadow-[0_0_8px_rgba(255,185,95,0.8)]",
     progress: "bg-gradient-to-r from-[#6063ee] to-primary",
@@ -43,7 +44,7 @@ const platformLabels: Record<Project["platform"], string> = {
 
 export function ProjectCard({ project }: { project: Project }) {
   const state = presentation[project.status];
-  const percent = Math.round((state.count / 7) * 100);
+  const percent = Math.round((state.count / PIXIES.length) * 100);
 
   return (
     <article className="app-card group relative flex min-h-[244px] flex-col overflow-hidden p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_15px_40px_rgba(11,28,48,0.08)]">
@@ -62,7 +63,7 @@ export function ProjectCard({ project }: { project: Project }) {
       <div className="mb-6">
         <div className="mb-2 flex items-center justify-between text-xs font-medium">
           <span className="text-muted-foreground">Pixies Assembled</span>
-          <span className="font-semibold text-primary">{state.count}/7</span>
+          <span className="font-semibold text-primary">{state.count}/{PIXIES.length}</span>
         </div>
         <span className="block h-1.5 overflow-hidden rounded-full bg-surface-container">
           <span className={`block h-full rounded-full ${state.progress}`} style={{ width: `${percent}%` }} />

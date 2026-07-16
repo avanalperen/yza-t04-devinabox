@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { requestJson } from "@/lib/api/client";
 import type { ProjectGoal, ProjectPlatform } from "@/types/project";
 
 const goals: { value: ProjectGoal; label: string }[] = [
@@ -83,40 +84,63 @@ export function NewProjectForm() {
   const [timeline, setTimeline] = useState("6 weeks");
   const [teamSize, setTeamSize] = useState("1");
   const [submitting, setSubmitting] = useState(false);
+  const submittingRef = useRef(false);
   const [error, setError] = useState<string | null>(null);
+
+  function validateIdea(): boolean {
+    if (rawIdea.trim().length >= 20) return true;
+    setStep(0);
+    setError("Tell the pixies a little more — your idea needs at least 20 characters.");
+    requestAnimationFrame(() => document.getElementById("idea")?.focus());
+    return false;
+  }
+
+  function handleStepChange(nextStep: number) {
+    if (nextStep > 0 && !validateIdea()) return;
+    setError(null);
+    setStep(nextStep);
+  }
+
+  function handleNext() {
+    if (step === 0 && !validateIdea()) return;
+    setError(null);
+    setStep((current) => Math.min(current + 1, steps.length - 1));
+  }
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    if (rawIdea.trim().length < 20 || submitting) {
-      setStep(0);
-      setError("Tell the pixies a little more — your idea needs at least 20 characters.");
-      return;
-    }
+    if (submittingRef.current || !validateIdea()) return;
+    if (step < steps.length - 1) return handleNext();
 
+    submittingRef.current = true;
     setSubmitting(true);
     setError(null);
     try {
-      const response = await fetch("/api/projects", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          rawIdea,
-          targetAudience: targetAudience.trim() || "builders",
-          goal,
-          platform,
-          constraints: {
-            timeline: timeline.trim() || undefined,
-            teamSize: Number(teamSize) || undefined,
-          },
-        }),
-      });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "Project could not be created");
-      if (!data.project?.id) throw new Error("Project could not be created");
+      const data = await requestJson<{ project?: { id?: unknown } }>(
+        "/api/projects",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            rawIdea,
+            targetAudience: targetAudience.trim() || "builders",
+            goal,
+            platform,
+            constraints: {
+              timeline: timeline.trim() || undefined,
+              teamSize: Number(teamSize) || undefined,
+            },
+          }),
+        },
+        "Project could not be created",
+      );
+      if (typeof data.project?.id !== "string") {
+        throw new Error("Project could not be created");
+      }
       router.push(`/projects/${data.project.id}`);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "Project could not be created");
-    } finally {
+      submittingRef.current = false;
       setSubmitting(false);
     }
   }
@@ -155,7 +179,7 @@ export function NewProjectForm() {
                 {index > 0 && (
                   <span className={cn("mx-2 h-0.5 flex-1 rounded-full", complete || active ? "bg-primary" : "bg-outline-variant")} aria-hidden="true" />
                 )}
-                <button type="button" onClick={() => setStep(index)} className="group relative flex flex-col items-center" aria-current={active ? "step" : undefined}>
+                <button type="button" onClick={() => handleStepChange(index)} className="group relative flex flex-col items-center" aria-current={active ? "step" : undefined}>
                   <span className={cn(
                     "flex size-10 items-center justify-center rounded-full transition-all",
                     active && "bg-[#6063ee] text-white shadow-[0_0_10px_rgba(96,99,238,0.4)]",
@@ -182,7 +206,7 @@ export function NewProjectForm() {
                   <Sparkles className="size-4 text-secondary" fill="currentColor" />
                 </Label>
                 <div className="group relative rounded-lg">
-                  <Textarea id="idea" value={rawIdea} onChange={(event) => setRawIdea(event.target.value)} placeholder="I want to build a web app for tracking local coffee shop ratings..." rows={5} required minLength={20} className="min-h-32 resize-none bg-surface p-4 pr-11 text-base leading-6 focus-visible:bg-white md:text-lg md:leading-7" />
+                  <Textarea id="idea" value={rawIdea} onChange={(event) => setRawIdea(event.target.value)} placeholder="I want to build a web app for tracking local coffee shop ratings..." rows={5} required minLength={20} aria-invalid={Boolean(error) && rawIdea.trim().length < 20} aria-describedby={error ? "project-form-error" : undefined} className="min-h-32 resize-none bg-surface p-4 pr-11 text-base leading-6 focus-visible:bg-white md:text-lg md:leading-7" />
                   <Pencil className="absolute right-4 bottom-4 size-5 text-primary/30 transition-colors group-focus-within:text-primary" />
                 </div>
               </div>
@@ -235,7 +259,7 @@ export function NewProjectForm() {
               </div>
               <div className="flex flex-col gap-2">
                 <Label htmlFor="team-size">Team size</Label>
-                <Input id="team-size" type="number" min="1" max="100" value={teamSize} onChange={(event) => setTeamSize(event.target.value)} className="h-12 bg-surface px-4" />
+                <Input id="team-size" type="number" min="1" max="20" value={teamSize} onChange={(event) => setTeamSize(event.target.value)} className="h-12 bg-surface px-4" />
               </div>
               <div className="app-card col-span-full bg-surface p-4 text-sm leading-5 text-muted-foreground">
                 The pixies will use these constraints to right-size your scope, backlog and technical plan.
@@ -243,7 +267,7 @@ export function NewProjectForm() {
             </div>
           )}
 
-          {error && <p role="alert" className="mt-4 text-sm text-destructive">{error}</p>}
+          {error && <p id="project-form-error" role="alert" className="mt-4 text-sm text-destructive">{error}</p>}
         </div>
       </div>
 
@@ -252,10 +276,17 @@ export function NewProjectForm() {
           <ArrowLeft className="size-[18px]" />
           Back
         </button>
-        <button type="submit" disabled={submitting} className="magic-button inline-flex h-12 items-center gap-2 rounded-lg border-t border-white/20 px-6 text-sm font-semibold tracking-[0.02em] transition-all disabled:pointer-events-none disabled:opacity-50">
-          {submitting ? "Summoning..." : "Summon the Team"}
-          <ArrowRight className="size-[18px]" />
-        </button>
+        {step < steps.length - 1 ? (
+          <button type="button" onClick={handleNext} className="magic-button inline-flex h-12 items-center gap-2 rounded-lg border-t border-white/20 px-6 text-sm font-semibold tracking-[0.02em] transition-all">
+            Continue
+            <ArrowRight className="size-[18px]" />
+          </button>
+        ) : (
+          <button type="submit" disabled={submitting} className="magic-button inline-flex h-12 items-center gap-2 rounded-lg border-t border-white/20 px-6 text-sm font-semibold tracking-[0.02em] transition-all disabled:pointer-events-none disabled:opacity-50">
+            {submitting ? "Summoning..." : "Summon the Team"}
+            <ArrowRight className="size-[18px]" />
+          </button>
+        )}
       </footer>
     </form>
   );

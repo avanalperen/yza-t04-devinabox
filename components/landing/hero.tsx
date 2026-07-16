@@ -25,7 +25,7 @@ export function Hero() {
         <div className="z-10 flex flex-1 flex-col items-start gap-6">
           <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-xs font-medium text-primary">
             <Sparkles className="size-4" fill="currentColor" />
-            The Magic of AI
+            From rough idea to structured plan
           </span>
           <h1 className="max-w-2xl font-heading text-[40px] leading-[1.14] font-semibold tracking-[-0.02em] text-foreground md:text-5xl md:leading-[56px]">
             Turn messy ideas into <br className="hidden md:block" />
@@ -40,27 +40,16 @@ export function Hero() {
               Summon your pixies
             </Link>
             <Link href="/#features" className="glass-panel inline-flex h-14 items-center justify-center rounded-full px-8 text-sm font-semibold tracking-[0.02em] text-foreground transition-colors hover:bg-surface-low">
-              View Demo
+              See what you get
             </Link>
           </div>
-          <div className="mt-6 flex items-center gap-4 text-xs font-medium text-muted-foreground">
-            <span className="flex -space-x-3" aria-hidden="true">
-              {[
-                ["MK", "bg-primary-fixed text-primary"],
-                ["AZ", "bg-secondary-fixed text-secondary"],
-                ["EL", "bg-surface-high text-tertiary"],
-              ].map(([name, className]) => (
-                <span key={name} className={`flex size-8 items-center justify-center rounded-full border-2 border-surface text-[9px] font-bold ${className}`}>
-                  {name}
-                </span>
-              ))}
-            </span>
-            Loved by 1,000+ creators
-          </div>
+          <p className="mt-6 text-xs font-medium tracking-wide text-muted-foreground uppercase">
+            Structured outputs · Export-ready plans · No invented progress
+          </p>
         </div>
 
         <div className="relative z-10 w-full max-w-2xl flex-1">
-          <div className="glass-panel flex w-full flex-col gap-6 rounded-2xl p-4 shadow-2xl md:flex-row md:p-6">
+          <div aria-label="Illustrative blueprint progress preview" className="glass-panel flex w-full flex-col gap-6 rounded-2xl p-4 shadow-2xl md:flex-row md:p-6">
             <div className="flex flex-1 flex-col gap-4">
               <div className="mb-2 flex items-center gap-2" aria-hidden="true">
                 <span className="size-3 rounded-full bg-destructive/80" />

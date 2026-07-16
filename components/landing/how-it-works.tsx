@@ -61,7 +61,7 @@ export function HowItWorks() {
               </span>
               <h3 className="font-heading text-2xl leading-8 font-medium">Bootcamp Mode</h3>
               <p className="text-sm leading-5 text-muted-foreground">
-                Need tough love? Bootcamp Mode challenges your assumptions, asking hard questions about market fit and technical feasibility before a single line of code is written.
+                Turn real sprint notes into factual Daily Scrum, Review, Retro, backlog and README drafts. Missing evidence is flagged instead of invented.
               </p>
             </div>
             <div className="flex flex-1 gap-3 rounded-xl border border-outline-variant/30 bg-surface p-6">
@@ -69,7 +69,7 @@ export function HowItWorks() {
                 <AlertTriangle className="size-4" />
               </span>
               <p className="rounded-lg rounded-tl-none border border-outline-variant/10 bg-white p-3 text-xs font-medium leading-5">
-                “You mentioned recurring billing, but haven&apos;t defined the pricing tiers. How will you handle failed payments?”
+                “Deployment evidence was not included in the source notes. Add a verified link or keep this item open.”
               </p>
             </div>
           </div>

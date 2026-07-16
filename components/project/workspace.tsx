@@ -13,14 +13,16 @@ import {
 import { PixieTeam } from "@/components/pixies/pixie-team";
 import { OutputHub } from "@/components/outputs/output-hub";
 import { BootcampMode } from "@/components/project/bootcamp-mode";
+import { requestJson } from "@/lib/api/client";
+import { blueprintSchema } from "@/lib/ai/schemas";
 import { exportMarkdown } from "@/lib/export/markdown";
+import { generationJobResponseSchema } from "@/lib/schemas/generation-job";
 import type { Project } from "@/types/project";
 import type { GenerationJob } from "@/types/generation-job";
 import type { Blueprint, BlueprintSection } from "@/types/output";
 import type { PixieStatus } from "@/types/pixie";
 import { PIXIES } from "@/types/pixie";
 
-const pipelineNames = PIXIES.map((pixie) => pixie.name);
 const pollDelayMs = 1500;
 const maxPollAttempts = 240;
 
@@ -49,31 +51,32 @@ export function Workspace({ project }: { project: Project }) {
     setBlueprint(null);
     const next: Record<string, PixieStatus> = {};
     PIXIES.forEach((p) => (next[p.name] = "waiting"));
-    pipelineNames.forEach((n) => (next[n] = "thinking"));
+    next.Pip = "thinking";
     setStatuses(next);
 
     try {
-      const res = await fetch("/api/generation-jobs", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          projectId: project.id,
-          input: {
-            rawIdea: project.rawIdea,
-            goal: project.goal,
-            platform: project.platform,
-            targetAudience: project.targetAudience,
-            constraints: project.constraints,
-            outputDepth: project.outputDepth,
-          },
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Generation failed");
-      const jobId = data.job?.id as string | undefined;
-      if (!jobId) throw new Error("Generation job could not be started");
+      const data = await requestJson<unknown>(
+        "/api/generation-jobs",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            projectId: project.id,
+            input: {
+              rawIdea: project.rawIdea,
+              goal: project.goal,
+              platform: project.platform,
+              targetAudience: project.targetAudience,
+              constraints: project.constraints,
+              outputDepth: project.outputDepth,
+            },
+          }),
+        },
+        "Generation failed",
+      );
+      const { job } = generationJobResponseSchema.parse(data);
 
-      const finishedJob = await pollGenerationJob(jobId);
+      const finishedJob = await pollGenerationJob(job.id);
       if (finishedJob.status === "failed") {
         throw new Error(finishedJob.error || "Generation failed");
       }
@@ -88,7 +91,8 @@ export function Workspace({ project }: { project: Project }) {
     } catch (err) {
       setError(err instanceof Error ? err.message : "Generation failed");
       const failed: Record<string, PixieStatus> = {};
-      PIXIES.forEach((p) => (failed[p.name] = "failed"));
+      PIXIES.forEach((p) => (failed[p.name] = "waiting"));
+      failed.Pip = "failed";
       setStatuses(failed);
     } finally {
       setLoading(false);
@@ -98,13 +102,12 @@ export function Workspace({ project }: { project: Project }) {
   async function pollGenerationJob(jobId: string): Promise<GenerationJob> {
     for (let attempt = 0; attempt < maxPollAttempts; attempt += 1) {
       await wait(pollDelayMs);
-      const res = await fetch(`/api/generation-jobs/${jobId}`);
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Generation status could not be loaded");
-      }
-
-      const job = data.job as GenerationJob;
+      const data = await requestJson<unknown>(
+        `/api/generation-jobs/${jobId}`,
+        undefined,
+        "Generation status could not be loaded",
+      );
+      const { job } = generationJobResponseSchema.parse(data);
       if (job.status === "succeeded" || job.status === "failed") {
         return job;
       }
@@ -117,18 +120,27 @@ export function Workspace({ project }: { project: Project }) {
     if (!blueprint) return;
     setError(null);
     try {
-      const res = await fetch("/api/export-readme", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ projectId: project.id, blueprint }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Export failed");
+      const data = await requestJson<{
+        markdown?: unknown;
+        filename?: unknown;
+      }>(
+        "/api/export-readme",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ projectId: project.id, blueprint }),
+        },
+        "Export failed",
+      );
+      if (typeof data.markdown !== "string") {
+        throw new Error("Export returned an invalid document");
+      }
       const blob = new Blob([data.markdown], { type: "text/markdown" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = data.filename || "README.md";
+      a.download =
+        typeof data.filename === "string" ? data.filename : "README.md";
       a.click();
       URL.revokeObjectURL(url);
     } catch (err) {
@@ -140,18 +152,24 @@ export function Workspace({ project }: { project: Project }) {
     if (!blueprint) return;
     setError(null);
     try {
-      const res = await fetch("/api/export-json", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ projectId: project.id, blueprint }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Export failed");
+      const data = await requestJson<{ json?: unknown; filename?: unknown }>(
+        "/api/export-json",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ projectId: project.id, blueprint }),
+        },
+        "Export failed",
+      );
+      if (typeof data.json !== "string") {
+        throw new Error("Export returned invalid JSON");
+      }
       const blob = new Blob([data.json], { type: "application/json" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = data.filename || "blueprint.json";
+      a.download =
+        typeof data.filename === "string" ? data.filename : "blueprint.json";
       a.click();
       URL.revokeObjectURL(url);
     } catch (err) {
@@ -189,20 +207,24 @@ export function Workspace({ project }: { project: Project }) {
     setError(null);
     setRegeneratingSection(section);
     try {
-      const res = await fetch("/api/regenerate-output", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          projectId: project.id,
-          section,
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Regenerate failed");
-      setBlueprint((prev) => {
-        if (data.blueprint) return data.blueprint as Blueprint;
-        return prev ? { ...prev, [section]: data.output } : prev;
-      });
+      const data = await requestJson<{
+        blueprint?: unknown;
+      }>(
+        "/api/regenerate-output",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            projectId: project.id,
+            section,
+          }),
+        },
+        "Regenerate failed",
+      );
+      if (!data.blueprint) {
+        throw new Error("Regeneration returned an invalid blueprint");
+      }
+      setBlueprint(blueprintSchema.parse(data.blueprint));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Regenerate failed");
     } finally {
@@ -211,7 +233,16 @@ export function Workspace({ project }: { project: Project }) {
   }
 
   return (
-    <div className="flex min-w-0 flex-col gap-8" aria-live="polite">
+    <div className="flex min-w-0 flex-col gap-8" aria-busy={loading}>
+      <p className="sr-only" role="status" aria-live="polite">
+        {loading
+          ? "The blueprint is being generated."
+          : error
+            ? error
+            : blueprint
+              ? "The blueprint is ready."
+              : "The blueprint has not been generated yet."}
+      </p>
       <div className="grid min-w-0 gap-6 xl:grid-cols-[minmax(240px,0.8fr)_minmax(290px,0.95fr)_minmax(390px,1.35fr)]">
         <section className="app-card flex min-h-[620px] min-w-0 flex-col overflow-hidden">
           <header className="flex items-center gap-2 border-b border-outline-variant/30 bg-surface px-6 py-4">
@@ -255,7 +286,7 @@ export function Workspace({ project }: { project: Project }) {
           <header className="relative z-10 flex items-center justify-between gap-3 border-b border-outline-variant/30 bg-white/50 px-6 py-4 backdrop-blur-md">
             <h2 className="flex items-center gap-2 font-heading text-2xl leading-8 font-medium">
               <FileText className="size-5 text-tertiary" />
-              MVP Scope
+              Blueprint Output
             </h2>
             <span className="rounded-md bg-surface-container px-2 py-1 text-xs font-medium text-muted-foreground">
               {loading ? "Drafting..." : blueprint ? "Auto-saved" : "Not started"}

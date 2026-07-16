@@ -21,7 +21,7 @@ export function Navbar() {
           href="/dashboard"
           className="inline-flex h-10 items-center rounded-full bg-primary px-6 text-sm font-semibold tracking-[0.02em] text-primary-foreground shadow-[0_4px_14px_rgba(70,72,212,0.39)] transition-all hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(70,72,212,0.25)]"
         >
-          Sign In
+          Open workspace
         </Link>
       </div>
     </header>

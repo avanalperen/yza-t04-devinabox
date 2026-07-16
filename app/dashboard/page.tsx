@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { WandSparkles } from "lucide-react";
 import { AppShell } from "@/components/layout/app-shell";
@@ -6,6 +7,10 @@ import { Button } from "@/components/ui/button";
 import { listProjects } from "@/lib/projects";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Projects",
+};
 
 export default async function DashboardPage() {
   const { projects, loadError } = await listProjects().then(

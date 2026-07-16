@@ -14,7 +14,10 @@ const lexend = Lexend({
 });
 
 export const metadata: Metadata = {
-  title: "BuildPixies — Turn messy ideas into build-ready MVPs",
+  title: {
+    default: "BuildPixies — Turn messy ideas into build-ready MVPs",
+    template: "%s — BuildPixies",
+  },
   description:
     "BuildPixies gives you a tiny AI product team that transforms your rough idea into a product brief, UX flow, backlog, tech plan and launch-ready documentation.",
   keywords: [

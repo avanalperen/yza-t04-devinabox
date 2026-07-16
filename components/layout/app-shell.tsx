@@ -1,20 +1,15 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import {
-  Bell,
-  CircleHelp,
   FolderOpen,
-  LayoutDashboard,
-  Settings,
   WandSparkles,
 } from "lucide-react";
 import { Brand } from "@/components/brand";
 import { cn } from "@/lib/utils";
 
-type ActiveItem = "dashboard" | "projects" | "settings";
+type ActiveItem = "dashboard" | "projects";
 
 const navigation = [
-  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard, key: "dashboard" },
   { label: "Projects", href: "/dashboard", icon: FolderOpen, key: "projects" },
 ] as const;
 
@@ -26,7 +21,7 @@ function NavigationLink({
   active: ActiveItem;
 }) {
   const Icon = item.icon;
-  const isActive = item.key === active;
+  const isActive = active === "dashboard" || item.key === active;
 
   return (
     <Link
@@ -60,13 +55,6 @@ export function AppShell({
           {navigation.map((item) => (
             <NavigationLink key={item.key} item={item} active={active} />
           ))}
-          <Link
-            href="/dashboard"
-            className="mt-auto flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold text-muted-foreground transition-colors hover:bg-surface-low hover:text-primary"
-          >
-            <Settings className="size-5" />
-            Settings
-          </Link>
         </nav>
       </aside>
 
@@ -82,23 +70,6 @@ export function AppShell({
             <WandSparkles className="size-4" />
             <span className="hidden sm:inline">Summon</span>
           </Link>
-          <button
-            type="button"
-            className="hidden size-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-surface-low hover:text-primary sm:flex"
-            aria-label="Notifications"
-          >
-            <Bell className="size-5" />
-          </button>
-          <button
-            type="button"
-            className="hidden size-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-surface-low hover:text-primary sm:flex"
-            aria-label="Help"
-          >
-            <CircleHelp className="size-5" />
-          </button>
-          <span className="flex size-8 items-center justify-center rounded-full border border-outline-variant/50 bg-primary-fixed text-xs font-bold text-primary">
-            BP
-          </span>
         </div>
       </header>
 
@@ -106,11 +77,8 @@ export function AppShell({
         {children}
       </main>
 
-      <nav className="fixed inset-x-4 bottom-4 z-50 grid grid-cols-3 rounded-2xl border border-white/60 bg-white/85 p-1.5 shadow-xl backdrop-blur-xl lg:hidden" aria-label="Mobile navigation">
-        <Link href="/dashboard" className={cn("flex flex-col items-center gap-1 rounded-xl py-2 text-[11px] font-semibold", active === "dashboard" ? "bg-surface-low text-primary" : "text-muted-foreground") }>
-          <LayoutDashboard className="size-4" />Dashboard
-        </Link>
-        <Link href="/dashboard" className={cn("flex flex-col items-center gap-1 rounded-xl py-2 text-[11px] font-semibold", active === "projects" ? "bg-surface-low text-primary" : "text-muted-foreground") }>
+      <nav className="fixed inset-x-4 bottom-4 z-50 grid grid-cols-2 rounded-2xl border border-white/60 bg-white/85 p-1.5 shadow-xl backdrop-blur-xl lg:hidden" aria-label="Mobile navigation">
+        <Link href="/dashboard" className={cn("flex flex-col items-center gap-1 rounded-xl py-2 text-[11px] font-semibold", active === "dashboard" || active === "projects" ? "bg-surface-low text-primary" : "text-muted-foreground") }>
           <FolderOpen className="size-4" />Projects
         </Link>
         <Link href="/projects/new" className="flex flex-col items-center gap-1 rounded-xl py-2 text-[11px] font-semibold text-muted-foreground">

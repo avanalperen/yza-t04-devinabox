@@ -14,6 +14,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
+import { requestJson } from "@/lib/api/client";
+import { bootcampReportSchema } from "@/lib/ai/schemas";
 import { exportBootcampMarkdown } from "@/lib/export/bootcamp";
 import type { BootcampReport } from "@/types/output";
 import type { Project } from "@/types/project";
@@ -95,21 +97,21 @@ export function BootcampMode({ project }: { project: Project }) {
     setError(null);
     setCopied(false);
     try {
-      const response = await fetch("/api/bootcamp-report", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          projectId: project.id,
-          sprintName,
-          sprintGoal: sprintGoal.trim() || undefined,
-          progressNotes,
-        }),
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || "Bootcamp report could not be generated");
-      }
-      setReport(data.report as BootcampReport);
+      const data = await requestJson<{ report?: unknown }>(
+        "/api/bootcamp-report",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            projectId: project.id,
+            sprintName,
+            sprintGoal: sprintGoal.trim() || undefined,
+            progressNotes,
+          }),
+        },
+        "Bootcamp report could not be generated",
+      );
+      setReport(bootcampReportSchema.parse(data.report));
     } catch (caught) {
       setError(
         caught instanceof Error

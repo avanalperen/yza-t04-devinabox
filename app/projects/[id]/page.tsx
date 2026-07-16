@@ -1,11 +1,17 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { AppShell } from "@/components/layout/app-shell";
 import { Workspace } from "@/components/project/workspace";
 import { getProject } from "@/lib/projects";
+import { resourceIdSchema } from "@/lib/api/schemas";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Project workspace",
+};
 
 export default async function ProjectDetailPage({
   params,
@@ -13,6 +19,7 @@ export default async function ProjectDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  if (!resourceIdSchema.safeParse(id).success) notFound();
   const project = await getProject(id);
   if (!project) notFound();
 
