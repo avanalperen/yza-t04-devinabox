@@ -144,6 +144,18 @@ formatlarda hazırlanır.
 | BP-026 | Kullanıcı olarak anonim hesabımı email/OAuth hesaba bağlamak istiyorum | P1 | Sprint 3 |
 | BP-027 | Ürün sahibi olarak public abuse/quota/CAPTCHA koruması istiyorum | P1 | Sprint 3 |
 | BP-028 | Geliştirici olarak kritik demo akışını her değişiklikte doğrulamak istiyorum | P1 | Done |
+| BP-029 | Sahte sosyal kanıt ve ölü CTA'lar kaldırılır | P0 | Done |
+| BP-030 | Curated sample schema-safe ve AI beklemeden versiyonlu olur | P0 | Done |
+| BP-042 | Evidence klasörü ve naming standardı oluşturulur | P0 | Done |
+| BP-043 | Sprint 2 altı zorunlu README maddesi tamamlanır | P0 | Done |
+| BP-046 | Issue/label/description/homepage hygiene kontrolü | P0 | Done |
+| BP-001R | Landing ürünü 5 saniyede doğru anlatır (Revize) | P0 | Done |
+| BP-002R | Gerçek sample blueprint görülebilir (Revize) | P0 | Done |
+| BP-008R-S2 | Pixie event sözleşmesi tasarlanır | P0 | Done |
+| BP-031-S2 | Partial persistence dikey dilimi tasarlanır | P0 | Done |
+| BP-008-S3 | Pixie Event altyapısının kodlanması ve arayüze entegrasyonu | P0 | Sprint 3 |
+| BP-031-S3 | Partial Persistence altyapısının yazılması | P0 | Sprint 3 |
+| BP-050 | Production Deploy ve Canlı Test (Supabase RLS) | P0 | Sprint 3 |
 
 ---
 
