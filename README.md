@@ -661,10 +661,6 @@ sırasında bağlanır.
 Sprint 1 ve Sprint 2 ekran görüntüleri `Ürün Durumu` bölümlerinde listelenmiştir.
 Sprint 3 sonunda bu bölüm final demo akışıyla güncellenecektir.
 
-### Sprint 2 Board
-
-![Sprint 2 Board](docs/evidence/sprint-2/board/2026-07-19-board-closeout-backfilled.png)
-
 # Demo Video
 
 > 3 dakikalık YouTube videosu son sprintte eklenecek.
