@@ -35,10 +35,10 @@ BuildPixies
     <td>Developer</td>
     <td>
       <a href="https://github.com/smallforward11" target="_blank">
-        <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" height="28">
+        <img src="https://img.shields.io/badge/--100000?style=flat-square&logo=github&logoColor=white" alt="GitHub" height="24">
       </a>
       <a href="https://www.linkedin.com/in/kemal-ersin-özkan-855244231/" target="_blank">
-        <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" height="28">
+        <img src="https://img.shields.io/badge/--0077B5?style=flat-square&logo=linkedin&logoColor=white" alt="LinkedIn" height="24">
       </a>
     </td>
   </tr>
