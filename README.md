@@ -31,15 +31,11 @@ BuildPixies
     </td>
   </tr>
   <tr>
-    <td>Kemal Ersin Özkan</td>
+    <td><a href="https://github.com/smallforward11">Kemal Ersin Özkan</a></td>
     <td>Developer</td>
     <td>
-      <a href="https://github.com/smallforward11" target="_blank">
-        <img src="https://img.shields.io/badge/--100000?style=flat-square&logo=github&logoColor=white" alt="GitHub" height="24">
-      </a>
-      <a href="https://www.linkedin.com/in/kemal-ersin-özkan-855244231/" target="_blank">
-        <img src="https://img.shields.io/badge/--0077B5?style=flat-square&logo=linkedin&logoColor=white" alt="LinkedIn" height="24">
-      </a>
+      <a href="https://github.com/smallforward11" target="_blank"><img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="20" height="20" /></a>
+      <a href="https://www.linkedin.com/in/kemal-ersin-özkan-855244231/" target="_blank"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" width="20" height="20" /></a>
     </td>
   </tr>
   <tr>
